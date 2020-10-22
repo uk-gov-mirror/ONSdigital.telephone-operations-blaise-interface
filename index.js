@@ -1,78 +1,65 @@
+const Functions = require('./Functions');
 const express = require('express');
 const path = require('path');
 const axios = require('axios');
-const dotenv = require('dotenv').config();
+const nunjucks = require('nunjucks');
 
 const app = express();
 
+const axios_instance = axios.create();
+axios_instance.defaults.timeout = 3000;
 
 if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
 }
 
+const app_title = "Blaise Survey Manager Lite"
 
-// Serve the static files from the React app
-app.use(express.static(path.join(__dirname, 'client/build')));
+function getInstruments() {
+    return new Promise((resolve, reject) => {
+        axios_instance.get(process.env.INTRUMENT_CHECKER_URL + '/api/instruments?vm_name=' + process.env.VM_INTERNAL_URL)
+            .then(function (response) {
+                // Add interviewing link and date of instrument to array objects
+                response.data.forEach(function (element) {
+                    element.link = process.env.VM_EXTERNAL_WEB_URL + "/" + element.name;
+                    element.date = Functions.field_period_to_text(element.name)
+                });
+                resolve(response.data)
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+                reject(error)
+            })
+    })
+}
 
-// An api endpoint that returns a short list of items
-app.get('/api/getList', (req,res) => {
-    console.log('get list of items');
+nunjucks.configure('views', {
+    autoescape: true,
+    express: app
+});
 
-    axios.get(process.env.INTRUMENT_CHECKER_URL + '/api/instruments?vm_name=' + process.env.VM_INTERNAL_URL)
-        .then(function (response) {
-            // handle success
-            console.log(response.data);
-            // Add interviewing link of instrument to array objects
-            response.data.forEach(function (element) {
-                element.link = process.env.VM_EXTERNAL_WEB_URL + element.name;
-            });
+function render_homepage(res, instruments, error = null) {
+    res.render('index.html', {
+        title: app_title,
+        error: error,
+        instruments: instruments,
+        external_cati_dashboard_web_url: process.env.VM_EXTERNAL_WEB_URL + "/Blaise",
+        external_client_url: process.env.VM_EXTERNAL_CLIENT_URL
+    });
+}
 
-            res.json(response.data);
+app.get('*', async function (req, res) {
+    getInstruments()
+        .then((instruments) => {
+            render_homepage(res, instruments)
         })
-        .catch(function (error) {
-            // handle error
-            console.log(error);
-            res.json(response.data);
+        .catch((error) => {
+            render_homepage(res, [], error);
         })
-        .then(function () {
-            // always executed
-        });
-
-
-    // // var list = ["item1", "item2", "item3"];
-    // let list = [{name: "2004", link: "/link"},{name: "2007", link: "/link"},{name: "2101", link: "/link"}];
-    //
-    // var list = [{name: [{baocn: ""}], link: []}]
-    // res.json(list);
-    // console.log('Sent list of items');
 });
 
-app.get('/api/url_info', (req,res) => {
-    res.json(
-        {
-            external_cati_dashboard_web_url: process.env.VM_EXTERNAL_WEB_URL + "/Blaise",
-            external_client_url: process.env.VM_EXTERNAL_CLIENT_URL
-        }
-    );
-});
-
-app.get('/cati_dashboard', (req,res) => {
-    console.log("Redirect to CATI dashboard")
-    res.redirect('https://dev-matt42-web-tel.social-surveys.gcp.onsdigital.uk/Blaise');
-});
-
-app.get('/interview/:instrument', (req, res) => {
-    console.log("Redirect to CATI dashboard")
-    res.redirect(process.env.VM_EXTERNAL_WEB_URL + req.params.instrument);
-});
-
-
-// Handles any requests that don't match the ones above
-app.get('*', (req,res) =>{
-    res.sendFile(path.join(__dirname+'/client/build/index.html'));
-});
-
-const port = process.env.PORT || 5001;
+const port = process.env.PORT || 5000;
 app.listen(port);
 
 console.log('App is listening on port ' + port);
