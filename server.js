@@ -1,6 +1,5 @@
 const Functions = require('./Functions');
 const express = require('express');
-const path = require('path');
 const axios = require('axios');
 const nunjucks = require('nunjucks');
 
@@ -71,7 +70,7 @@ server.get('/', async function (req, res) {
 });
 
 //Capture All 404 errors
-server.use(function (req, res, next){
+server.use(function (req, res){
     res.status(404).render('404.html', {
         title: app_title,
         external_client_url: process.env.VM_EXTERNAL_CLIENT_URL
