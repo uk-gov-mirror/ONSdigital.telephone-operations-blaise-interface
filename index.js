@@ -21,7 +21,7 @@ function getInstruments() {
             .then(function (response) {
                 // Add interviewing link and date of instrument to array objects
                 response.data.forEach(function (element) {
-                    element.link = process.env.VM_EXTERNAL_WEB_URL + "/" + element.name;
+                    element.link = process.env.VM_EXTERNAL_WEB_URL + "/" + element.name + '?LayoutSet=CATI-Interviewer_Large';
                     element.date = Functions.field_period_to_text(element.name)
                 });
                 resolve(response.data)
