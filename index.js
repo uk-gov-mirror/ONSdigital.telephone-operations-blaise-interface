@@ -24,11 +24,13 @@ function getInstruments() {
                     element.link = process.env.VM_EXTERNAL_WEB_URL + "/" + element.name + '?LayoutSet=CATI-Interviewer_Large';
                     element.date = Functions.field_period_to_text(element.name)
                 });
+                console.log("Retrieved instrument list, " + response.data.length + " item/s")
                 resolve(response.data)
             })
             .catch(function (error) {
                 // handle error
-                console.log(error);
+                console.error("Failed to retrieve instrument list")
+                console.error(error)
                 reject(error)
             })
     })
@@ -49,12 +51,20 @@ function render_homepage(res, instruments, error = null) {
     });
 }
 
-app.get('*', async function (req, res) {
+app.get('/health_check', async function (req, res) {
+    console.log("Heath Check endpoint called")
+    res.json(200)
+});
+
+app.get('/', async function (req, res) {
+
     getInstruments()
         .then((instruments) => {
+            console.log("Rendering page index.html")
             render_homepage(res, instruments)
         })
         .catch((error) => {
+            console.log("Rendering page index.html with error")
             render_homepage(res, [], error);
         })
 });
