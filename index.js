@@ -69,6 +69,14 @@ app.get('/', async function (req, res) {
         })
 });
 
+//Capture All 404 errors
+app.use(function (req,res,next){
+    res.status(404).render('404.html', {
+        title: app_title,
+        external_client_url: process.env.VM_EXTERNAL_CLIENT_URL
+    });
+});
+
 const port = process.env.PORT || 5000;
 app.listen(port);
 
