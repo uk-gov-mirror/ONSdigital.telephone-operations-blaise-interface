@@ -1,5 +1,5 @@
-function field_period_to_text(field_period: string) {
-    let month_number: string = field_period.substr(5, 2);
+function field_period_to_text(field_period) {
+    let month_number = field_period.substr(5, 2);
     let month = "Unknown"
 
     switch (month_number) {
@@ -41,7 +41,7 @@ function field_period_to_text(field_period: string) {
             break;
     }
 
-    let year_number: string = field_period.substr(3, 2);
+    let year_number = field_period.substr(3, 2);
     let year = ""
 
     switch (year_number) {
@@ -61,4 +61,4 @@ function field_period_to_text(field_period: string) {
     return month + " " + year
 }
 
-export {field_period_to_text}
+module.exports = { field_period_to_text }
