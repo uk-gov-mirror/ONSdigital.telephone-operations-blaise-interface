@@ -1,7 +1,7 @@
-const Functions = require('./Functions');
-const express = require('express');
-const axios = require('axios');
-const nunjucks = require('nunjucks');
+import Functions from './functions';
+import express from 'express';
+import axios from 'axios';
+import nunjucks from 'nunjucks';
 
 const server = express();
 
@@ -9,7 +9,18 @@ const axios_instance = axios.create();
 axios_instance.defaults.timeout = 3000;
 
 if (process.env.NODE_ENV !== 'production') {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     require('dotenv').config();
+}
+
+interface Instrument {
+    id: string
+    "install-date": string
+    name: string
+    "server-park": string
+    status: string
+    link: string
+    date: string
 }
 
 const app_title = "Blaise Survey Manager Lite"
@@ -46,7 +57,7 @@ server.get('/health_check', async function (req, res) {
     res.status(200).json({status: 200})
 });
 
-function render_homepage(res, instruments, error = null) {
+function render_homepage(res, instruments: Instrument[], error = null) {
     res.render('index.html', {
         title: app_title,
         error: error,
@@ -58,7 +69,7 @@ function render_homepage(res, instruments, error = null) {
 
 server.get('/', async function (req, res) {
     getInstruments()
-        .then((instruments) => {
+        .then((instruments: Instrument[]) => {
             console.log("Rendering page index.html")
             render_homepage(res, instruments)
         })
@@ -69,11 +80,12 @@ server.get('/', async function (req, res) {
 });
 
 //Capture All 404 errors
-server.use(function (req, res){
+server.use(function (req, res) {
     res.status(404).render('404.html', {
         title: app_title,
         external_client_url: process.env.VM_EXTERNAL_CLIENT_URL
     });
 });
 
-module.exports = server
+
+export default server;
