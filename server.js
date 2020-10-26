@@ -41,7 +41,6 @@ nunjucks.configure('views', {
 });
 
 
-
 server.get('/health_check', async function (req, res) {
     console.log("Heath Check endpoint called")
     res.status(200).json({status: 200})
