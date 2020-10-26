@@ -9,6 +9,7 @@ To run Blaise Survey Manger Lite locally, you'll need to have [Node installed](h
 To have the list of instruments load on the page, you'll need to have [Blaise Instrument Checker](https://github.com/ONSdigital/blaise-instrument-checker) running locally
  or you can [port forward from a kubernates pod](https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/) running in a sanndbox.  
 
+#### Setup locally steps
 Clone the Repo
 ```shell script
 git clone https://github.com/ONSdigital/blaise-survey-manager-lite.git
@@ -48,3 +49,18 @@ This will log the port the service is running on where you can connect from
 ```shell script
 App is listening on port 5001
 ```
+
+### Tests
+The [Jest testing framework](https://jestjs.io/en/) has been setup in this project, all tests currently reside in the `tests` directory.
+This currently only running tests on the health check endpoint, haven't got the hang of mocking Axios yet.
+ 
+To run the tests run
+```shell script
+yarn run test
+```
+
+### Dockerfile
+You can run this service in a container, the Dockerfile is setup to:
+- Setup Yarn and the required dependencies.
+- Run the tests, the build will fail if the tests fail.
+- Run Yarn Start on startup
