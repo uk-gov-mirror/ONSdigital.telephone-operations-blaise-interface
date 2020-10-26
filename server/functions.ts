@@ -1,6 +1,4 @@
-import server from "./server";
-
-function field_period_to_text(field_period: string) {
+function field_period_to_text(field_period: string) : string {
     const month_number: string = field_period.substr(5, 2);
     let month = "Unknown";
 
@@ -47,18 +45,18 @@ function field_period_to_text(field_period: string) {
     let year = "";
 
     switch (year_number) {
-        case "19":
-            year = "2019";
-            break;
-        case "20":
-            year = "2020";
-            break;
-        case "21":
-            year = "2021";
-            break;
-        case "22":
-            year = "2021";
-            break;
+    case "19":
+        year = "2019";
+        break;
+    case "20":
+        year = "2020";
+        break;
+    case "21":
+        year = "2021";
+        break;
+    case "22":
+        year = "2021";
+        break;
     }
     return month + " " + year;
 }
