@@ -5,9 +5,9 @@ Blaise Dashboard for accessing active surveys and CATI dashboard.
 ### Setup
 
 #### Prerequisites
-To run Blaise Survey Manger Lite locally, you'll need to have [Node installed](https://nodejs.org/en/).
+To run Blaise Survey Manger Lite locally, you'll need to have [Node installed](https://nodejs.org/en/), as well as [yarn](https://classic.yarnpkg.com/en/docs/install#mac-stable).
 To have the list of instruments load on the page, you'll need to have [Blaise Instrument Checker](https://github.com/ONSdigital/blaise-instrument-checker) running locally
- or you can [port forward from a Kubernetes pod](https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/) running in a sanndbox.  
+ or you can [port forward from a Kubernetes pod](https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/) running in a sandbox.  
 
 #### Setup locally steps
 Clone the Repo
