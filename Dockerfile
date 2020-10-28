@@ -14,7 +14,8 @@ FROM node:14
 COPY . .
 
 RUN yarn
+RUN yarn run build-react
 RUN yarn test
 
 EXPOSE 8080
-CMD ["yarn", "start"]
+CMD ["yarn", "run", "start-server"]
