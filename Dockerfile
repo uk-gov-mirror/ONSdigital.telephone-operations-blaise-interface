@@ -5,8 +5,8 @@ RUN apt-get --yes update && apt-get --yes upgrade
 COPY . .
 
 RUN yarn
-RUN yarn run build-react
 RUN yarn test
+RUN yarn run build-react
 
-EXPOSE 8080
+EXPOSE 5000
 CMD ["yarn", "run", "start-server"]
