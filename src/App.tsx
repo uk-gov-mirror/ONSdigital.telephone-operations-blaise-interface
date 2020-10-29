@@ -57,6 +57,7 @@ function App() {
                                 console.log("Set instrument list")
                                 console.log(json)
                                 setList(json)
+                            setListError({error: false, message: ""});
                             }
                         ).catch(() => {
                         console.error("Unable to read json from response");
@@ -88,7 +89,7 @@ function App() {
                                           link={externalCATIUrl}/>
                         </p>
                         <table id="basic-table" className="table ">
-                            <caption className="table__caption">Active surveys</caption>
+                            <caption className="table__caption">Active surveys table</caption>
                             <ErrorBoundary errorMessageText={"Unable to load survey table correctly"}>
                                 <thead className="table__head">
                                 <tr className="table__row">
