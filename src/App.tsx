@@ -83,15 +83,21 @@ function App() {
                 <main id="main-content" className="page__main">
                     <DefaultErrorBoundary>
                         <h1>Interviewing</h1>
+                        <p>
+                            This page provides information on active survey instruments with corresponding links that redirect to specific areas of CATI dashboard.
+                            </p>
+                            <p>
+                            Please note, the table containing information on active survey instrument information may take a few seconds to load
+                        </p>
                         {listError.error && <ONSErrorPanel/>}
                         <p className="u-mt-m">
                             <ExternalLink text={"Link to CATI dashboard"}
                                           link={externalCATIUrl}/>
                         </p>
+                        <h3>Active surveys table</h3>
                         <table id="basic-table" className="table ">
-                            <caption className="table__caption">Active surveys table</caption>
                             <ErrorBoundary errorMessageText={"Unable to load survey table correctly"}>
-                                <thead className="table__head">
+                                <thead className="table__head u-mt-m">
                                 <tr className="table__row">
                                     <th scope="col" className="table__header ">
                                         <span>Instrument</span>
