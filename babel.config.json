@@ -3,6 +3,7 @@
     "@babel/plugin-transform-react-jsx"
   ],
   "presets": [
+    "@babel/preset-typescript",
     [
       "@babel/env",
       {
