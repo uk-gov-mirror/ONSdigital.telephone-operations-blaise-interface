@@ -51,9 +51,9 @@ The following run commands are available, these are all setup in the `package.js
 | `yarn start-react`             | Starts react project in local development setup with quick reloading on making changes. Note: For instruments to be shown the server needs to be running.  |
 | `yarn build-react`             | Compiles build project ready to be served by express.                                                                                                    |
 | `yarn test-react`              | Run tests for React Components.                                                                                                                           |
-| `yarn test-react-coverage`     | Run tests for React Components and outputs coverage statistics                                                                                            |
+| `yarn test-react-coverage`     | Run tests for React Components and outputs coverage statistics.                                                                                           |
 | `yarn test`                    | Runs all tests for server and React Components.                                                                                                           |
-| `yarn test-coverage`           | Runs all tests for server and React Components and outputs coverage statistics                                                                            |
+| `yarn test-coverage`           | Runs all tests for server and React Components and outputs coverage statistics.                                                                           |
 
 ##### Simple setup for local development
 
@@ -86,11 +86,11 @@ To run all tests run
 yarn test
 ```
 
-Other test command can be seen in the [run commands section](#Run commands).
+Other test command can be seen in the Run Commands section above.
 
 ### Dockerfile
 You can run this service in a container, the Dockerfile is setup to:
-- Update and upgrade the DOcker container image.
+- Update and upgrade the Docker container image.
 - Setup Yarn and the required dependencies.
 - Run the tests, the build will fail if the tests fail.
 - Build the React project for serving by express
