@@ -20,7 +20,7 @@ Create a new .env file and add the following variables.
 
 | Variable                      | Description                                                                     | Var Example                  |
 |-------------------------------|---------------------------------------------------------------------------------|------------------------------|
-| PORT                          | Optional variable, specify the Port for express server to run on. If not passed in this is set as 5000 by default. It's best not to set this as the react project will try and use the variable as well and conflict. By default React project locally runs on port 3000.                                              | 5009                         |
+| PORT                          | Optional variable, specify the Port for express server to run on. If not passed in this is set as 5000 by default. <br><br>It's best not to set this as the react project will try and use the variable as well and conflict. By default React project locally runs on port 3000.                                              | 5009                         |
 | VM_EXTERNAL_WEB_URL           | External Url used for CATI dashboard and survey links.                          | tel-client-server.uk         |
 | VM_INTERNAL_URL               | Internal url of the Blaise VM which is sent to the Instrument checker service.  | tel-web-server.internal.uk   |
 | VM_EXTERNAL_CLIENT_URL        | External link to connect to Blaise remotely through Blaise Server Manager.      | tel-web-server.uk            |
@@ -45,11 +45,11 @@ yarn install
 
 The following run commands are available, these are all setup in the `package.json` under `scripts`.
 
-| Command                        | Description                                                                                                                                                |
+| Command                        | Description                                                                                                                                               |
 |--------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `yarn start-server`            | Start the express server, Note: For the website to be rendered the React Project will need to be built.                                                   |
-| `yarn start-react`             | Starts react project in local development setup with quick reloading on making changes. Note: For instruments to be shown the server needs to be running.  |
-| `yarn build-react`             | Compiles build project ready to be served by express.                                                                                                    |
+| `yarn start-react`             | Starts react project in local development setup with quick reloading on making changes. Note: For instruments to be shown the server needs to be running. |
+| `yarn build-react`             | Compiles build project ready to be served by express.                                                                                                     |
 | `yarn test-react`              | Run tests for React Components.                                                                                                                           |
 | `yarn test-react-coverage`     | Run tests for React Components and outputs coverage statistics.                                                                                           |
 | `yarn test`                    | Runs all tests for server and React Components.                                                                                                           |
