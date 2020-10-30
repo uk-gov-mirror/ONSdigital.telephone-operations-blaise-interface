@@ -7,6 +7,7 @@ import {ErrorBoundary} from "./Components/ErrorBoundary";
 import "./App.css";
 import Footer from "./Components/Footer";
 import ONSErrorPanel from "./Components/ONSErrorPanel";
+import {isDevEnv} from "./Functions";
 
 interface ListItem {
     name: string
@@ -35,9 +36,9 @@ function App() {
 
 
     useEffect(function retrieveVariables() {
-        setExternalClientUrl(process.env.NODE_ENV === 'development' ?
+        setExternalClientUrl(isDevEnv() ?
             process.env.REACT_APP_VM_EXTERNAL_CLIENT_URL || externalClientUrl : (window as any).VM_EXTERNAL_CLIENT_URL)
-        setExternalCATIUrl(process.env.NODE_ENV === 'development' ?
+        setExternalCATIUrl(isDevEnv() ?
             process.env.REACT_APP_CATI_DASHBOARD_URL || externalCATIUrl : (window as any).CATI_DASHBOARD_URL)
     }, [externalClientUrl, externalCATIUrl]);
 
@@ -54,10 +55,10 @@ function App() {
                 if (r.status === 200) {
                     r.json()
                         .then((json: ListItem[]) => {
-                                console.log("Set instrument list")
-                                console.log(json)
+                                console.log("Retrieved instrument list, " + json.length + " items/s")
+                                isDevEnv() && console.log(json)
                                 setList(json)
-                            setListError({error: false, message: ""});
+                                setListError({error: false, message: ""});
                             }
                         ).catch(() => {
                         console.error("Unable to read json from response");
@@ -84,10 +85,12 @@ function App() {
                     <DefaultErrorBoundary>
                         <h1>Interviewing</h1>
                         <p>
-                            This page provides information on active survey instruments with corresponding links that redirect to specific areas of CATI dashboard.
-                            </p>
-                            <p>
-                            Please note, the table containing information on active survey instrument information may take a few seconds to load
+                            This page provides information on active survey instruments with corresponding links that
+                            redirect to specific areas of CATI dashboard.
+                        </p>
+                        <p>
+                            Please note, the table containing information on active survey instrument information may
+                            take a few seconds to load
                         </p>
                         {listError.error && <ONSErrorPanel/>}
                         <p className="u-mt-m">

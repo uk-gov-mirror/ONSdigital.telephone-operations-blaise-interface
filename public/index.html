@@ -45,11 +45,5 @@
       window.VM_EXTERNAL_CLIENT_URL = "\<\%= VM_EXTERNAL_CLIENT_URL \%\>";
       window.CATI_DASHBOARD_URL = "\<\%= CATI_DASHBOARD_URL \%\>";
     </script>
-    <script>
-      // before React is loaded
-      if (typeof window.__REACT_DEVTOOLS_GLOBAL_HOOK__ === 'object') {
-        __REACT_DEVTOOLS_GLOBAL_HOOK__.inject = function() {};
-      }
-    </script>
   </body>
 </html>
