@@ -49,7 +49,7 @@ The following run commands are available, these are all setup in the `package.js
 |--------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `yarn start-server`            | Start the express server, Note: For the website to be rendered the React Project will need to be built.                                                   |
 | `yarn start-react`             | Starts react project in local development setup with quick reloading on making changes. Note: For instruments to be shown the server needs to be running. |
-| `yarn build-react`             | Compiles build project ready to be served by express.                                                                                                     |
+| `yarn build-react`             | Compiles build project ready to be served by express. The build in outputted to the the `build` directory which express points to with the var `buildFolder` in `server/server.js`.                       |
 | `yarn test-react`              | Run tests for React Components.                                                                                                                           |
 | `yarn test-react-coverage`     | Run tests for React Components and outputs coverage statistics.                                                                                           |
 | `yarn test`                    | Runs all tests for server and React Components.                                                                                                           |
