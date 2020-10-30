@@ -55,7 +55,7 @@ function field_period_to_text(field_period) {
             year = "2021"
             break;
         case "22":
-            year = "2021"
+            year = "2022"
             break;
     }
     return month + " " + year
