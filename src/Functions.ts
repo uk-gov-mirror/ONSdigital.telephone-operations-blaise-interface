@@ -1,5 +1,5 @@
-function isDevEnv() {
-    return process.env.NODE_ENV === 'development'
+function isDevEnv(): boolean {
+    return process.env.NODE_ENV === "development";
 }
 
-export {isDevEnv}
+export {isDevEnv};
