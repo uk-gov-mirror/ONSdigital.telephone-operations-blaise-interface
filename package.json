@@ -4,13 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node ./server/index.js",
     "start-server": "node server/index.js",
     "start-react": "react-scripts start",
     "build-react": "react-scripts build",
     "test-react": "react-scripts test",
     "test-react-coverage": "react-scripts test --coverage --watchAll=false",
     "test": "jest",
-    "test-coverage": "jest --coverage --watchAll=false"
+    "test-coverage": "jest --coverage --watchAll=false",
+    "gcp-build": "react-scripts build"
   },
   "proxy": "http://localhost:5000",
   "keywords": [],
@@ -37,7 +39,8 @@
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "react-scripts": "3.4.4",
-    "typescript": "~3.7.2"
+    "typescript": "~3.7.2",
+    "ejs": "^3.1.5"
   },
   "devDependencies": {
     "@babel/plugin-transform-react-jsx": "^7.12.1",
@@ -45,7 +48,6 @@
     "@babel/preset-typescript": "^7.12.1",
     "@types/enzyme-adapter-react-16": "^1.0.5",
     "cross-env": "^7.0.2",
-    "ejs": "^3.1.5",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.1",
     "enzyme-async-helpers": "^0.9.1",
