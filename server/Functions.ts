@@ -2,7 +2,7 @@ function isNumber(n: string) {
     return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
-function field_period_to_text(field_period: string) {
+function field_period_to_text(field_period: string): string {
     const month_number_str: string = field_period.substr(5, 2);
     let month_number_int = -1;
     let month = "Unknown";
