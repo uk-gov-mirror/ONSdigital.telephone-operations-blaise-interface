@@ -1,16 +1,17 @@
-import Functions from './functions';
-import express from 'express';
-import axios from 'axios';
-import nunjucks from 'nunjucks';
+import Functions from "./Functions";
+import express, {Request, Response} from "express";
+import axios, {AxiosResponse} from "axios";
+import path from "path";
+import ejs from "ejs";
+import dotenv from "dotenv";
 
 const server = express();
 
 const axios_instance = axios.create();
-axios_instance.defaults.timeout = 3000;
+axios_instance.defaults.timeout = 10000;
 
-if (process.env.NODE_ENV !== 'production') {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    require('dotenv').config();
+if (process.env.NODE_ENV !== "production") {
+    dotenv.config();
 }
 
 interface Instrument {
@@ -23,69 +24,54 @@ interface Instrument {
     date: string
 }
 
-const app_title = "Blaise Survey Manager Lite"
+// where ever the react built package is
+const buildFolder = "../build";
 
-function getInstruments() {
-    return new Promise((resolve, reject) => {
-        axios_instance.get("http://" + process.env.BLAISE_INSTRUMENT_CHECKER_URL + '/api/instruments?vm_name=' + process.env.VM_INTERNAL_URL)
-            .then(function (response) {
-                // Add interviewing link and date of instrument to array objects
-                response.data.forEach(function (element) {
-                    element.link = "https://" + process.env.VM_EXTERNAL_WEB_URL + "/" + element.name + '?LayoutSet=CATI-Interviewer_Large';
-                    element.date = Functions.field_period_to_text(element.name)
-                });
-                console.log("Retrieved instrument list, " + response.data.length + " item/s")
-                resolve(response.data)
-            })
-            .catch(function (error) {
-                // handle error
-                console.error("Failed to retrieve instrument list")
-                console.error(error)
-                reject(error)
-            })
-    })
-}
+// load the .env variables in the server
+const {VM_EXTERNAL_CLIENT_URL, VM_EXTERNAL_WEB_URL, BLAISE_INSTRUMENT_CHECKER_URL, VM_INTERNAL_URL} = process.env;
+const CATI_DASHBOARD_URL = "https://" + VM_EXTERNAL_WEB_URL + "/Blaise";
 
-nunjucks.configure('views', {
-    autoescape: true,
-    express: server
-});
+// treat the index.html as a template and substitute the value
+// at runtime
+server.set("views", path.join(__dirname, buildFolder));
+server.engine("html", ejs.renderFile);
+server.use(
+    "/static",
+    express.static(path.join(__dirname, `${buildFolder}/static`)),
+);
 
+// An api endpoint that returns list of installed instruments
+server.get("/api/instruments", (req: Request, res: Response) => {
+    console.log("get list of items");
 
-server.get('/health_check', async function (req, res) {
-    console.log("Heath Check endpoint called")
-    res.status(200).json({status: 200})
-});
-
-function render_homepage(res, instruments: Instrument[], error = null) {
-    res.render('index.html', {
-        title: app_title,
-        error: error,
-        instruments: instruments,
-        external_cati_dashboard_web_url: "https://" + process.env.VM_EXTERNAL_WEB_URL + "/Blaise",
-        external_client_url: process.env.VM_EXTERNAL_CLIENT_URL
-    });
-}
-
-server.get('/', async function (req, res) {
-    getInstruments()
-        .then((instruments: Instrument[]) => {
-            console.log("Rendering page index.html")
-            render_homepage(res, instruments)
+    axios_instance.get("http://" + BLAISE_INSTRUMENT_CHECKER_URL + "/api/instruments?vm_name=" + VM_INTERNAL_URL)
+        .then(function (response: AxiosResponse) {
+            // Add interviewing link and date of instrument to array objects
+            response.data.forEach(function (element: Instrument) {
+                element.link = "https://" + VM_EXTERNAL_WEB_URL + "/" + element.name + "?LayoutSet=CATI-Interviewer_Large";
+                element.date = Functions.field_period_to_text(element.name);
+            });
+            console.log("Retrieved instrument list, " + response.data.length + " item/s");
+            return res.json(response.data);
         })
-        .catch((error) => {
-            console.log("Rendering page index.html with error")
-            render_homepage(res, [], error);
-        })
+        .catch(function (error) {
+            // handle error
+            console.error("Failed to retrieve instrument list");
+            console.error(error);
+            return res.status(500).json(error);
+        });
 });
 
-//Capture All 404 errors
-server.use(function (req, res) {
-    res.status(404).render('404.html', {
-        title: app_title,
-        external_client_url: process.env.VM_EXTERNAL_CLIENT_URL
+// Health Check endpoint
+server.get("/health_check", async function (req: Request, res: Response) {
+    console.log("Heath Check endpoint called");
+    res.status(200).json({status: 200});
+});
+
+server.get("*", function (req: Request, res: Response) {
+    res.render("index.html", {
+        VM_EXTERNAL_CLIENT_URL, CATI_DASHBOARD_URL
     });
 });
-
 
 export default server;
