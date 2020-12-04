@@ -74,4 +74,9 @@ server.get("*", function (req: Request, res: Response) {
     });
 });
 
+server.use(function (err, req, res) {
+    console.error(err.stack);
+    res.render("../views/500.html", {});
+});
+
 export default server;
