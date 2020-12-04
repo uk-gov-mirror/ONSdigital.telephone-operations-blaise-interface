@@ -1,5 +1,5 @@
 import Functions from "./Functions";
-import express, {Request, Response} from "express";
+import express, {NextFunction, Request, Response} from "express";
 import axios, {AxiosResponse} from "axios";
 import path from "path";
 import ejs from "ejs";
@@ -72,11 +72,6 @@ server.get("*", function (req: Request, res: Response) {
     res.render("index.html", {
         VM_EXTERNAL_CLIENT_URL, CATI_DASHBOARD_URL
     });
-});
-
-server.use(function (err, req, res) {
-    console.error(err.stack);
-    res.render("../views/500.html", {});
 });
 
 export default server;
