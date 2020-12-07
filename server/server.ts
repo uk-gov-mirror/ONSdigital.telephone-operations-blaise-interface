@@ -74,7 +74,7 @@ server.get("*", function (req: Request, res: Response) {
     });
 });
 
-server.use(function (err: any, req: any, res: any, next: any) {
+server.use(function (err: Error, req: Request, res: Response, next: NextFunction) {
     console.error(err.stack);
     res.render("../views/500.html", {});
 });
