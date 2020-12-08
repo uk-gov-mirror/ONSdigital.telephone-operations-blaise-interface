@@ -7,7 +7,7 @@ Blaise Dashboard for accessing active surveys and CATI dashboard.
 
 This project is a React application which when build is rendered by a Node.js express server.
 
-<img src=".github/Diagram.png" width="100">
+![Diagram of Blaise Survey Manager Lite sertup](.github/Diagram.png)
 
 ### Setup
 
