@@ -1,4 +1,4 @@
-service: telephone_operations_blaise_interface
+service: tobi-ui
 runtime: nodejs12
 
 vpc_access_connector:

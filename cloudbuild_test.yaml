@@ -9,7 +9,7 @@ steps:
         sed "s#_VM_INTERNAL_URL#${_VM_INTERNAL_URL}#g" | \
         sed "s#_VM_EXTERNAL_WEB_URL#${_VM_EXTERNAL_WEB_URL}#g" | \
         sed "s#_VM_EXTERNAL_CLIENT_URL#${_VM_EXTERNAL_CLIENT_URL}#g" | \
-        sed "s#_BLAISE_API_URL#${}#g" > app.yaml
+        sed "s#_BLAISE_API_URL#${_BLAISE_API_URL}#g" > app.yaml
 
   - name: 'gcr.io/cloud-builders/gcloud'
     id: Print Output
