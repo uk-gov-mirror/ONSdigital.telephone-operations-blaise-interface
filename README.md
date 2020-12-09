@@ -1,4 +1,4 @@
-# Blaise Survey Manager Lite
+# Telephone Operations Blaise Interface
 
 [![codecov](https://codecov.io/gh/ONSdigital/blaise-survey-manager-lite/branch/master/graph/badge.svg)](https://codecov.io/gh/ONSdigital/blaise-survey-manager-lite)
 
