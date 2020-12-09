@@ -5,7 +5,7 @@
   "main": "index.ts",
   "scripts": {
     "build-dist": "tsc",
-    "start": "yarn run start-server",
+    "start": "tsc --project tsconfig.server.json && node ./dist/index.js",
     "start-server": "tsc --project tsconfig.server.json && node ./dist/index.js",
     "start-react": "react-scripts start",
     "build-react": "react-scripts build",
