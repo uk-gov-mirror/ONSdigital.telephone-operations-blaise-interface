@@ -1,4 +1,4 @@
-service: bsm-lite
+service: telephone_operations_blaise_interface
 runtime: nodejs12
 
 vpc_access_connector:
