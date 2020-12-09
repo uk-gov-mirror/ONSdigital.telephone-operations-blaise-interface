@@ -1,4 +1,4 @@
-# Blaise Survey Manager Lite
+# Telephone Operations Blaise Interface
 
 [![codecov](https://codecov.io/gh/ONSdigital/blaise-survey-manager-lite/branch/master/graph/badge.svg)](https://codecov.io/gh/ONSdigital/blaise-survey-manager-lite)
 
@@ -93,6 +93,13 @@ yarn test
 ```
 
 Other test command can be seen in the Run Commands section above.
+
+Deploying to app engine
+
+To deploy the locally edited service to app engine in your environment, you can run trigger the cloudbuild trigger with the following line, changing the environment variables as needed. 
+```.shell
+gcloud builds submit --substitutions=_PROJECT_ID=ons-blaise-v2-dev-matt-54,_VM_INTERNAL_URL=test,_VM_EXTERNAL_WEB_URL=test,_VM_EXTERNAL_CLIENT_URL=test,_BLAISE_API_URL=/
+```
 
 ### Dockerfile
 You can run this service in a container, the Dockerfile is setup to:
