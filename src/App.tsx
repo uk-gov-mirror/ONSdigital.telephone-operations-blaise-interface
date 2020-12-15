@@ -1,23 +1,21 @@
 import React, {ReactElement, useEffect, useState} from "react";
-import Header from "./Components/Header";
-import BetaBanner from "./Components/BetaBanner";
-import ExternalLink from "./Components/ExternalLink";
-import {DefaultErrorBoundary} from "./Components/DefaultErrorBoundary";
-import {ErrorBoundary} from "./Components/ErrorBoundary";
-import "./App.css";
-import Footer from "./Components/Footer";
-import ONSErrorPanel from "./Components/ONSErrorPanel";
+import Header from "./Components/ONSDesignSystem/Header";
+import BetaBanner from "./Components/ONSDesignSystem/BetaBanner";
+import ExternalLink from "./Components/ONSDesignSystem/ExternalLink";
+import {DefaultErrorBoundary} from "./Components/ErrorHandling/DefaultErrorBoundary";
+import Footer from "./Components/ONSDesignSystem/Footer";
+import ONSErrorPanel from "./Components/ONSDesignSystem/ONSErrorPanel";
 import {isDevEnv} from "./Functions";
+import {
+    Switch,
+    Route,
 
-interface ListItem {
-    name: string
-    link: string
-    id: string
-    status: string
-    "server-park": string
-    fieldPeriod: string
-    "install-date": string
-}
+} from "react-router-dom";
+import InstrumentList from "./Components/InstrumentList";
+import SurveyList from "./Components/SurveyList";
+import {Survey} from "../Interfaces";
+import {ErrorBoundary} from "./Components/ErrorHandling/ErrorBoundary";
+
 
 interface listError {
     error: boolean,
@@ -29,7 +27,11 @@ interface window extends Window {
     CATI_DASHBOARD_URL: string
 }
 
-function App() : ReactElement {
+const divStyle = {
+    minHeight: "calc(67vh)"
+};
+
+function App(): ReactElement {
 
     const [externalClientUrl, setExternalClientUrl] = useState<string>("External URL should be here");
     const [externalCATIUrl, setExternalCATIUrl] = useState<string>("/Blaise");
@@ -42,7 +44,7 @@ function App() : ReactElement {
             process.env.REACT_APP_CATI_DASHBOARD_URL || externalCATIUrl : (window as unknown as window).CATI_DASHBOARD_URL);
     }, [externalClientUrl, externalCATIUrl]);
 
-    const [list, setList] = useState<ListItem[]>([]);
+    const [surveys, setSurveys] = useState<Survey[]>([]);
     const [listError, setListError] = useState<listError>({error: false, message: "Loading ..."});
 
     useEffect(() => {
@@ -54,10 +56,10 @@ function App() : ReactElement {
             .then((r: Response) => {
                 if (r.status === 200) {
                     r.json()
-                        .then((json: ListItem[]) => {
+                        .then((json: Survey[]) => {
                                 console.log("Retrieved instrument list, " + json.length + " items/s");
                                 isDevEnv() && console.log(json);
-                                setList(json);
+                                setSurveys(json);
                                 setListError({error: false, message: ""});
                             }
                         ).catch(() => {
@@ -80,7 +82,7 @@ function App() : ReactElement {
         <>
             <BetaBanner/>
             <Header title={"Telephone Operations Blaise Interface"}/>
-            <div id={"body"} className="page__container container">
+            <div style={divStyle} className="page__container container">
                 <main id="main-content" className="page__main">
                     <DefaultErrorBoundary>
                         <h1>Interviewing</h1>
@@ -97,53 +99,18 @@ function App() : ReactElement {
                             <ExternalLink text={"Link to CATI dashboard"}
                                           link={externalCATIUrl}/>
                         </p>
-                        <h3>Active questionnaires table</h3>
-                        <table id="basic-table" className="table ">
-                            <ErrorBoundary errorMessageText={"Unable to load survey table correctly"}>
-                                <thead className="table__head u-mt-m">
-                                <tr className="table__row">
-                                    <th scope="col" className="table__header ">
-                                        <span>Questionnaire</span>
-                                    </th>
-                                    <th scope="col" className="table__header ">
-                                        <span>Field period</span>
-                                    </th>
-                                    <th scope="col" className="table__header ">
-                                        <span>Link to interview</span>
-                                    </th>
-                                </tr>
-                                </thead>
-                                <tbody className="table__body">
-                                {
-                                    list && list.length > 0
-                                        ?
-                                        list.map((item: ListItem) => {
-                                            return (
-                                                <tr className="table__row" key={item.id}>
-                                                    <td className="table__cell ">
-                                                        {item.name}
-                                                    </td>
-                                                    <td className="table__cell ">
-                                                        {item.fieldPeriod}
-                                                    </td>
-                                                    <td className="table__cell ">
-                                                        <ExternalLink text={"Interview"}
-                                                                      link={item.link}
-                                                                      ariaLabel={"Launch interview for instrument " + item.name + " " + item.fieldPeriod}/>
-                                                    </td>
-                                                </tr>
-                                            );
-                                        })
-                                        :
-                                        <tr>
-                                            <td className="table__cell " colSpan={3}>
-                                                {listError.message}
-                                            </td>
-                                        </tr>
-                                }
-                                </tbody>
-                            </ErrorBoundary>
-                        </table>
+                        <Switch>
+                            <Route path="/survey/:survey">
+                                <ErrorBoundary errorMessageText={"Unable to load questionnaire table correctly"}>
+                                    <InstrumentList list={surveys} listError={listError}/>
+                                </ErrorBoundary>
+                            </Route>
+                            <Route path="/">
+                                <ErrorBoundary errorMessageText={"Unable to load survey table correctly"}>
+                                    <SurveyList list={surveys} listError={listError}/>
+                                </ErrorBoundary>
+                            </Route>
+                        </Switch>
                     </DefaultErrorBoundary>
                 </main>
             </div>
