@@ -8,8 +8,9 @@ import flushPromises from "./tests/utils";
 import {act} from "react-dom/test-utils";
 import {createMemoryHistory} from "history";
 import {Router} from "react-router";
+import {Survey} from "../Interfaces";
 
-const surveyListReturned = [
+const surveyListReturned: Survey[] = [
     {
         survey: "OPN",
         instruments: [
@@ -22,21 +23,26 @@ const surveyListReturned = [
                 name: "OPN2007T",
                 serverParkName: "LocalDevelopment",
                 "surveyTLA": "OPN",
+                surveyDays: []
             }
         ]
     }
 ];
 
+function mock_server_request(returnedStatus: number, returnedJSON: any) {
+    global.fetch = jest.fn(() =>
+        Promise.resolve({
+            status: returnedStatus,
+            json: () => Promise.resolve(returnedJSON),
+        })
+    );
+}
+
 describe("React homepage", () => {
     Enzyme.configure({adapter: new Adapter()});
 
     beforeAll(() => {
-        global.fetch = jest.fn(() =>
-            Promise.resolve({
-                status: 200,
-                json: () => Promise.resolve(surveyListReturned),
-            })
-        );
+        mock_server_request(200, surveyListReturned);
     });
 
 
@@ -122,12 +128,7 @@ describe("Given the API returns malformed json", () => {
     Enzyme.configure({adapter: new Adapter()});
 
     beforeAll(() => {
-        global.fetch = jest.fn(() =>
-            Promise.resolve({
-                status: 200,
-                json: () => Promise.resolve({test: "Hello"}),
-            })
-        );
+        mock_server_request(200, {text: "Hello"});
     });
 
     it("it should render with the error message displayed", async () => {
@@ -158,12 +159,7 @@ describe("Given the API returns an empty list", () => {
     Enzyme.configure({adapter: new Adapter()});
 
     beforeAll(() => {
-        global.fetch = jest.fn(() =>
-            Promise.resolve({
-                status: 200,
-                json: () => Promise.resolve([]),
-            })
-        );
+        mock_server_request(200, []);
     });
 
     it("it should render with a message to inform the user in the list", async () => {
