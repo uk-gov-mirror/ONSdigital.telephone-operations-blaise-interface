@@ -54,24 +54,28 @@ function App(): ReactElement {
     function getList() {
         fetch("/api/instruments")
             .then((r: Response) => {
-                if (r.status === 200) {
-                    r.json()
-                        .then((json: Survey[]) => {
-                                console.log("Retrieved instrument list, " + json.length + " items/s");
-                                isDevEnv() && console.log(json);
-                                setSurveys(json);
-                                setListError({error: false, message: ""});
-                            }
-                        ).catch(() => {
-                        console.error("Unable to read json from response");
+                if (r.status !== 200) {
+                    throw r.status + " - " + r.statusText;
+                }
+                r.json()
+                    .then((json: Survey[]) => {
+                        if (!Array.isArray(json)) {
+                            throw "Json response is not a list";
+                        }
+                        console.log("Retrieved instrument list, " + json.length + " items/s");
+                        isDevEnv() && console.log(json);
+                        setSurveys(json);
+                        setListError({error: false, message: ""});
+
+                        // If the list is empty then show this message in the list
+                        if (json.length === 0) setListError({error: false, message: "No active surveys found."});
+                    })
+                    .catch((error) => {
+                        isDevEnv() && console.error("Unable to read json from response, error: " + error);
                         setListError({error: true, message: "Unable to load surveys"});
                     });
-                } else {
-                    console.error("Failed to retrieve instrument list, status " + r.status);
-                    setListError({error: true, message: "Unable to load surveys"});
-                }
-            }).catch(() => {
-                console.error("Failed to retrieve instrument list");
+            }).catch((error) => {
+                isDevEnv() && console.error("Failed to retrieve instrument list, error: " + error);
                 setListError({error: true, message: "Unable to load surveys"});
             }
         );
