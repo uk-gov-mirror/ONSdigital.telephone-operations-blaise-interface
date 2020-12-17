@@ -96,7 +96,7 @@ function App(): ReactElement {
                         </p>
                         <p>
                             Please note, the table containing information on active questionnaires may
-                            take a few seconds to load
+                            take a few seconds to load.
                         </p>
                         {listError.error && <ONSErrorPanel/>}
                         <p className="u-mt-m">
