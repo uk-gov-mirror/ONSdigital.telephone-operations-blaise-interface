@@ -95,7 +95,7 @@ function App(): ReactElement {
                             redirect to specific areas of CATI dashboard.
                         </p>
                         <p>
-                            Please note, the table containing information on active questionnaires information may
+                            Please note, the table containing information on active questionnaires may
                             take a few seconds to load
                         </p>
                         {listError.error && <ONSErrorPanel/>}
