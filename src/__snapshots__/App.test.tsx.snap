@@ -149,7 +149,7 @@ Object {
           </h3>
           <table
             class="table "
-            id="basic-table"
+            id="instrument-table"
           >
             <thead
               class="table__head u-mt-m"
@@ -433,7 +433,7 @@ Object {
         </h3>
         <table
           class="table "
-          id="basic-table"
+          id="instrument-table"
         >
           <thead
             class="table__head u-mt-m"
@@ -767,7 +767,7 @@ Object {
           </h3>
           <table
             class="table "
-            id="basic-table"
+            id="survey-table"
           >
             <thead
               class="table__head u-mt-m"
@@ -1013,7 +1013,7 @@ Object {
         </h3>
         <table
           class="table "
-          id="basic-table"
+          id="survey-table"
         >
           <thead
             class="table__head u-mt-m"

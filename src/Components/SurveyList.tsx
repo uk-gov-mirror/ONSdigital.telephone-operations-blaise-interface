@@ -17,7 +17,7 @@ function SurveyList(props: Props): ReactElement {
 
     return <>
         <h3>Surveys</h3>
-        <table id="basic-table" className="table ">
+        <table id="survey-table" className="table ">
             <thead className="table__head u-mt-m">
             <tr className="table__row">
                 <th scope="col" className="table__header ">

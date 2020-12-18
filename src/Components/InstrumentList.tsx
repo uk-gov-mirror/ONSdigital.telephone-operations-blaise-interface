@@ -44,7 +44,7 @@ function InstrumentList(props: Props): ReactElement {
 
 
         <h3>Active questionnaires</h3>
-        <table id="basic-table" className="table ">
+        <table id="instrument-table" className="table ">
             <thead className="table__head u-mt-m">
             <tr className="table__row">
                 <th scope="col" className="table__header ">
