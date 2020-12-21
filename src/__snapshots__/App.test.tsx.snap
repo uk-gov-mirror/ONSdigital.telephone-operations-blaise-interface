@@ -117,6 +117,7 @@ Object {
           >
             <a
               class="external-link"
+              id="cati-dashboard"
               rel="noopener noreferrer"
               target="_blank"
             >
@@ -140,6 +141,7 @@ Object {
           <p>
             <a
               href="/"
+              id="return-to-survey-list"
             >
               Return to survey list
             </a>
@@ -401,6 +403,7 @@ Object {
         >
           <a
             class="external-link"
+            id="cati-dashboard"
             rel="noopener noreferrer"
             target="_blank"
           >
@@ -424,6 +427,7 @@ Object {
         <p>
           <a
             href="/"
+            id="return-to-survey-list"
           >
             Return to survey list
           </a>
@@ -742,6 +746,7 @@ Object {
           >
             <a
               class="external-link"
+              id="cati-dashboard"
               rel="noopener noreferrer"
               target="_blank"
             >
@@ -988,6 +993,7 @@ Object {
         >
           <a
             class="external-link"
+            id="cati-dashboard"
             rel="noopener noreferrer"
             target="_blank"
           >

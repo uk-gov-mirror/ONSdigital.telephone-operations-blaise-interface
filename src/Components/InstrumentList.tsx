@@ -39,7 +39,7 @@ function InstrumentList(props: Props): ReactElement {
 
     return <>
         <p>
-            <Link to={"/"}>Return to survey list</Link>
+            <Link to={"/"} id={"return-to-survey-list"}>Return to survey list</Link>
         </p>
 
 
