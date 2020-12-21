@@ -5,6 +5,7 @@ interface Props {
     text: string
     link: string
     ariaLabel?: string
+    id?: string
 }
 
 
@@ -12,6 +13,7 @@ function ExternalLink(props: Props): ReactElement {
     return (
         <>
             <a href={props.link}
+               id={props.id}
                aria-label={props.ariaLabel}
                className="external-link"
                target="_blank"

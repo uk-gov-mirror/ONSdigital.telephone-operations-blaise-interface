@@ -101,7 +101,8 @@ function App(): ReactElement {
                         {listError.error && <ONSErrorPanel/>}
                         <p className="u-mt-m">
                             <ExternalLink text={"Link to CATI dashboard"}
-                                          link={externalCATIUrl}/>
+                                          link={externalCATIUrl}
+                                          id={"cati-dashboard"}/>
                         </p>
                         <Switch>
                             <Route path="/survey/:survey">
