@@ -151,7 +151,7 @@ Object {
           </h2>
           <table
             class="table "
-            id="survey-table"
+            id="instrument-table"
           >
             <thead
               class="table__head u-mt-m"
@@ -437,7 +437,7 @@ Object {
         </h2>
         <table
           class="table "
-          id="survey-table"
+          id="instrument-table"
         >
           <thead
             class="table__head u-mt-m"
