@@ -146,12 +146,12 @@ Object {
               Return to survey list
             </a>
           </p>
-          <h3>
+          <h2>
             Active questionnaires
-          </h3>
+          </h2>
           <table
             class="table "
-            id="instrument-table"
+            id="survey-table"
           >
             <thead
               class="table__head u-mt-m"
@@ -432,12 +432,12 @@ Object {
             Return to survey list
           </a>
         </p>
-        <h3>
+        <h2>
           Active questionnaires
-        </h3>
+        </h2>
         <table
           class="table "
-          id="instrument-table"
+          id="survey-table"
         >
           <thead
             class="table__head u-mt-m"
@@ -767,9 +767,9 @@ Object {
               </svg>
             </a>
           </p>
-          <h3>
+          <h2>
             Surveys
-          </h3>
+          </h2>
           <table
             class="table "
             id="survey-table"
@@ -1014,9 +1014,9 @@ Object {
             </svg>
           </a>
         </p>
-        <h3>
+        <h2>
           Surveys
-        </h3>
+        </h2>
         <table
           class="table "
           id="survey-table"
