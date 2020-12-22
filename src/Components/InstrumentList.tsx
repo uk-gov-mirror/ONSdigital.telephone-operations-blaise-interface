@@ -35,59 +35,60 @@ function InstrumentList(props: Props): ReactElement {
         listError.message = "Unable to load questionnaires for survey " + survey;
     }
 
-    surveyInstruments.sort((a: Instrument,b: Instrument) => Date.parse(b.installDate) - Date.parse(a.installDate));
+    surveyInstruments.sort((a: Instrument, b: Instrument) => Date.parse(b.installDate) - Date.parse(a.installDate));
 
     return <>
         <p>
             <Link to={"/"} id={"return-to-survey-list"}>Return to survey list</Link>
         </p>
 
-
-        <h3>Active questionnaires</h3>
-        <table id="instrument-table" className="table ">
-            <thead className="table__head u-mt-m">
-            <tr className="table__row">
-                <th scope="col" className="table__header ">
-                    <span>Questionnaire</span>
-                </th>
-                <th scope="col" className="table__header ">
-                    <span>Field period</span>
-                </th>
-                <th scope="col" className="table__header ">
-                    <span>Link to interview</span>
-                </th>
-            </tr>
-            </thead>
-            <tbody className="table__body">
-            {
-                surveyInstruments && surveyInstruments.length > 0
-                    ?
-                    surveyInstruments.map((item: Instrument) => {
-                        return (
-                            <tr className="table__row" key={item.name} data-testid={"instrument-table-row"}>
-                                <td className="table__cell ">
-                                    {item.name}
-                                </td>
-                                <td className="table__cell ">
-                                    {item.fieldPeriod}
-                                </td>
-                                <td className="table__cell ">
-                                    <ExternalLink text={"Interview"}
-                                                  link={item.link}
-                                                  ariaLabel={"Launch interview for instrument " + item.name + " " + item.fieldPeriod}/>
-                                </td>
-                            </tr>
-                        );
-                    })
-                    :
-                    <tr>
-                        <td className="table__cell " colSpan={3}>
-                            {listError.message}
-                        </td>
+        <h2>Active questionnaires</h2>
+        {
+            surveyInstruments && surveyInstruments.length > 0
+                ?
+                <table id="survey-table" className="table ">
+                    <thead className="table__head u-mt-m">
+                    <tr className="table__row">
+                        <th scope="col" className="table__header ">
+                            <span>Questionnaire</span>
+                        </th>
+                        <th scope="col" className="table__header ">
+                            <span>Field period</span>
+                        </th>
+                        <th scope="col" className="table__header ">
+                            <span>Link to interview</span>
+                        </th>
                     </tr>
-            }
-            </tbody>
-        </table>
+                    </thead>
+                    <tbody className="table__body">
+                    {
+                        surveyInstruments.map((item: Instrument) => {
+                            return (
+                                <tr className="table__row" key={item.name} data-testid={"instrument-table-row"}>
+                                    <td className="table__cell ">
+                                        {item.name}
+                                    </td>
+                                    <td className="table__cell ">
+                                        {item.fieldPeriod}
+                                    </td>
+                                    <td className="table__cell ">
+                                        <ExternalLink text={"Interview"}
+                                                      link={item.link}
+                                                      ariaLabel={"Launch interview for instrument " + item.name + " " + item.fieldPeriod}/>
+                                    </td>
+                                </tr>
+                            );
+                        })
+                    }
+                    </tbody>
+                </table>
+                :
+                <div className="panel panel--info panel--simple u-mb-m">
+                    <div className="panel__body">
+                        <p>{listError.message}</p>
+                    </div>
+                </div>
+        }
     </>;
 }
 
