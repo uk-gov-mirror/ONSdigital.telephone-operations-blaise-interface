@@ -46,7 +46,7 @@ function InstrumentList(props: Props): ReactElement {
         {
             surveyInstruments && surveyInstruments.length > 0
                 ?
-                <table id="survey-table" className="table ">
+                <table id="instrument-table" className="table ">
                     <thead className="table__head u-mt-m">
                     <tr className="table__row">
                         <th scope="col" className="table__header ">
