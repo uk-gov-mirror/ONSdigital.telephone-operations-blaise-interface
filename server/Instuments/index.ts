@@ -9,15 +9,16 @@ interface InstrumentResponse extends AxiosResponse {
 }
 
 export default function GetAllActiveInstruments(res: Response, BLAISE_API_URL: string, VM_EXTERNAL_WEB_URL: string): void {
-    console.log("get list of items");
+    console.log("Retrieve list of instruments");
 
-    axios.get("http://" + BLAISE_API_URL + "/api/v1/cati/instruments")
+    axios.get(`http://${BLAISE_API_URL}/api/v1/cati/instruments`)
         .then(function ({data}: InstrumentResponse) {
             // Add interviewing link and date of instrument to array objects
             data.map((instrument: Instrument) => {
-                instrument.surveyTLA = instrument.name.substr(0, 3);
-                instrument.link = "https://" + VM_EXTERNAL_WEB_URL + "/" + instrument.name + "?LayoutSet=CATI-Interviewer_Large";
-                instrument.fieldPeriod = Functions.field_period_to_text(instrument.name);
+                const {name}: Instrument = instrument;
+                instrument.surveyTLA = name.substr(0, 3);
+                instrument.link = `https://${VM_EXTERNAL_WEB_URL}/${name}?LayoutSet=CATI-Interviewer_Large`;
+                instrument.fieldPeriod = Functions.field_period_to_text(name);
             });
 
             // Filter the instruments by activeToday filed
