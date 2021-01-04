@@ -108,3 +108,5 @@ You can run this service in a container, the Dockerfile is setup to:
 - Run the tests, the build will fail if the tests fail.
 - Build the React project for serving by express
 - Run Yarn Start on startup
+
+Copyright (c) 2021 Crown Copyright (Government Digital Service)
