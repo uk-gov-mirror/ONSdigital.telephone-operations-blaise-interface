@@ -32,14 +32,14 @@ function SurveyList({list, listError}: Props): ReactElement {
                     </thead>
                     <tbody className="table__body">
                     {
-                        list.map(({survey}: Survey) => {
+                        list.map(({survey_name}: Survey) => {
                             return (
-                                <tr className="table__row" key={survey} data-testid={"survey-table-row"}>
+                                <tr className="table__row" key={survey_name} data-testid={"survey-table-row"}>
                                     <td className="table__cell ">
-                                        {survey}
+                                        {survey_name}
                                     </td>
                                     <td className="table__cell ">
-                                        <Link to={`/survey/${survey}`}>View active questionnaires</Link>
+                                        <Link to={`/survey/${survey_name}`}>View active questionnaires</Link>
                                     </td>
                                 </tr>
                             );

@@ -12,7 +12,7 @@ import {Survey} from "../Interfaces";
 
 const surveyListReturned: Survey[] = [
     {
-        survey: "OPN",
+        survey_name: "OPN",
         instruments: [
             {
                 activeToday: true,

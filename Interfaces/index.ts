@@ -12,7 +12,7 @@ interface Instrument {
 
 interface Survey {
     instruments: Instrument[]
-    survey: string
+    survey_name: string
 }
 
 export type {Instrument, Survey};

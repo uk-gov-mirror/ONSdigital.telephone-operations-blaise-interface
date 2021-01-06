@@ -22,7 +22,7 @@ function InstrumentList({list, listError}: Props): ReactElement {
     const {survey}: Params = useParams();
 
     const filteredSurvey: Survey[] = list.filter((obj: Survey) => {
-        return obj.survey === survey;
+        return obj.survey_name === survey;
     });
 
     let surveyInstruments: Instrument[] = [];

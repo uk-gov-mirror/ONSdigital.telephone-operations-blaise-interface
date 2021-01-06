@@ -30,7 +30,7 @@ export default function GetAllActiveInstruments(res: Response, BLAISE_API_URL: s
                 // Group the elements of Array based on `surveyTLA` property
                 .groupBy("surveyTLA")
                 // `key` is group's name (surveyTLA), `value` is the array of objects
-                .map((value: Instrument[], key: string) => ({survey: key, instruments: value}))
+                .map((value: Instrument[], key: string) => ({survey_name: key, instruments: value}))
                 .value();
             return res.json(surveys);
         })
