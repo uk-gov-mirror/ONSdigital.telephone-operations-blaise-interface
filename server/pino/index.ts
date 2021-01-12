@@ -1,5 +1,4 @@
 import logger from "pino-http";
-import pino from "pino";
 
 // https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#logseverity
 const PinoLevelToSeverityLookup = {
@@ -14,7 +13,7 @@ const PinoLevelToSeverityLookup = {
 const defaultPinoConf = {
     messageKey: "message",
     formatters: {
-        level(label: any, number: any) {
+        level(label: unknown, number: unknown) {
             return {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
@@ -22,21 +21,24 @@ const defaultPinoConf = {
                 level: number,
             };
         },
-        log(message: any) {
-            return {message};
+        log(error: never) {
+            return {error};
         },
     },
     serializers: {
-        err: pino.stdSerializers.err,
         req: (req: any) => ({
             method: req.method,
             url: req.url,
-            user: req.raw.user,
-            // other: req.raw
+            user: req.raw.user
         }),
     },
 };
 
-export default function createLogger(options: any = {autoLogging: false}) {
-    return logger(Object.assign({}, options, defaultPinoConf));
+
+export default function createLogger(options: any = {autoLogging: false})  {
+    let pinoConfig = {};
+    if (process.env.NODE_ENV === "production") {
+        pinoConfig = defaultPinoConf;
+    }
+    return logger(Object.assign({}, options, pinoConfig));
 }

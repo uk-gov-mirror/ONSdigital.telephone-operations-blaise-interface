@@ -47,9 +47,7 @@ export default function InstrumentRouter(BLAISE_API_URL: string, VM_EXTERNAL_WEB
                 return res.json(surveys);
             })
             .catch(function (error) {
-                // handle error
-                req.log.error("Failed to retrieve instrument list");
-                req.log.error(error);
+                req.log.error(error, "Failed to retrieve instrument list");
                 return res.status(500).json(error);
             });
     });
