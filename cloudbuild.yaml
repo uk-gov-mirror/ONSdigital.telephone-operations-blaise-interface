@@ -32,12 +32,26 @@ steps:
       - |
         versions=$(gcloud app versions list --service "tobi-ui" --sort-by '~version' --format 'value(VERSION.ID)' --project "${_PROJECT_ID}" | tail -n +11)
 
-        SAVEIFS=$IFS          # Save current IFS
-        IFS=$'\n'             # Change IFS to new line
         versions=($versions)  # split to array $versions
-        IFS=$SAVEIFS          # Restore IFS
 
         for (( i=0; i<${#versions[@]}; i++ ))
         do
           gcloud app versions delete ${versions[$i]} --service "tobi-ui" --project "${_PROJECT_ID}" --quiet
         done
+
+  - name: "gcr.io/cloud-builders/gcloud"
+    id: "Slack Notify"
+    waitFor: ["Deploy service"]
+    entrypoint: "/bin/bash"
+    args:
+      - "-c"
+      - |
+        python3 -u slack/slack-notify.py;
+    env:
+      - 'PROJECT_ID=$PROJECT_ID'
+      - 'BUILD_ID=$BUILD_ID'
+      - 'REPO_NAME=$REPO_NAME'
+      - 'COMMIT_SHA=$COMMIT_SHA'
+      - 'SHORT_SHA=$SHORT_SHA'
+      - 'SLACK_CHANNEL=$_SLACK_CHANNEL'
+      - 'SLACK_WEBHOOK=$_SLACK_WEBHOOK'

@@ -238,37 +238,12 @@ Object {
         class="footer"
       >
         <div
-          class="footer--body"
+          class="footer__body"
           data-analytics="footer"
         >
           <div
             class="container "
           >
-            <div
-              class="grid"
-            >
-              <div
-                class="u-mb-m"
-              >
-                <dl
-                  aria-label="Blaise Server Manager link to telephone server park"
-                  class="metadata metadata__list grid grid--gutterless u-cf u-mb-l"
-                  title="Blaise Server Manager link to telephone server park"
-                >
-                  <dt
-                    class="metadata__term grid__col col-6@m"
-                  >
-                     Telephone server park for Blaise Server Manager:
-                  </dt>
-                  <dd
-                    class="metadata__value grid__col col-6@m"
-                  />
-                </dl>
-                <hr
-                  class="footer__hr"
-                />
-              </div>
-            </div>
             <div
               class="grid grid--flex grid--between"
             >
@@ -524,37 +499,12 @@ Object {
       class="footer"
     >
       <div
-        class="footer--body"
+        class="footer__body"
         data-analytics="footer"
       >
         <div
           class="container "
         >
-          <div
-            class="grid"
-          >
-            <div
-              class="u-mb-m"
-            >
-              <dl
-                aria-label="Blaise Server Manager link to telephone server park"
-                class="metadata metadata__list grid grid--gutterless u-cf u-mb-l"
-                title="Blaise Server Manager link to telephone server park"
-              >
-                <dt
-                  class="metadata__term grid__col col-6@m"
-                >
-                   Telephone server park for Blaise Server Manager:
-                </dt>
-                <dd
-                  class="metadata__value grid__col col-6@m"
-                />
-              </dl>
-              <hr
-                class="footer__hr"
-              />
-            </div>
-          </div>
           <div
             class="grid grid--flex grid--between"
           >
@@ -828,37 +778,12 @@ Object {
         class="footer"
       >
         <div
-          class="footer--body"
+          class="footer__body"
           data-analytics="footer"
         >
           <div
             class="container "
           >
-            <div
-              class="grid"
-            >
-              <div
-                class="u-mb-m"
-              >
-                <dl
-                  aria-label="Blaise Server Manager link to telephone server park"
-                  class="metadata metadata__list grid grid--gutterless u-cf u-mb-l"
-                  title="Blaise Server Manager link to telephone server park"
-                >
-                  <dt
-                    class="metadata__term grid__col col-6@m"
-                  >
-                     Telephone server park for Blaise Server Manager:
-                  </dt>
-                  <dd
-                    class="metadata__value grid__col col-6@m"
-                  />
-                </dl>
-                <hr
-                  class="footer__hr"
-                />
-              </div>
-            </div>
             <div
               class="grid grid--flex grid--between"
             >
@@ -1075,37 +1000,12 @@ Object {
       class="footer"
     >
       <div
-        class="footer--body"
+        class="footer__body"
         data-analytics="footer"
       >
         <div
           class="container "
         >
-          <div
-            class="grid"
-          >
-            <div
-              class="u-mb-m"
-            >
-              <dl
-                aria-label="Blaise Server Manager link to telephone server park"
-                class="metadata metadata__list grid grid--gutterless u-cf u-mb-l"
-                title="Blaise Server Manager link to telephone server park"
-              >
-                <dt
-                  class="metadata__term grid__col col-6@m"
-                >
-                   Telephone server park for Blaise Server Manager:
-                </dt>
-                <dd
-                  class="metadata__value grid__col col-6@m"
-                />
-              </dl>
-              <hr
-                class="footer__hr"
-              />
-            </div>
-          </div>
           <div
             class="grid grid--flex grid--between"
           >
