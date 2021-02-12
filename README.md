@@ -1,6 +1,8 @@
 # Telephone Operations Blaise Interface
 
 [![codecov](https://codecov.io/gh/ONSdigital/telephone-operations-blaise-interface/branch/main/graph/badge.svg)](https://codecov.io/gh/ONSdigital/telephone-operations-blaise-interface)
+[![CI status](https://github.com/ONSdigital/telephone-operations-blaise-interface/workflows/Test%20coverage%20report/badge.svg)](https://github.com/ONSdigital/telephone-operations-blaise-interface/workflows/Test%20coverage%20report/badge.svg)
+<img src="https://img.shields.io/github/release/ONSdigital/telephone-operations-blaise-interface.svg?style=flat-square" alt="Telephone operations blaise interface release verison">
 
 
 Blaise Dashboard for accessing active surveys and CATI dashboard.
