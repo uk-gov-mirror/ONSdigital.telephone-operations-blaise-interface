@@ -1,7 +1,7 @@
-import ExternalLink from "./ONSDesignSystem/ExternalLink";
 import React, {ReactElement} from "react";
 import {Link, useParams} from "react-router-dom";
 import {Instrument, Survey} from "../../Interfaces";
+import {ExternalLink} from "blaise-design-system-react-components";
 
 
 interface listError {
