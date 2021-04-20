@@ -35,10 +35,8 @@ export default function GetAllActiveInstruments(res: Response, BLAISE_API_URL: s
             return res.json(surveys);
         })
         .catch(function (error) {
-            // handle error
             console.error("Failed to retrieve instrument list");
             console.error(error);
             return res.status(500).json(error);
         });
 }
-

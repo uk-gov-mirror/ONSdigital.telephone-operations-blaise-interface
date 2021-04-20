@@ -68,7 +68,7 @@ function App(): ReactElement {
                         setListError({error: false, message: ""});
 
                         // If the list is empty then show this message in the list
-                        if (surveys.length === 0) setListError({error: false, message: "No active surveys found."});
+                        if (!surveys.length) setListError("No active surveys found.");
                     })
                     .catch((error) => {
                         isDevEnv() && console.error(`Unable to read json from response, error: ${error}`);
