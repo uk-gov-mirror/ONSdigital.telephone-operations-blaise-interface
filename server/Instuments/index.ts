@@ -15,7 +15,7 @@ export default function InstrumentRouter(BLAISE_API_URL: string, VM_EXTERNAL_WEB
         console.log("get list of items");
 
         function activeToday(instrument: Instrument) {
-            return instrument.ActiveForTelephoneOperators === true;
+            return instrument.activeForTelephoneOperators === true;
         }
 
         axios.get("http://" + BLAISE_API_URL + "/api/v1/cati/instruments")
@@ -30,7 +30,7 @@ export default function InstrumentRouter(BLAISE_API_URL: string, VM_EXTERNAL_WEB
 
                 console.log("Retrieved instrument list, " + instruments.length + " item/s");
 
-                // Filter the instruments by ActiveForTelephoneOperators field
+                // Filter the instruments by activeForTelephoneOperators field
                 instruments = instruments.filter(activeToday);
 
                 console.log("Retrieved active instruments, " + instruments.length + " item/s");
