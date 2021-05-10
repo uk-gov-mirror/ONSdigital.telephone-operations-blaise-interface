@@ -3,7 +3,7 @@ interface Instrument {
     name: string
     expired: boolean
     serverParkName: string
-    ActiveForTelephoneOperators: boolean
+    activeForTelephoneOperators: boolean
     surveyDays: string[]
     link: string
     fieldPeriod: string
