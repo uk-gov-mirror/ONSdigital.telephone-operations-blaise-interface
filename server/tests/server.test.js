@@ -25,14 +25,14 @@ describe("Given the API returns 2 instruments with only one that is active", () 
 
     const apiInstrumentList = [
         {
-            activeToday: true,
+            ActiveForTelephoneOperators: true,
             expired: false,
             installDate: "2020-12-11T11:53:55.5612856+00:00",
             name: "OPN2007T",
             serverParkName: "LocalDevelopment"
         },
         {
-            activeToday: false,
+            ActiveForTelephoneOperators: false,
             expired: false,
             installDate: "2020-12-11T11:53:55.5612856+00:00",
             name: "OPN2004A",
@@ -45,7 +45,7 @@ describe("Given the API returns 2 instruments with only one that is active", () 
             survey: "OPN",
             instruments: [
                 {
-                    activeToday: true,
+                    ActiveForTelephoneOperators: true,
                     fieldPeriod: "July 2020",
                     expired: false,
                     installDate: "2020-12-11T11:53:55.5612856+00:00",
@@ -83,14 +83,14 @@ describe("Given the API returns 2 active instruments for the survey OPN", () => 
 
     const apiInstrumentList = [
         {
-            activeToday: true,
+            ActiveForTelephoneOperators: true,
             expired: false,
             installDate: "2020-12-11T11:53:55.5612856+00:00",
             name: "OPN2007T",
             serverParkName: "LocalDevelopment"
         },
         {
-            activeToday: true,
+            ActiveForTelephoneOperators: true,
             expired: false,
             installDate: "2020-12-11T11:53:55.5612856+00:00",
             name: "OPN2004A",
@@ -103,7 +103,7 @@ describe("Given the API returns 2 active instruments for the survey OPN", () => 
             survey: "OPN",
             instruments: [
                 {
-                    activeToday: true,
+                    ActiveForTelephoneOperators: true,
                     fieldPeriod: "July 2020",
                     expired: false,
                     installDate: "2020-12-11T11:53:55.5612856+00:00",
@@ -113,7 +113,7 @@ describe("Given the API returns 2 active instruments for the survey OPN", () => 
                     "surveyTLA": "OPN",
                 },
                 {
-                    activeToday: true,
+                    ActiveForTelephoneOperators: true,
                     fieldPeriod: "April 2020",
                     expired: false,
                     installDate: "2020-12-11T11:53:55.5612856+00:00",
@@ -153,14 +153,14 @@ describe("Given the API returns 2 active instruments for 2 separate surveys ", (
 
     const apiInstrumentList = [
         {
-            activeToday: true,
+            ActiveForTelephoneOperators: true,
             expired: false,
             installDate: "2020-12-11T11:53:55.5612856+00:00",
             name: "IPS2007T",
             serverParkName: "LocalDevelopment"
         },
         {
-            activeToday: true,
+            ActiveForTelephoneOperators: true,
             expired: false,
             installDate: "2020-12-11T11:53:55.5612856+00:00",
             name: "OPN2004A",
@@ -173,7 +173,7 @@ describe("Given the API returns 2 active instruments for 2 separate surveys ", (
             survey: "IPS",
             instruments: [
                 {
-                    activeToday: true,
+                    ActiveForTelephoneOperators: true,
                     fieldPeriod: "Field period unknown",
                     expired: false,
                     installDate: "2020-12-11T11:53:55.5612856+00:00",
@@ -187,7 +187,7 @@ describe("Given the API returns 2 active instruments for 2 separate surveys ", (
             survey: "OPN",
             instruments: [
                 {
-                    activeToday: true,
+                    ActiveForTelephoneOperators: true,
                     fieldPeriod: "April 2020",
                     expired: false,
                     installDate: "2020-12-11T11:53:55.5612856+00:00",
@@ -256,7 +256,7 @@ defineFeature(feature, test => {
         given("a survey questionnaire end date has passed", async () => {
             const apiInstrumentList = [
                 {
-                    activeToday: true,
+                    ActiveForTelephoneOperators: true,
                     expired: false,
                     installDate: "2020-12-11T11:53:55.5612856+00:00",
                     name: "OPN2007T",
@@ -264,7 +264,7 @@ defineFeature(feature, test => {
                 },
                 {
                     // this one is inactive
-                    activeToday: false,
+                    ActiveForTelephoneOperators: false,
                     expired: false,
                     installDate: "2020-12-11T11:53:55.5612856+00:00",
                     name: "OPN2004A",
@@ -288,7 +288,7 @@ defineFeature(feature, test => {
 
             const instrumentListReturned = [
                     {
-                        activeToday: true,
+                        ActiveForTelephoneOperators: true,
                         fieldPeriod: "July 2020",
                         expired: false,
                         installDate: "2020-12-11T11:53:55.5612856+00:00",
