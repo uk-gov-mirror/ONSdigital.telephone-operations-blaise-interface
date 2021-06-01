@@ -14,29 +14,44 @@ export default function InstrumentRouter(BLAISE_API_URL: string, VM_EXTERNAL_WEB
     instrumentRouter.get("/instruments", (req: Request, res: Response) => {
         console.log("get list of items");
 
-        function activeToday(instrument: Instrument) {
-            return instrument.activeToday === true;
+        
+
+        async function activeToday(instrument: Instrument) {
+            return axios.get(`http://${BLAISE_API_URL}/api/v1/serverparks/${instrument.serverParkName}/instruments/${instrument.name}/liveDate`)
+            .then(function (response: AxiosResponse) {
+
+            let liveDateResponse = response.data;
+            
+            if(liveDateResponse == null || Date.parse(liveDateResponse) <= Date.now())
+            {
+                console.log(`the instrument ${instrument.name} is live (live date = ${liveDateResponse}) (Active today = ${instrument.activeToday})`);
+                return instrument.activeToday;
+            }
+            console.log(`the instrument ${instrument.name} is not currently live (live date = ${liveDateResponse}) (Active today = ${instrument.activeToday})`);
+            return false;
+            })
         }
 
         axios.get("http://" + BLAISE_API_URL + "/api/v1/cati/instruments")
-            .then(function (response: AxiosResponse) {
-                let instruments: Instrument[] = response.data;
+            .then(async function (response: AxiosResponse) {
+                let allInstruments: Instrument[] = response.data;
+                let activeInstruments: Instrument[] = [];
                 // Add interviewing link and date of instrument to array objects
-                instruments.forEach(function (element: Instrument) {
-                    element.surveyTLA = element.name.substr(0, 3);
-                    element.link = "https://" + VM_EXTERNAL_WEB_URL + "/" + element.name + "?LayoutSet=CATI-Interviewer_Large";
-                    element.fieldPeriod = Functions.field_period_to_text(element.name);
-                });
+                await Promise.all(allInstruments.map(async function (instrument: Instrument) {
+                    let active = await activeToday(instrument);
+                    console.log(`Active today outputted (${active}) for instrument (${instrument.name}) type of (${typeof active})`)
+                    if (active)
+                    {
+                        instrument.surveyTLA = instrument.name.substr(0, 3);
+                        instrument.link = "https://" + VM_EXTERNAL_WEB_URL + "/" + instrument.name + "?LayoutSet=CATI-Interviewer_Large";
+                        instrument.fieldPeriod = Functions.field_period_to_text(instrument.name);
+                        activeInstruments.push(instrument);
+                    }                
+                }));
+                
+                console.log("Retrieved active instruments, " + activeInstruments.length + " item/s");
 
-                console.log("Retrieved instrument list, " + instruments.length + " item/s");
-
-                // Filter the instruments by activeToday field
-                instruments = instruments.filter(activeToday);
-
-                console.log("Retrieved active instruments, " + instruments.length + " item/s");
-
-
-                const surveys: Survey[] = _.chain(instruments)
+                const surveys: Survey[] = _.chain(activeInstruments)
                     // Group the elements of Array based on `surveyTLA` property
                     .groupBy("surveyTLA")
                     // `key` is group's name (surveyTLA), `value` is the array of objects
