@@ -21,6 +21,10 @@ describe("Given the API returns 2 instruments with only one that is active", () 
         mock.onGet("http://" + process.env.BLAISE_API_URL + "/api/v1/cati/instruments").reply(200,
             apiInstrumentList,
         );
+        const liveDateUrl = new RegExp(`http://${process.env.BLAISE_API_URL}/api/v1/serverparks/.*/instruments/.*/liveDate`)
+        mock.onGet(liveDateUrl).reply(200, 
+            null,
+        );     
     });
 
     const apiInstrumentList = [
@@ -79,6 +83,10 @@ describe("Given the API returns 2 active instruments for the survey OPN", () => 
         mock.onGet("http://" + process.env.BLAISE_API_URL + "/api/v1/cati/instruments").reply(200,
             apiInstrumentList,
         );
+        const liveDateUrl = new RegExp(`http://${process.env.BLAISE_API_URL}/api/v1/serverparks/.*/instruments/.*/liveDate`)
+        mock.onGet(liveDateUrl).reply(200, 
+            null,
+        );   
     });
 
     const apiInstrumentList = [
@@ -148,6 +156,10 @@ describe("Given the API returns 2 active instruments for 2 separate surveys ", (
     beforeAll(() => {
         mock.onGet("http://" + process.env.BLAISE_API_URL + "/api/v1/cati/instruments").reply(200,
             apiInstrumentList,
+        );
+        const liveDateUrl = new RegExp(`http://${process.env.BLAISE_API_URL}/api/v1/serverparks/.*/instruments/.*/liveDate`)
+        mock.onGet(liveDateUrl).reply(200, 
+            null,
         );
     });
 
@@ -222,6 +234,10 @@ describe("Given the API returns 2 active instruments for 2 separate surveys ", (
 describe("Get list of instruments endpoint fails", () => {
     beforeAll(() => {
         mock.onGet("http://" + process.env.BLAISE_API_URL + "/api/v1/cati/instruments").networkError();
+        const liveDateUrl = new RegExp(`http://${process.env.BLAISE_API_URL}/api/v1/serverparks/.*/instruments/.*/liveDate`)
+        mock.onGet(liveDateUrl).reply(200, 
+            null,
+        );
     });
 
     it("should return a 500 status and an error message", async done => {
@@ -274,6 +290,10 @@ defineFeature(feature, test => {
 
             mock.onGet("http://" + process.env.BLAISE_API_URL + "/api/v1/cati/instruments").reply(200,
                 apiInstrumentList,
+            );
+            const liveDateUrl = new RegExp(`http://${process.env.BLAISE_API_URL}/api/v1/serverparks/.*/instruments/.*/liveDate`)
+            mock.onGet(liveDateUrl).reply(200, 
+                null,
             );
             response = await request.get("/api/instruments");
         });
