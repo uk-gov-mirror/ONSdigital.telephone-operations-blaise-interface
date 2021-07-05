@@ -23,7 +23,7 @@ export default function InstrumentRouter(
 
         async function activeToday(instrument: Instrument) {
             return axios({
-                url: `http://${BIMS_API_URL}/tostartdate/${instrument.name}`,
+                url: `${BIMS_API_URL}/tostartdate/${instrument.name}`,
                 method: "GET",
                 headers: authProvider.getAuthHeader(),
             })
