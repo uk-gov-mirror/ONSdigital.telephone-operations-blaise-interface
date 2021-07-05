@@ -3,31 +3,40 @@ import {Instrument, Survey} from "../../Interfaces";
 import axios, {AxiosResponse} from "axios";
 import _ from "lodash";
 import Functions from "../Functions";
+import AuthProvider from "../AuthProvider"
+import { Footer } from "blaise-design-system-react-components";
 
-
-export default function InstrumentRouter(BLAISE_API_URL: string, VM_EXTERNAL_WEB_URL: string): Router {
+export default function InstrumentRouter(
+    BLAISE_API_URL: string, 
+    VM_EXTERNAL_WEB_URL: string, 
+    BIMS_CLIENT_ID: string,
+    BIMS_API_URL:string
+    ): 
+    Router {
     "use strict";
     const instrumentRouter = express.Router();
-
+    const authProvider = new AuthProvider(BIMS_CLIENT_ID);
 
     // An api endpoint that returns list of installed instruments
     instrumentRouter.get("/instruments", (req: Request, res: Response) => {
         console.log("get list of items");
 
-        
-
         async function activeToday(instrument: Instrument) {
-            return axios.get(`http://${BLAISE_API_URL}/api/v1/serverparks/${instrument.serverParkName}/instruments/${instrument.name}/liveDate`)
+            return axios({
+                url: `http://${BIMS_API_URL}/tostartdate/${instrument.name}`,
+                method: "GET",
+                headers: authProvider.getAuthHeader(),
+            })
             .then(function (response: AxiosResponse) {
 
-            let liveDateResponse = response.data;
+            let TelOpsStartDateResponse = response.data;
             
-            if(liveDateResponse == null || Date.parse(liveDateResponse) <= Date.now())
+            if(TelOpsStartDateResponse == null || Date.parse(TelOpsStartDateResponse) <= Date.now())
             {
-                console.log(`the instrument ${instrument.name} is live (live date = ${liveDateResponse}) (Active today = ${instrument.activeToday})`);
+                console.log(`the instrument ${instrument.name} is live for TO (TO start date = ${TelOpsStartDateResponse}) (Active today = ${instrument.activeToday})`);
                 return instrument.activeToday;
             }
-            console.log(`the instrument ${instrument.name} is not currently live (live date = ${liveDateResponse}) (Active today = ${instrument.activeToday})`);
+            console.log(`the instrument ${instrument.name} is not currently live for TO (TO start date = ${TelOpsStartDateResponse}) (Active today = ${instrument.activeToday})`);
             return false;
             })
         }

@@ -21,7 +21,7 @@ describe("Given the API returns 2 instruments with only one that is active", () 
         mock.onGet("http://" + process.env.BLAISE_API_URL + "/api/v1/cati/instruments").reply(200,
             apiInstrumentList,
         );
-        const liveDateUrl = new RegExp(`http://${process.env.BLAISE_API_URL}/api/v1/serverparks/.*/instruments/.*/liveDate`)
+        const liveDateUrl = new RegExp(`http://${process.env.BIMS_API_URL}/tostartdate/.*`)
         mock.onGet(liveDateUrl).reply(200, 
             null,
         );     
@@ -83,7 +83,7 @@ describe("Given the API returns 2 active instruments for the survey OPN", () => 
         mock.onGet("http://" + process.env.BLAISE_API_URL + "/api/v1/cati/instruments").reply(200,
             apiInstrumentList,
         );
-        const liveDateUrl = new RegExp(`http://${process.env.BLAISE_API_URL}/api/v1/serverparks/.*/instruments/.*/liveDate`)
+        const liveDateUrl = new RegExp(`http://${process.env.BIMS_API_URL}/tostartdate/.*`)
         mock.onGet(liveDateUrl).reply(200, 
             null,
         );   
@@ -157,7 +157,7 @@ describe("Given the API returns 2 active instruments for 2 separate surveys ", (
         mock.onGet("http://" + process.env.BLAISE_API_URL + "/api/v1/cati/instruments").reply(200,
             apiInstrumentList,
         );
-        const liveDateUrl = new RegExp(`http://${process.env.BLAISE_API_URL}/api/v1/serverparks/.*/instruments/.*/liveDate`)
+        const liveDateUrl = new RegExp(`http://${process.env.BIMS_API_URL}/tostartdate/.*`)
         mock.onGet(liveDateUrl).reply(200, 
             null,
         );
@@ -234,7 +234,7 @@ describe("Given the API returns 2 active instruments for 2 separate surveys ", (
 describe("Get list of instruments endpoint fails", () => {
     beforeAll(() => {
         mock.onGet("http://" + process.env.BLAISE_API_URL + "/api/v1/cati/instruments").networkError();
-        const liveDateUrl = new RegExp(`http://${process.env.BLAISE_API_URL}/api/v1/serverparks/.*/instruments/.*/liveDate`)
+        const liveDateUrl = new RegExp(`http://${process.env.BIMS_API_URL}/tostartdate/.*`)
         mock.onGet(liveDateUrl).reply(200, 
             null,
         );
@@ -291,7 +291,7 @@ defineFeature(feature, test => {
             mock.onGet("http://" + process.env.BLAISE_API_URL + "/api/v1/cati/instruments").reply(200,
                 apiInstrumentList,
             );
-            const liveDateUrl = new RegExp(`http://${process.env.BLAISE_API_URL}/api/v1/serverparks/.*/instruments/.*/liveDate`)
+            const liveDateUrl = new RegExp(`http://${process.env.BIMS_API_URL}/tostartdate/.*`)
             mock.onGet(liveDateUrl).reply(200, 
                 null,
             );

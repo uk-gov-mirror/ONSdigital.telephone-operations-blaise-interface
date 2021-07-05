@@ -11,7 +11,7 @@
     "test": "jest --coverage --watchAll=false",
     "gcp-build": "react-scripts build && tsc --project tsconfig.server.json"
   },
-  "proxy": "http://localhost:5000",
+  "proxy": "http://localhost:5008",
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -40,6 +40,7 @@
     "ejs": "^3.1.5",
     "express": "^4.17.1",
     "jest-cucumber": "^3.0.0",
+    "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.20",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
