@@ -11,7 +11,6 @@ const request = supertest(app);
 // This sets the mock adapter on the default instance
 const mock = new MockAdapter(axios, {onNoMatch: "throwException"});
 
-
 // Mock any GET request to /api/instruments
 // arguments for reply are (status, data, headers)
 
@@ -21,10 +20,10 @@ describe("Given the API returns 2 instruments with only one that is active", () 
         mock.onGet("http://" + process.env.BLAISE_API_URL + "/api/v1/cati/instruments").reply(200,
             apiInstrumentList,
         );
-        const liveDateUrl = new RegExp(`${process.env.BIMS_API_URL}/tostartdate/.*`)
+        const liveDateUrl = new RegExp(`${process.env.BIMS_API_URL}/tostartdate/.*`);
         mock.onGet(liveDateUrl).reply(200,
-            {tostartdate:null}
-        );     
+            {tostartdate: null}
+        );
     });
 
     const apiInstrumentList = [
@@ -60,7 +59,6 @@ describe("Given the API returns 2 instruments with only one that is active", () 
                 }
             ]
         }
-
     ];
 
     it("should return a 200 status and a list with the one active instrument", async done => {
@@ -83,9 +81,9 @@ describe("Given the API returns 2 active instruments for the survey OPN", () => 
         mock.onGet("http://" + process.env.BLAISE_API_URL + "/api/v1/cati/instruments").reply(200,
             apiInstrumentList,
         );
-        const liveDateUrl = new RegExp(`${process.env.BIMS_API_URL}/tostartdate/.*`)
-        mock.onGet(liveDateUrl).reply(200, 
-          {tostartdate:null}
+        const liveDateUrl = new RegExp(`${process.env.BIMS_API_URL}/tostartdate/.*`);
+        mock.onGet(liveDateUrl).reply(200,
+            {tostartdate: null}
         );   
     });
 
@@ -132,7 +130,6 @@ describe("Given the API returns 2 active instruments for the survey OPN", () => 
                 }
             ]
         }
-
     ];
 
     it("should return a list with one survey with 2 instrument objects", async done => {
@@ -157,9 +154,9 @@ describe("Given the API returns 2 active instruments for 2 separate surveys ", (
         mock.onGet("http://" + process.env.BLAISE_API_URL + "/api/v1/cati/instruments").reply(200,
             apiInstrumentList,
         );
-        const liveDateUrl = new RegExp(`${process.env.BIMS_API_URL}/tostartdate/.*`)
+        const liveDateUrl = new RegExp(`${process.env.BIMS_API_URL}/tostartdate/.*`);
         mock.onGet(liveDateUrl).reply(200, 
-            null,
+            {tostartdate: null}
         );
     });
 
@@ -213,7 +210,7 @@ describe("Given the API returns 2 active instruments for 2 separate surveys ", (
 
     ];
 
-    it("should return a list with 2 surveys with  instrument object in each", async done => {
+    it("should return a list with 2 surveys with instrument object in each", async done => {
         const response = await request.get("/api/instruments");
 
         expect(response.statusCode).toEqual(200);
@@ -234,9 +231,9 @@ describe("Given the API returns 2 active instruments for 2 separate surveys ", (
 describe("Get list of instruments endpoint fails", () => {
     beforeAll(() => {
         mock.onGet("http://" + process.env.BLAISE_API_URL + "/api/v1/cati/instruments").networkError();
-        const liveDateUrl = new RegExp(`${process.env.BIMS_API_URL}/tostartdate/.*`)
+        const liveDateUrl = new RegExp(`${process.env.BIMS_API_URL}/tostartdate/.*`);
         mock.onGet(liveDateUrl).reply(200, 
-            null,
+            {tostartdate: null}
         );
     });
 
@@ -255,12 +252,9 @@ describe("Get list of instruments endpoint fails", () => {
 
 
 import {defineFeature, loadFeature} from "jest-cucumber";
-
-
 const feature = loadFeature("./src/features/TO_Interviewer_Happy_Path.feature", {tagFilter: "@server"});
 
 defineFeature(feature, test => {
-
 
     /**
      *  Scenario 3b
@@ -273,7 +267,6 @@ defineFeature(feature, test => {
             const apiInstrumentList = [
                 {
                     activeToday: true,
-                    expired: false,
                     installDate: "2020-12-11T11:53:55.5612856+00:00",
                     name: "OPN2007T",
                     serverParkName: "LocalDevelopment"
@@ -281,7 +274,6 @@ defineFeature(feature, test => {
                 {
                     // this one is inactive
                     activeToday: false,
-                    expired: false,
                     installDate: "2020-12-11T11:53:55.5612856+00:00",
                     name: "OPN2004A",
                     serverParkName: "LocalDevelopment"
@@ -292,8 +284,9 @@ defineFeature(feature, test => {
                 apiInstrumentList,
             );
             const liveDateUrl = new RegExp(`${process.env.BIMS_API_URL}/tostartdate/.*`);
+            const date = new Date();
             mock.onGet(liveDateUrl).reply(200,
-                {tostartdate:null},
+                {tostartdate: date.toISOString()}
             );
             response = await request.get("/api/instruments");
         });
@@ -310,7 +303,6 @@ defineFeature(feature, test => {
                     {
                         activeToday: true,
                         fieldPeriod: "July 2020",
-                        expired: false,
                         installDate: "2020-12-11T11:53:55.5612856+00:00",
                         link: "https://external-web-url/OPN2007T?LayoutSet=CATI-Interviewer_Large",
                         name: "OPN2007T",

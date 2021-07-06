@@ -9,8 +9,7 @@ export default function InstrumentRouter(
     BLAISE_API_URL: string, 
     VM_EXTERNAL_WEB_URL: string, 
     BIMS_CLIENT_ID: string,
-    BIMS_API_URL:string
-    ): 
+    BIMS_API_URL:string):
     Router {
     "use strict";
     const instrumentRouter = express.Router();
@@ -23,11 +22,13 @@ export default function InstrumentRouter(
         async function activeToday(instrument: Instrument) {
             return axios.get(
                 `${BIMS_API_URL}/tostartdate/${instrument.name}`,
-                { headers: authProvider.getAuthHeader() })
+                {
+                    headers: authProvider.getAuthHeader(),
+                    validateStatus: function (status) { return status >= 200;} })
             .then(function (response: AxiosResponse) {
                 
             const telOpsStartDate = response.status == 200 ? response.data.tostartdate : null;
-            
+
             if(telOpsStartDate == null || Date.parse(telOpsStartDate) <= Date.now())
             {
                 console.log(`the instrument ${instrument.name} is live for TO (TO start date = ${telOpsStartDate}) (Active today = ${instrument.activeToday})`);
