@@ -3,8 +3,7 @@ import {Instrument, Survey} from "../../Interfaces";
 import axios, {AxiosResponse} from "axios";
 import _ from "lodash";
 import Functions from "../Functions";
-import AuthProvider from "../AuthProvider"
-import { Footer } from "blaise-design-system-react-components";
+import AuthProvider from "../AuthProvider";
 
 export default function InstrumentRouter(
     BLAISE_API_URL: string, 
@@ -22,14 +21,11 @@ export default function InstrumentRouter(
         console.log("get list of items");
 
         async function activeToday(instrument: Instrument) {
-            return axios({
-                url: `${BIMS_API_URL}/tostartdate/${instrument.name}`,
-                method: "GET",
-                headers: authProvider.getAuthHeader(),
-            })
+            return axios.get(`${BIMS_API_URL}/tostartdate/${instrument.name}`,
+                { headers: authProvider.getAuthHeader() })
             .then(function (response: AxiosResponse) {
 
-            let TelOpsStartDateResponse = response.data;
+            const TelOpsStartDateResponse = response.data;
             
             if(TelOpsStartDateResponse == null || Date.parse(TelOpsStartDateResponse) <= Date.now())
             {
@@ -38,13 +34,13 @@ export default function InstrumentRouter(
             }
             console.log(`the instrument ${instrument.name} is not currently live for TO (TO start date = ${TelOpsStartDateResponse}) (Active today = ${instrument.activeToday})`);
             return false;
-            })
+            });
         }
 
         axios.get("http://" + BLAISE_API_URL + "/api/v1/cati/instruments")
             .then(async function (response: AxiosResponse) {
-                let allInstruments: Instrument[] = response.data;
-                let activeInstruments: Instrument[] = [];
+                const allInstruments: Instrument[] = response.data;
+                const activeInstruments: Instrument[] = [];
                 // Add interviewing link and date of instrument to array objects
                 await Promise.all(allInstruments.map(async function (instrument: Instrument) {
                     let active = await activeToday(instrument);
