@@ -22,10 +22,36 @@ Feature: TOBI UI
 
   # Scenario 3b
   @server
-  Scenario: Do not show expired surveys in TOBI
-    Given a survey questionnaire end date has passed
+  Scenario: Show surveys that have a TelOps start date of today and an active survey day in TOBI
+    Given a survey questionnaire has a TelOps start date of today
+    And an active survey day
     When I select the survey I am working on
     Then I will not see that questionnaire listed for the survey
+
+#  Scenario: Show surveys that have a TelOps start date in the past and an active survey day in TOBI
+#    Given a survey questionnaire TelOps start date is in the future
+#    When I select the survey I am working on
+#    Then I will not see that questionnaire listed for the survey
+#
+#  Scenario: Do not show surveys that have an active survey day but TelOps start date in the future in TOBI
+#    Given a survey questionnaire TelOps start date is in the future
+#    When I select the survey I am working on
+#    Then I will not see that questionnaire listed for the survey
+#
+#  Scenario: Do not show surveys that do not have an active survey day but TelOps start date has passed in TOBI
+#    Given a survey questionnaire TelOps start date is in the future
+#    When I select the survey I am working on
+#    Then I will not see that questionnaire listed for the survey
+#
+#  Scenario: Show surveys that dont have a TelOps start date but have an active survey day in TOBI
+#    Given a survey questionnaire TelOps start date is in the future
+#    When I select the survey I am working on
+#    Then I will not see that questionnaire listed for the survey
+#
+#  Scenario: Do not show surveys  that dont have a TelOps start date and do not have an active survey day in TOBI
+#    Given a survey questionnaire TelOps start date is in the future
+#    When I select the survey I am working on
+#    Then I will not see that questionnaire listed for the survey
 
   # Scenario 3c
   Scenario: Return to select survey

@@ -29,14 +29,12 @@ describe("Given the API returns 2 instruments with only one that is active", () 
     const apiInstrumentList = [
         {
             activeToday: true,
-            expired: false,
             installDate: "2020-12-11T11:53:55.5612856+00:00",
             name: "OPN2007T",
             serverParkName: "LocalDevelopment"
         },
         {
             activeToday: false,
-            expired: false,
             installDate: "2020-12-11T11:53:55.5612856+00:00",
             name: "OPN2004A",
             serverParkName: "LocalDevelopment"
@@ -50,7 +48,6 @@ describe("Given the API returns 2 instruments with only one that is active", () 
                 {
                     activeToday: true,
                     fieldPeriod: "July 2020",
-                    expired: false,
                     installDate: "2020-12-11T11:53:55.5612856+00:00",
                     link: "https://external-web-url/OPN2007T?LayoutSet=CATI-Interviewer_Large",
                     name: "OPN2007T",
@@ -90,14 +87,12 @@ describe("Given the API returns 2 active instruments for the survey OPN", () => 
     const apiInstrumentList = [
         {
             activeToday: true,
-            expired: false,
             installDate: "2020-12-11T11:53:55.5612856+00:00",
             name: "OPN2007T",
             serverParkName: "LocalDevelopment"
         },
         {
             activeToday: true,
-            expired: false,
             installDate: "2020-12-11T11:53:55.5612856+00:00",
             name: "OPN2004A",
             serverParkName: "LocalDevelopment"
@@ -111,7 +106,6 @@ describe("Given the API returns 2 active instruments for the survey OPN", () => 
                 {
                     activeToday: true,
                     fieldPeriod: "July 2020",
-                    expired: false,
                     installDate: "2020-12-11T11:53:55.5612856+00:00",
                     link: "https://external-web-url/OPN2007T?LayoutSet=CATI-Interviewer_Large",
                     name: "OPN2007T",
@@ -121,7 +115,6 @@ describe("Given the API returns 2 active instruments for the survey OPN", () => 
                 {
                     activeToday: true,
                     fieldPeriod: "April 2020",
-                    expired: false,
                     installDate: "2020-12-11T11:53:55.5612856+00:00",
                     link: "https://external-web-url/OPN2004A?LayoutSet=CATI-Interviewer_Large",
                     name: "OPN2004A",
@@ -163,14 +156,12 @@ describe("Given the API returns 2 active instruments for 2 separate surveys ", (
     const apiInstrumentList = [
         {
             activeToday: true,
-            expired: false,
             installDate: "2020-12-11T11:53:55.5612856+00:00",
             name: "IPS2007T",
             serverParkName: "LocalDevelopment"
         },
         {
             activeToday: true,
-            expired: false,
             installDate: "2020-12-11T11:53:55.5612856+00:00",
             name: "OPN2004A",
             serverParkName: "LocalDevelopment"
@@ -184,7 +175,6 @@ describe("Given the API returns 2 active instruments for 2 separate surveys ", (
                 {
                     activeToday: true,
                     fieldPeriod: "Field period unknown",
-                    expired: false,
                     installDate: "2020-12-11T11:53:55.5612856+00:00",
                     link: "https://external-web-url/IPS2007T?LayoutSet=CATI-Interviewer_Large",
                     name: "IPS2007T",
@@ -198,7 +188,6 @@ describe("Given the API returns 2 active instruments for 2 separate surveys ", (
                 {
                     activeToday: true,
                     fieldPeriod: "April 2020",
-                    expired: false,
                     installDate: "2020-12-11T11:53:55.5612856+00:00",
                     link: "https://external-web-url/OPN2004A?LayoutSet=CATI-Interviewer_Large",
                     name: "OPN2004A",
@@ -259,23 +248,24 @@ defineFeature(feature, test => {
     /**
      *  Scenario 3b
      **/
-    test("Do not show expired surveys in TOBI", ({given, when, then}) => {
+    test("Show surveys that have a TelOps start date of today and an active survey day in TOBI", ({given, when, then}) => {
         let selectedSurvey;
         let response;
 
-        given("a survey questionnaire end date has passed", async () => {
+         given("a survey questionnaire has a TelOps start date of today", async () => {
+            const liveDateUrl = new RegExp(`${process.env.BIMS_API_URL}/tostartdate/.*`);
+            const date = new Date();
+            mock.onGet(liveDateUrl).reply(200,
+                {tostartdate: date.toISOString()}
+            );
+        });
+
+        given("an active survey day", async () => {
             const apiInstrumentList = [
                 {
                     activeToday: true,
                     installDate: "2020-12-11T11:53:55.5612856+00:00",
                     name: "OPN2007T",
-                    serverParkName: "LocalDevelopment"
-                },
-                {
-                    // this one is inactive
-                    activeToday: false,
-                    installDate: "2020-12-11T11:53:55.5612856+00:00",
-                    name: "OPN2004A",
                     serverParkName: "LocalDevelopment"
                 }
             ];
@@ -288,15 +278,15 @@ defineFeature(feature, test => {
             mock.onGet(liveDateUrl).reply(200,
                 {tostartdate: date.toISOString()}
             );
-            response = await request.get("/api/instruments");
         });
 
         when("I select the survey I am working on", async () => {
-            selectedSurvey = response.body[0].instruments;
+            response = await request.get("/api/instruments");
         });
 
         then("I will not see that questionnaire listed for the survey", () => {
             // Only the one active survey is returned
+            selectedSurvey = response.body[0].instruments;
             expect(selectedSurvey).toHaveLength(1);
 
             const instrumentListReturned = [
@@ -309,8 +299,7 @@ defineFeature(feature, test => {
                         serverParkName: "LocalDevelopment",
                         "surveyTLA": "OPN",
                     }
-                ]
-            ;
+                ];
             expect(selectedSurvey).toStrictEqual(instrumentListReturned);
         });
     });
