@@ -25,15 +25,15 @@ export default function InstrumentRouter(
                 `${BIMS_API_URL}/tostartdate/${instrument.name}`,
                 { headers: authProvider.getAuthHeader() })
             .then(function (response: AxiosResponse) {
-
-            const TelOpsStartDateResponse = response.data;
+                
+            const telOpsStartDate = response.status == 200 ? response.data.tostartdate : null;
             
-            if(TelOpsStartDateResponse == null || Date.parse(TelOpsStartDateResponse) <= Date.now())
+            if(telOpsStartDate == null || Date.parse(telOpsStartDate) <= Date.now())
             {
-                console.log(`the instrument ${instrument.name} is live for TO (TO start date = ${TelOpsStartDateResponse}) (Active today = ${instrument.activeToday})`);
+                console.log(`the instrument ${instrument.name} is live for TO (TO start date = ${telOpsStartDate}) (Active today = ${instrument.activeToday})`);
                 return instrument.activeToday;
             }
-            console.log(`the instrument ${instrument.name} is not currently live for TO (TO start date = ${TelOpsStartDateResponse}) (Active today = ${instrument.activeToday})`);
+            console.log(`the instrument ${instrument.name} is not currently live for TO (TO start date = ${telOpsStartDate}) (Active today = ${instrument.activeToday})`);
             return false;
             });
         }

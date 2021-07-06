@@ -22,8 +22,8 @@ describe("Given the API returns 2 instruments with only one that is active", () 
             apiInstrumentList,
         );
         const liveDateUrl = new RegExp(`${process.env.BIMS_API_URL}/tostartdate/.*`)
-        mock.onGet(liveDateUrl).reply(200, 
-            null,
+        mock.onGet(liveDateUrl).reply(200,
+            {tostartdate:null}
         );     
     });
 
@@ -85,7 +85,7 @@ describe("Given the API returns 2 active instruments for the survey OPN", () => 
         );
         const liveDateUrl = new RegExp(`${process.env.BIMS_API_URL}/tostartdate/.*`)
         mock.onGet(liveDateUrl).reply(200, 
-            null,
+          {tostartdate:null}
         );   
     });
 
@@ -291,9 +291,9 @@ defineFeature(feature, test => {
             mock.onGet("http://" + process.env.BLAISE_API_URL + "/api/v1/cati/instruments").reply(200,
                 apiInstrumentList,
             );
-            const liveDateUrl = new RegExp(`${process.env.BIMS_API_URL}/tostartdate/.*`)
-            mock.onGet(liveDateUrl).reply(200, 
-                null,
+            const liveDateUrl = new RegExp(`${process.env.BIMS_API_URL}/tostartdate/.*`);
+            mock.onGet(liveDateUrl).reply(200,
+                {tostartdate:null},
             );
             response = await request.get("/api/instruments");
         });
