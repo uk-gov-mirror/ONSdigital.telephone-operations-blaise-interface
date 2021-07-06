@@ -21,7 +21,8 @@ export default function InstrumentRouter(
         console.log("get list of items");
 
         async function activeToday(instrument: Instrument) {
-            return axios.get(`${BIMS_API_URL}/tostartdate/${instrument.name}`,
+            return axios.get(
+                `${BIMS_API_URL}/tostartdate/${instrument.name}`,
                 { headers: authProvider.getAuthHeader() })
             .then(function (response: AxiosResponse) {
 
@@ -43,8 +44,8 @@ export default function InstrumentRouter(
                 const activeInstruments: Instrument[] = [];
                 // Add interviewing link and date of instrument to array objects
                 await Promise.all(allInstruments.map(async function (instrument: Instrument) {
-                    let active = await activeToday(instrument);
-                    console.log(`Active today outputted (${active}) for instrument (${instrument.name}) type of (${typeof active})`)
+                    const active = await activeToday(instrument);
+                    console.log(`Active today outputted (${active}) for instrument (${instrument.name}) type of (${typeof active})`);
                     if (active)
                     {
                         instrument.surveyTLA = instrument.name.substr(0, 3);
