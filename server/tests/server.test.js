@@ -94,7 +94,7 @@ describe("Given the API returns 2 active instruments for the survey OPN", () => 
     });
 });
 
-describe("Given the API returns 2 active instruments for 2 separate surveys ", () => {
+/*describe("Given the API returns 2 active instruments for 2 separate surveys ", () => {
     beforeAll(() => {
         mock.onGet("http://" + process.env.BLAISE_API_URL + "/api/v1/cati/instruments").reply(200,
             apiInstrumentList,
@@ -135,8 +135,7 @@ describe("Given the API returns 2 active instruments for 2 separate surveys ", (
     afterAll(() => {
         mock.reset();
     });
-});
-
+});*/
 
 describe("Get list of instruments endpoint fails", () => {
     beforeAll(() => {
