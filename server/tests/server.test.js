@@ -245,21 +245,48 @@ const feature = loadFeature("./src/features/TO_Interviewer_Happy_Path.feature", 
 
 defineFeature(feature, test => {
 
-    /**
-     *  Scenario 3b
-     **/
-    test("Show surveys that have a TelOps start date of today and an active survey day in TOBI", ({given, when, then}) => {
-        let selectedSurvey;
-        let response;
+    //Scenario 3b
 
-         given("a survey questionnaire has a TelOps start date of today", async () => {
-            const liveDateUrl = new RegExp(`${process.env.BIMS_API_URL}/tostartdate/.*`);
+    let response;
+    const liveDateUrl = new RegExp(`${process.env.BIMS_API_URL}/tostartdate/.*`);
+
+    const questionnaireHasATelOpsStartDateOfToday = (given) => {
+     given("a survey questionnaire has a TelOps start date of today", async () => {
             const date = new Date();
+            mock.onGet(liveDateUrl).reply(200,{tostartdate: date.toISOString()});
+        });
+    };
+
+    const questionnaireHasATelOpsStartDateInThePast = (given) => {
+     given("a survey questionnaire has a TelOps start date in the past", async () => {
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+
             mock.onGet(liveDateUrl).reply(200,
-                {tostartdate: date.toISOString()}
+                {tostartdate: yesterday.toISOString()}
             );
         });
+    };
 
+    const questionnaireHasATelOpsStartDateInTheFuture = (given) => {
+     given("a survey questionnaire has a TelOps start date is in the future", async () => {
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+
+            mock.onGet(liveDateUrl).reply(200,
+                {tostartdate: tomorrow.toISOString()}
+            );
+        });
+    };
+
+    const questionnaireDoesNotHaveATelOpsStartDate = (given) => {
+     given("a survey questionnaire does not have a TelOps start date", async () => {
+            mock.onGet(liveDateUrl).reply(404,
+                null);}
+            );
+        };
+
+    const questionnaireHasAnActiveSurveyDay = (given) => {
         given("an active survey day", async () => {
             const apiInstrumentList = [
                 {
@@ -271,22 +298,36 @@ defineFeature(feature, test => {
             ];
 
             mock.onGet("http://" + process.env.BLAISE_API_URL + "/api/v1/cati/instruments").reply(200,
-                apiInstrumentList,
-            );
-            const liveDateUrl = new RegExp(`${process.env.BIMS_API_URL}/tostartdate/.*`);
-            const date = new Date();
-            mock.onGet(liveDateUrl).reply(200,
-                {tostartdate: date.toISOString()}
-            );
+                apiInstrumentList);
         });
+    };
 
+    const questionnaireDoesNotHaveAnActiveSurveyDay = (given) => {
+        given("does not have an active survey day", async () => {
+            const apiInstrumentList = [
+                {
+                    activeToday: false,
+                    installDate: "2020-12-11T11:53:55.5612856+00:00",
+                    name: "OPN2007T",
+                    serverParkName: "LocalDevelopment"
+                }
+            ];
+
+            mock.onGet("http://" + process.env.BLAISE_API_URL + "/api/v1/cati/instruments").reply(200,
+                apiInstrumentList);
+        });
+    };
+
+    const iSelectTheSurveyIAmWorkingOn = (when) => {
         when("I select the survey I am working on", async () => {
             response = await request.get("/api/instruments");
         });
+    };
 
-        then("I will not see that questionnaire listed for the survey", () => {
-            // Only the one active survey is returned
-            selectedSurvey = response.body[0].instruments;
+    const thenIWillSeeTheQuestionnaireListed = (then) => {
+        then("I will see that questionnaire listed for the survey", () => {
+            // The survey is returned
+            let selectedSurvey = response.body[0].instruments;
             expect(selectedSurvey).toHaveLength(1);
 
             const instrumentListReturned = [
@@ -302,6 +343,54 @@ defineFeature(feature, test => {
                 ];
             expect(selectedSurvey).toStrictEqual(instrumentListReturned);
         });
+    };
+
+    const thenIWillNotSeeTheQuestionnaireListed = (then) => {
+        then("I will not see that questionnaire listed for the survey", () => {
+            // The survey is returned
+            expect(response.body).toHaveLength(0);
+        });
+    };
+
+    test("Show surveys that have a TelOps start date of today and an active survey day in TOBI", ({given, and, when, then}) => {
+        questionnaireHasATelOpsStartDateOfToday(given);
+        questionnaireHasAnActiveSurveyDay(and);
+        iSelectTheSurveyIAmWorkingOn(when);
+        thenIWillSeeTheQuestionnaireListed(then);
     });
 
+    test("Show surveys that have a TelOps start date in the past and an active survey day in TOBI", ({given, and, when, then}) => {
+        questionnaireHasATelOpsStartDateInThePast(given);
+        questionnaireHasAnActiveSurveyDay(and);
+        iSelectTheSurveyIAmWorkingOn(when);
+        thenIWillSeeTheQuestionnaireListed(then);
+    });
+
+    test("Do not show surveys that have an active survey day but TelOps start date in the future in TOBI", ({given, and, when, then}) => {
+        questionnaireHasATelOpsStartDateInTheFuture(given);
+        questionnaireHasAnActiveSurveyDay(and);
+        iSelectTheSurveyIAmWorkingOn(when);
+        thenIWillNotSeeTheQuestionnaireListed(then);
+    });
+
+    test("Do not show surveys that have a TelOps start date in the past but no active survey day in TOBI", ({given, and, when, then}) => {
+        questionnaireHasATelOpsStartDateInThePast(given);
+        questionnaireDoesNotHaveAnActiveSurveyDay(and);
+        iSelectTheSurveyIAmWorkingOn(when);
+        thenIWillNotSeeTheQuestionnaireListed(then);
+    });
+
+    test("Show surveys that do not have a TelOps start date but have an active survey day in TOBI", ({given, and, when, then}) => {
+        questionnaireDoesNotHaveATelOpsStartDate(given);
+        questionnaireHasAnActiveSurveyDay(and);
+        iSelectTheSurveyIAmWorkingOn(when);
+        thenIWillSeeTheQuestionnaireListed(then);
+    });
+
+    test("Do not show surveys that do not have a TelOps start date and do not have an active survey day in TOBI", ({given, and, when, then}) => {
+        questionnaireDoesNotHaveATelOpsStartDate(given);
+        questionnaireDoesNotHaveAnActiveSurveyDay(and);
+        iSelectTheSurveyIAmWorkingOn(when);
+        thenIWillNotSeeTheQuestionnaireListed(then);
+    });
 });
