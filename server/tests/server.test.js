@@ -44,7 +44,7 @@ describe("Given the API returns 2 instruments with only one that is active", () 
         expect(response.statusCode).toEqual(200);
         expect(response.body).toHaveLength(1);
         expect(response.body[0].instruments).toHaveLength(1);
-        expect(response.body).toEqual(instrumentListReturned);
+        expect(response.body).toEqual(expect.arrayContaining(instrumentListReturned));
         done();
     });
 
@@ -85,7 +85,7 @@ describe("Given the API returns 2 active instruments for the survey OPN", () => 
         expect(response.body).toHaveLength(1);
 
         expect(response.body[0].instruments).toHaveLength(2);
-        expect(response.body).toEqual(instrumentListReturned);
+        expect(response.body).toEqual(expect.arrayContaining(instrumentListReturned));
         done();
     });
 
@@ -94,7 +94,7 @@ describe("Given the API returns 2 active instruments for the survey OPN", () => 
     });
 });
 
-/*describe("Given the API returns 2 active instruments for 2 separate surveys ", () => {
+describe("Given the API returns 2 active instruments for 2 separate surveys ", () => {
     beforeAll(() => {
         mock.onGet("http://" + process.env.BLAISE_API_URL + "/api/v1/cati/instruments").reply(200,
             apiInstrumentList,
@@ -128,14 +128,15 @@ describe("Given the API returns 2 active instruments for the survey OPN", () => 
 
         expect(response.body[0].instruments).toHaveLength(1);
         expect(response.body[1].instruments).toHaveLength(1);
-        expect(response.body).toEqual(instrumentListReturned);
+        expect(response.body).toEqual(expect.arrayContaining(instrumentListReturned));
         done();
     });
 
     afterAll(() => {
         mock.reset();
     });
-});*/
+});
+
 
 describe("Get list of instruments endpoint fails", () => {
     beforeAll(() => {
