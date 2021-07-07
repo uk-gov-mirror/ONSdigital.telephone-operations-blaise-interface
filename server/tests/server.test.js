@@ -86,7 +86,8 @@ describe("Given the API returns 2 active instruments for the survey OPN", () => 
         expect(response.body).toHaveLength(1);
 
         expect(response.body[0].instruments).toHaveLength(2);
-        expect(response.body).toIncludeSameMembers(instrumentListReturned);
+        expect(response.body[0].survey).toEqual(instrumentListReturned[0].survey);
+        expect(response.body[0].instruments).toIncludeSameMembers(instrumentListReturned[0].instruments);
         done();
     });
 
