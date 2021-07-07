@@ -228,17 +228,8 @@ defineFeature(feature, test => {
             let selectedSurvey = response.body[0].instruments;
             expect(selectedSurvey).toHaveLength(1);
 
-            const instrumentListReturned = [
-                    {
-                        activeToday: true,
-                        fieldPeriod: "July 2020",
-                        installDate: "2020-12-11T11:53:55.5612856+00:00",
-                        link: "https://external-web-url/OPN2007T?LayoutSet=CATI-Interviewer_Large",
-                        name: "OPN2007T",
-                        serverParkName: "LocalDevelopment",
-                        "surveyTLA": "OPN",
-                    }
-                ];
+            const instrumentListReturned = [InstrumentHelper.instrument(instrumentName, true, "July 2020","OPN", "https://external-web-url/OPN2007T?LayoutSet=CATI-Interviewer_Large")];
+
             expect(selectedSurvey).toStrictEqual(instrumentListReturned);
         });
     };
