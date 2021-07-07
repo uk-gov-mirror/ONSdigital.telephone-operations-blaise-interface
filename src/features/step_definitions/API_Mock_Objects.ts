@@ -11,8 +11,7 @@ export const survey_list_with_OPN_and_LMS_with_one_active_instrument_each: Surve
                 link: "https://external-web-url/OPN2007T?LayoutSet=CATI-Interviewer_Large",
                 name: "OPN2007T",
                 serverParkName: "LocalDevelopment",
-                surveyTLA: "OPN",
-                surveyDays: []
+                surveyTLA: "OPN"
             }
         ]
     },
@@ -26,8 +25,7 @@ export const survey_list_with_OPN_and_LMS_with_one_active_instrument_each: Surve
                 link: "https://external-web-url/LMSSurvey01?LayoutSet=CATI-Interviewer_Large",
                 name: "LMSSurvey01",
                 serverParkName: "LocalDevelopment",
-                surveyTLA: "LMS",
-                surveyDays: []
+                surveyTLA: "LMS"
             }
         ]
     }
@@ -44,8 +42,7 @@ export const survey_list_with_OPN_with_one_active_instrument: Survey[] = [
                 link: "https://external-web-url/OPN2007T?LayoutSet=CATI-Interviewer_Large",
                 name: "OPN2007T",
                 serverParkName: "LocalDevelopment",
-                surveyTLA: "OPN",
-                surveyDays: []
+                surveyTLA: "OPN"
             }
         ]
     }
@@ -62,8 +59,7 @@ export const survey_list_with_OPN_with_two_active_instruments: Survey[] = [
                 link: "https://external-web-url/OPN2007T?LayoutSet=CATI-Interviewer_Large",
                 name: "OPN2007T",
                 serverParkName: "LocalDevelopment",
-                surveyTLA: "OPN",
-                surveyDays: []
+                surveyTLA: "OPN"
             },
             {
                 activeToday: true,
@@ -72,8 +68,7 @@ export const survey_list_with_OPN_with_two_active_instruments: Survey[] = [
                 link: "https://external-web-url/OPN2004A?LayoutSet=CATI-Interviewer_Large",
                 name: "OPN2004A",
                 serverParkName: "LocalDevelopment",
-                surveyTLA: "OPN",
-                surveyDays: []
+                surveyTLA: "OPN"
             }
         ]
     }
@@ -90,8 +85,7 @@ export const survey_list_with_OPN_with_three_active_instruments: Survey[] = [
                 link: "https://external-web-url/OPN2007T?LayoutSet=CATI-Interviewer_Large",
                 name: "OPN2007T",
                 serverParkName: "LocalDevelopment",
-                surveyTLA: "OPN",
-                surveyDays: []
+                surveyTLA: "OPN"
             },
             {
                 activeToday: true,
@@ -100,8 +94,7 @@ export const survey_list_with_OPN_with_three_active_instruments: Survey[] = [
                 link: "https://external-web-url/OPN2101A?LayoutSet=CATI-Interviewer_Large",
                 name: "OPN2101A",
                 serverParkName: "LocalDevelopment",
-                surveyTLA: "OPN",
-                surveyDays: []
+                surveyTLA: "OPN"
             },
             {
                 activeToday: true,
@@ -110,8 +103,7 @@ export const survey_list_with_OPN_with_three_active_instruments: Survey[] = [
                 link: "https://external-web-url/OPN2004A?LayoutSet=CATI-Interviewer_Large",
                 name: "OPN2004A",
                 serverParkName: "LocalDevelopment",
-                surveyTLA: "OPN",
-                surveyDays: []
+                surveyTLA: "OPN"
             },
         ]
     }

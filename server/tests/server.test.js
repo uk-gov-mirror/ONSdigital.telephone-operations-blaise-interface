@@ -27,34 +27,13 @@ describe("Given the API returns 2 instruments with only one that is active", () 
     });
 
     const apiInstrumentList = [
-        {
-            activeToday: true,
-            installDate: "2020-12-11T11:53:55.5612856+00:00",
-            name: "OPN2007T",
-            serverParkName: "LocalDevelopment"
-        },
-        {
-            activeToday: false,
-            installDate: "2020-12-11T11:53:55.5612856+00:00",
-            name: "OPN2004A",
-            serverParkName: "LocalDevelopment"
-        }
-    ];
+        InstrumentHelper.apiInstrument("OPN2007T", true),
+        InstrumentHelper.apiInstrument("OPN2004A", false)];
 
     const instrumentListReturned = [
         {
             survey: "OPN",
-            instruments: [
-                {
-                    activeToday: true,
-                    fieldPeriod: "July 2020",
-                    installDate: "2020-12-11T11:53:55.5612856+00:00",
-                    link: "https://external-web-url/OPN2007T?LayoutSet=CATI-Interviewer_Large",
-                    name: "OPN2007T",
-                    serverParkName: "LocalDevelopment",
-                    "surveyTLA": "OPN",
-                }
-            ]
+            instruments: [InstrumentHelper.instrument("OPN2007T", true, "July 2020", "OPN", "https://external-web-url/OPN2007T?LayoutSet=CATI-Interviewer_Large")]
         }
     ];
 
@@ -85,43 +64,15 @@ describe("Given the API returns 2 active instruments for the survey OPN", () => 
     });
 
     const apiInstrumentList = [
-        {
-            activeToday: true,
-            installDate: "2020-12-11T11:53:55.5612856+00:00",
-            name: "OPN2007T",
-            serverParkName: "LocalDevelopment"
-        },
-        {
-            activeToday: true,
-            installDate: "2020-12-11T11:53:55.5612856+00:00",
-            name: "OPN2004A",
-            serverParkName: "LocalDevelopment"
-        }
-    ];
+          InstrumentHelper.apiInstrument("OPN2007T", true),
+          InstrumentHelper.apiInstrument("OPN2004A", true)];
 
     const instrumentListReturned = [
         {
             survey: "OPN",
             instruments: [
-                {
-                    activeToday: true,
-                    fieldPeriod: "July 2020",
-                    installDate: "2020-12-11T11:53:55.5612856+00:00",
-                    link: "https://external-web-url/OPN2007T?LayoutSet=CATI-Interviewer_Large",
-                    name: "OPN2007T",
-                    serverParkName: "LocalDevelopment",
-                    "surveyTLA": "OPN",
-                },
-                {
-                    activeToday: true,
-                    fieldPeriod: "April 2020",
-                    installDate: "2020-12-11T11:53:55.5612856+00:00",
-                    link: "https://external-web-url/OPN2004A?LayoutSet=CATI-Interviewer_Large",
-                    name: "OPN2004A",
-                    serverParkName: "LocalDevelopment",
-                    "surveyTLA": "OPN",
-                }
-            ]
+                InstrumentHelper.instrument("OPN2007T", true, "July 2020", "OPN", "https://external-web-url/OPN2007T?LayoutSet=CATI-Interviewer_Large"),
+                InstrumentHelper.instrument("OPN2004A", true, "April 2020", "OPN", "https://external-web-url/OPN2004A?LayoutSet=CATI-Interviewer_Large")]
         }
     ];
 
@@ -154,50 +105,18 @@ describe("Given the API returns 2 active instruments for 2 separate surveys ", (
     });
 
     const apiInstrumentList = [
-        {
-            activeToday: true,
-            installDate: "2020-12-11T11:53:55.5612856+00:00",
-            name: "IPS2007T",
-            serverParkName: "LocalDevelopment"
-        },
-        {
-            activeToday: true,
-            installDate: "2020-12-11T11:53:55.5612856+00:00",
-            name: "OPN2004A",
-            serverParkName: "LocalDevelopment"
-        }
-    ];
+          InstrumentHelper.apiInstrument("IPS2007T", true),
+          InstrumentHelper.apiInstrument("OPN2004A", true)];
 
     const instrumentListReturned = [
-        {
-            survey: "IPS",
-            instruments: [
-                {
-                    activeToday: true,
-                    fieldPeriod: "Field period unknown",
-                    installDate: "2020-12-11T11:53:55.5612856+00:00",
-                    link: "https://external-web-url/IPS2007T?LayoutSet=CATI-Interviewer_Large",
-                    name: "IPS2007T",
-                    serverParkName: "LocalDevelopment",
-                    "surveyTLA": "IPS",
-                }],
-        },
-        {
-            survey: "OPN",
-            instruments: [
-                {
-                    activeToday: true,
-                    fieldPeriod: "April 2020",
-                    installDate: "2020-12-11T11:53:55.5612856+00:00",
-                    link: "https://external-web-url/OPN2004A?LayoutSet=CATI-Interviewer_Large",
-                    name: "OPN2004A",
-                    serverParkName: "LocalDevelopment",
-                    "surveyTLA": "OPN",
-                }
-            ]
-        }
-
-    ];
+    {
+        survey: "IPS",
+        instruments: [InstrumentHelper.instrument("IPS2007T", true, "Field period unknown","IPS", "https://external-web-url/IPS2007T?LayoutSet=CATI-Interviewer_Large")]
+    },
+    {
+        survey: "OPN",
+        instruments: [InstrumentHelper.instrument("OPN2004A", true, "April 2020","OPN", "https://external-web-url/OPN2004A?LayoutSet=CATI-Interviewer_Large")]
+    }];
 
     it("should return a list with 2 surveys with instrument object in each", async done => {
         const response = await request.get("/api/instruments");
@@ -241,77 +160,56 @@ describe("Get list of instruments endpoint fails", () => {
 
 
 import {defineFeature, loadFeature} from "jest-cucumber";
+import {IsoDateHelper} from "./helpers/iso-date-helper";
+import {InstrumentHelper} from "./helpers/instrument-helper";
+
 const feature = loadFeature("./src/features/TO_Interviewer_Happy_Path.feature", {tagFilter: "@server"});
 
 defineFeature(feature, test => {
 
     //Scenario 3b
-
     let response;
     const liveDateUrl = new RegExp(`${process.env.BIMS_API_URL}/tostartdate/.*`);
+    const instrumentName = "OPN2007T";
 
     const questionnaireHasATelOpsStartDateOfToday = (given) => {
      given("a survey questionnaire has a TelOps start date of today", async () => {
-            const date = new Date();
-            mock.onGet(liveDateUrl).reply(200,{tostartdate: date.toISOString()});
+            mock.onGet(liveDateUrl).reply(200,{tostartdate: IsoDateHelper.today()});
         });
     };
 
     const questionnaireHasATelOpsStartDateInThePast = (given) => {
      given("a survey questionnaire has a TelOps start date in the past", async () => {
-            const yesterday = new Date();
-            yesterday.setDate(yesterday.getDate() - 1);
-
-            mock.onGet(liveDateUrl).reply(200,
-                {tostartdate: yesterday.toISOString()}
+            mock.onGet(liveDateUrl).reply(200,{tostartdate: IsoDateHelper.yesterday()}
             );
         });
     };
 
     const questionnaireHasATelOpsStartDateInTheFuture = (given) => {
      given("a survey questionnaire has a TelOps start date is in the future", async () => {
-            const tomorrow = new Date();
-            tomorrow.setDate(tomorrow.getDate() + 1);
-
-            mock.onGet(liveDateUrl).reply(200,
-                {tostartdate: tomorrow.toISOString()}
+            mock.onGet(liveDateUrl).reply(200,{tostartdate: IsoDateHelper.tomorrow()}
             );
         });
     };
 
     const questionnaireDoesNotHaveATelOpsStartDate = (given) => {
      given("a survey questionnaire does not have a TelOps start date", async () => {
-            mock.onGet(liveDateUrl).reply(404,
-                null);}
+            mock.onGet(liveDateUrl).reply(404,null);}
             );
         };
 
     const questionnaireHasAnActiveSurveyDay = (given) => {
         given("an active survey day", async () => {
-            const apiInstrumentList = [
-                {
-                    activeToday: true,
-                    installDate: "2020-12-11T11:53:55.5612856+00:00",
-                    name: "OPN2007T",
-                    serverParkName: "LocalDevelopment"
-                }
-            ];
+            const apiInstrumentList = [InstrumentHelper.apiInstrument(instrumentName, true)];
 
             mock.onGet("http://" + process.env.BLAISE_API_URL + "/api/v1/cati/instruments").reply(200,
-                apiInstrumentList);
+                 apiInstrumentList);
         });
     };
 
     const questionnaireDoesNotHaveAnActiveSurveyDay = (given) => {
         given("does not have an active survey day", async () => {
-            const apiInstrumentList = [
-                {
-                    activeToday: false,
-                    installDate: "2020-12-11T11:53:55.5612856+00:00",
-                    name: "OPN2007T",
-                    serverParkName: "LocalDevelopment"
-                }
-            ];
+            const apiInstrumentList = [InstrumentHelper.apiInstrument(instrumentName, false)];
 
             mock.onGet("http://" + process.env.BLAISE_API_URL + "/api/v1/cati/instruments").reply(200,
                 apiInstrumentList);
@@ -347,7 +245,7 @@ defineFeature(feature, test => {
 
     const thenIWillNotSeeTheQuestionnaireListed = (then) => {
         then("I will not see that questionnaire listed for the survey", () => {
-            // The survey is returned
+            // The questionnaire is not returned
             expect(response.body).toHaveLength(0);
         });
     };
