@@ -5,6 +5,7 @@ import app from "../server"; // Link to your server file
 import supertest from "supertest";
 import MockAdapter from "axios-mock-adapter";
 import axios from "axios";
+require("jest-extended");
 
 const request = supertest(app);
 
@@ -44,7 +45,7 @@ describe("Given the API returns 2 instruments with only one that is active", () 
         expect(response.statusCode).toEqual(200);
         expect(response.body).toHaveLength(1);
         expect(response.body[0].instruments).toHaveLength(1);
-        expect(response.body.sort()).toEqual(expect.arrayContaining(instrumentListReturned.sort()));
+        expect(response.body).toIncludeSameMembers(instrumentListReturned);
         done();
     });
 
@@ -85,7 +86,7 @@ describe("Given the API returns 2 active instruments for the survey OPN", () => 
         expect(response.body).toHaveLength(1);
 
         expect(response.body[0].instruments).toHaveLength(2);
-        expect(response.body.sort()).toEqual(expect.arrayContaining(instrumentListReturned.sort()));
+        expect(response.body).toIncludeSameMembers(instrumentListReturned);
         done();
     });
 
@@ -128,7 +129,7 @@ describe("Given the API returns 2 active instruments for 2 separate surveys ", (
 
         expect(response.body[0].instruments).toHaveLength(1);
         expect(response.body[1].instruments).toHaveLength(1);
-        expect(response.body.sort()).toEqual(expect.arrayContaining(instrumentListReturned.sort()));
+        expect(response.body).toIncludeSameMembers(instrumentListReturned);
         done();
     });
 
