@@ -1,4 +1,4 @@
-import {ApiInstrument, Instrument} from "../../../Interfaces";
+import {ApiInstrument, Instrument, Survey} from "../../../Interfaces";
 export class InstrumentHelper {
 
     public static apiInstrument(name :string, activeToday : boolean) : ApiInstrument {
@@ -26,5 +26,15 @@ export class InstrumentHelper {
                 };
 
         return instrument;
+    }
+
+        public static survey(name :string, activeToday : boolean, fieldPeriod: string, surveyType :string, link: string) : Survey {
+        const survey : Survey =
+                {
+                survey: surveyType,
+                instruments: [this.instrument(name, activeToday, fieldPeriod, surveyType, link)]
+                };
+
+        return survey;
     }
 }

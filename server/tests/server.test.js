@@ -94,7 +94,6 @@ describe("Given the API returns 2 active instruments for the survey OPN", () => 
     });
 });
 
-
 describe("Given the API returns 2 active instruments for 2 separate surveys ", () => {
     beforeAll(() => {
         mock.onGet("http://" + process.env.BLAISE_API_URL + "/api/v1/cati/instruments").reply(200,
@@ -112,14 +111,8 @@ describe("Given the API returns 2 active instruments for 2 separate surveys ", (
           InstrumentHelper.apiInstrument("OPN2004A", true)];
 
     const instrumentListReturned = [
-    {
-        survey: "IPS",
-        instruments: [InstrumentHelper.instrument("IPS2007T", true, "Field period unknown","IPS", "https://external-web-url/IPS2007T?LayoutSet=CATI-Interviewer_Large")]
-    },
-    {
-        survey: "OPN",
-        instruments: [InstrumentHelper.instrument("OPN2004A", true, "April 2020","OPN", "https://external-web-url/OPN2004A?LayoutSet=CATI-Interviewer_Large")]
-    }];
+         InstrumentHelper.survey("IPS2007T", true, "Field period unknown","IPS", "https://external-web-url/IPS2007T?LayoutSet=CATI-Interviewer_Large"),
+         InstrumentHelper.survey("OPN2004A", true, "April 2020","OPN", "https://external-web-url/OPN2004A?LayoutSet=CATI-Interviewer_Large")];
 
     it("should return a list with 2 surveys with instrument object in each", async done => {
         const response = await request.get("/api/instruments");
