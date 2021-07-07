@@ -26,15 +26,15 @@ export default function InstrumentRouter(
                     headers: authProvider.getAuthHeader(),
                     validateStatus: function (status) { return status >= 200;} })
             .then(function (response: AxiosResponse) {
-                
+            console.log(`The BIMS request responded with a status of ${response.status} and a body of ${response.data}`);
             const telOpsStartDate = response.status == 200 ? response.data.tostartdate : null;
 
             if(telOpsStartDate == null || Date.parse(telOpsStartDate) <= Date.now())
             {
-                console.log(`the instrument ${instrument.name} is live for TO (TO start date = ${telOpsStartDate}) (Active today = ${instrument.activeToday})`);
+                console.log(`the instrument ${instrument.name} is live for TO (TO start date = ${telOpsStartDate == null ? "Not set" : telOpsStartDate}) (Active today = ${instrument.activeToday})`);
                 return instrument.activeToday;
             }
-            console.log(`the instrument ${instrument.name} is not currently live for TO (TO start date = ${telOpsStartDate}) (Active today = ${instrument.activeToday})`);
+            console.log(`the instrument ${instrument.name} is not currently live for TO (TO start date = ${telOpsStartDate == null ? "Not set" : telOpsStartDate}) (Active today = ${instrument.activeToday})`);
             return false;
             });
         }
