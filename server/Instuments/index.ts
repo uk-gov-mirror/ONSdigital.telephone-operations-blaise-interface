@@ -1,4 +1,4 @@
-import express, {Request, Response, Router} from "express";
+import express, {Request, response, Response, Router} from "express";
 import {Instrument, Survey} from "../../Interfaces";
 import axios, {AxiosResponse} from "axios";
 import _ from "lodash";
@@ -19,15 +19,23 @@ export default function InstrumentRouter(
     instrumentRouter.get("/instruments", (req: Request, res: Response) => {
         console.log("get list of items");
 
-        async function activeToday(instrument: Instrument) {
+        async function getToStartDate(instrument: Instrument) {
+            let telOpsStartDate;
+            const authHeader = await authProvider.getAuthHeader();
             return axios.get(
                 `${BIMS_API_URL}/tostartdate/${instrument.name}`,
-                {
-                    headers: authProvider.getAuthHeader(),
+                {headers: authHeader,
                     validateStatus: function (status) { return status >= 200;} })
             .then(function (response: AxiosResponse) {
-            console.log(`The BIMS request responded with a status of ${response.status} and a body of ${response.data}`);
-            const telOpsStartDate = response.status == 200 ? response.data.tostartdate : null;
+
+                console.log(`The BIMS request responded with a status of ${response.status} and a body of ${response.data}`);
+
+                return response.status == 200 && response.headers["content-type"] == "application/json" ? response.data.tostartdate : null;
+            });
+        }
+
+        async function activeToday(instrument: Instrument) {
+            const telOpsStartDate = await getToStartDate(instrument);
 
             if(telOpsStartDate == null || Date.parse(telOpsStartDate) <= Date.now())
             {
@@ -36,7 +44,6 @@ export default function InstrumentRouter(
             }
             console.log(`the instrument ${instrument.name} is not currently live for TO (TO start date = ${telOpsStartDate == null ? "Not set" : telOpsStartDate}) (Active today = ${instrument.activeToday})`);
             return false;
-            });
         }
 
         axios.get("http://" + BLAISE_API_URL + "/api/v1/cati/instruments")

@@ -22,7 +22,8 @@ describe("Given the API returns 2 instruments with only one that is active", () 
         );
         const liveDateUrl = new RegExp(`${process.env.BIMS_API_URL}/tostartdate/.*`);
         mock.onGet(liveDateUrl).reply(200,
-            {tostartdate: null}
+            {tostartdate: null},
+            {"content-type": "application/json"}
         );
     });
 
@@ -59,7 +60,8 @@ describe("Given the API returns 2 active instruments for the survey OPN", () => 
         );
         const liveDateUrl = new RegExp(`${process.env.BIMS_API_URL}/tostartdate/.*`);
         mock.onGet(liveDateUrl).reply(200,
-            {tostartdate: null}
+            {tostartdate: null},
+            {"content-type": "application/json"}
         );   
     });
 
@@ -100,7 +102,8 @@ describe("Given the API returns 2 active instruments for 2 separate surveys ", (
         );
         const liveDateUrl = new RegExp(`${process.env.BIMS_API_URL}/tostartdate/.*`);
         mock.onGet(liveDateUrl).reply(200, 
-            {tostartdate: null}
+            {tostartdate: null},
+            {"content-type": "application/json"}
         );
     });
 
@@ -141,7 +144,8 @@ describe("Get list of instruments endpoint fails", () => {
         mock.onGet("http://" + process.env.BLAISE_API_URL + "/api/v1/cati/instruments").networkError();
         const liveDateUrl = new RegExp(`${process.env.BIMS_API_URL}/tostartdate/.*`);
         mock.onGet(liveDateUrl).reply(200, 
-            {tostartdate: null}
+            {tostartdate: null},
+            {"content-type": "application/json"}
         );
     });
 
@@ -174,27 +178,25 @@ defineFeature(feature, test => {
 
     const questionnaireHasATelOpsStartDateOfToday = (given) => {
      given("a survey questionnaire has a TelOps start date of today", async () => {
-            mock.onGet(liveDateUrl).reply(200,{tostartdate: IsoDateHelper.today()});
+            mock.onGet(liveDateUrl).reply(200,{tostartdate: IsoDateHelper.today()}, {"content-type": "application/json"});
         });
     };
 
     const questionnaireHasATelOpsStartDateInThePast = (given) => {
      given("a survey questionnaire has a TelOps start date in the past", async () => {
-            mock.onGet(liveDateUrl).reply(200,{tostartdate: IsoDateHelper.yesterday()}
-            );
+            mock.onGet(liveDateUrl).reply(200,{tostartdate: IsoDateHelper.yesterday()}, {"content-type": "application/json"});
         });
     };
 
     const questionnaireHasATelOpsStartDateInTheFuture = (given) => {
      given("a survey questionnaire has a TelOps start date is in the future", async () => {
-            mock.onGet(liveDateUrl).reply(200,{tostartdate: IsoDateHelper.tomorrow()}
-            );
+            mock.onGet(liveDateUrl).reply(200,{tostartdate: IsoDateHelper.tomorrow()}, {"content-type": "application/json"});
         });
     };
 
     const questionnaireDoesNotHaveATelOpsStartDate = (given) => {
      given("a survey questionnaire does not have a TelOps start date", async () => {
-            mock.onGet(liveDateUrl).reply(404,null);}
+            mock.onGet(liveDateUrl).reply(404,null, {"content-type": "application/json"});}
             );
         };
 
