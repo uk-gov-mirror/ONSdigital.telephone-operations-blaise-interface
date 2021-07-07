@@ -44,7 +44,7 @@ describe("Given the API returns 2 instruments with only one that is active", () 
         expect(response.statusCode).toEqual(200);
         expect(response.body).toHaveLength(1);
         expect(response.body[0].instruments).toHaveLength(1);
-        expect(response.body).toEqual(expect.arrayContaining(instrumentListReturned));
+        expect(response.body.sort()).toEqual(expect.arrayContaining(instrumentListReturned.sort()));
         done();
     });
 
@@ -85,7 +85,7 @@ describe("Given the API returns 2 active instruments for the survey OPN", () => 
         expect(response.body).toHaveLength(1);
 
         expect(response.body[0].instruments).toHaveLength(2);
-        expect(response.body).toEqual(expect.arrayContaining(instrumentListReturned));
+        expect(response.body.sort()).toEqual(expect.arrayContaining(instrumentListReturned.sort()));
         done();
     });
 
@@ -128,7 +128,7 @@ describe("Given the API returns 2 active instruments for 2 separate surveys ", (
 
         expect(response.body[0].instruments).toHaveLength(1);
         expect(response.body[1].instruments).toHaveLength(1);
-        expect(response.body).toEqual(expect.arrayContaining(instrumentListReturned));
+        expect(response.body.sort()).toEqual(expect.arrayContaining(instrumentListReturned.sort()));
         done();
     });
 
