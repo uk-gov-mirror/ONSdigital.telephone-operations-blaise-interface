@@ -44,7 +44,7 @@ describe("Given the API returns 2 instruments with only one that is active", () 
         expect(response.statusCode).toEqual(200);
         expect(response.body).toHaveLength(1);
         expect(response.body[0].instruments).toHaveLength(1);
-        expect(response.body).toStrictEqual(instrumentListReturned);
+        expect(response.body).toEqual(instrumentListReturned);
         done();
     });
 
@@ -85,7 +85,7 @@ describe("Given the API returns 2 active instruments for the survey OPN", () => 
         expect(response.body).toHaveLength(1);
 
         expect(response.body[0].instruments).toHaveLength(2);
-        expect(response.body).toStrictEqual(instrumentListReturned);
+        expect(response.body).toEqual(instrumentListReturned);
         done();
     });
 
@@ -129,7 +129,7 @@ describe("Given the API returns 2 active instruments for 2 separate surveys ", (
 
         expect(response.body[0].instruments).toHaveLength(1);
         expect(response.body[1].instruments).toHaveLength(1);
-        expect(response.body).toStrictEqual(instrumentListReturned);
+        expect(response.body).toEqual(instrumentListReturned);
         done();
     });
 
@@ -232,7 +232,7 @@ defineFeature(feature, test => {
 
             const instrumentListReturned = [InstrumentHelper.instrument(instrumentName, true, "July 2020","OPN", "https://external-web-url/OPN2007T?LayoutSet=CATI-Interviewer_Large")];
 
-            expect(selectedSurvey).toStrictEqual(instrumentListReturned);
+            expect(selectedSurvey).toEqual(instrumentListReturned);
         });
     };
 
