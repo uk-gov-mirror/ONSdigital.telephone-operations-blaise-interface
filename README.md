@@ -6,6 +6,8 @@
 [![GitHub pull requests](https://img.shields.io/github/issues-pr-raw/ONSdigital/telephone-operations-blaise-interface.svg)](https://github.com/ONSdigital/telephone-operations-blaise-interface/pulls)
 [![Github last commit](https://img.shields.io/github/last-commit/ONSdigital/telephone-operations-blaise-interface.svg)](https://github.com/ONSdigital/telephone-operations-blaise-interface/commits)
 [![Github contributors](https://img.shields.io/github/contributors/ONSdigital/telephone-operations-blaise-interface.svg)](https://github.com/ONSdigital/telephone-operations-blaise-interface/graphs/contributors)
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/ONSdigital/telephone-operations-blaise-interface.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/ONSdigital/telephone-operations-blaise-interface/alerts/)
+[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/ONSdigital/telephone-operations-blaise-interface.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/ONSdigital/telephone-operations-blaise-interface/context:javascript)
 
 Blaise Dashboard for accessing active surveys and CATI dashboard.
 
