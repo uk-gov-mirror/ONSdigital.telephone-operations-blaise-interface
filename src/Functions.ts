@@ -3,7 +3,7 @@ function isDevEnv(): boolean {
 }
 
 function isTrainingEnv(): boolean {
-    return window.location.href.includes("local");
+    return window.location.href.includes("training");
 }
 
 export {isDevEnv, isTrainingEnv};
