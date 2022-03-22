@@ -1,6 +1,6 @@
 import React, {ReactElement, useEffect, useState} from "react";
 import {DefaultErrorBoundary} from "./Components/ErrorHandling/DefaultErrorBoundary";
-import {isDevEnv} from "./Functions";
+import {isDevEnv, isTrainingEnv} from "./Functions";
 import {Switch, Route} from "react-router-dom";
 import InstrumentList from "./Components/InstrumentList";
 import SurveyList from "./Components/SurveyList";
@@ -24,9 +24,14 @@ const divStyle = {
 
 function App(): ReactElement {
 
+    const [headerText, setHeaderText] = useState<string>("Telephone Operations Blaise Interface");
+
+    useEffect(() => {
+        if (isTrainingEnv()) setHeaderText("Telephone Operations Blaise Interface (training)");
+      });
+
     const [externalClientUrl, setExternalClientUrl] = useState<string>("External URL should be here");
     const [externalCATIUrl, setExternalCATIUrl] = useState<string>("/Blaise");
-
 
     useEffect(function retrieveVariables() {
         setExternalClientUrl(isDevEnv() ?
@@ -76,7 +81,7 @@ function App(): ReactElement {
     return (
         <>
             <BetaBanner/>
-            <Header title={"Telephone Operations Blaise Interface"}/>
+            <Header title={headerText} />
             <div style={divStyle} className="page__container container">
                 <main id="main-content" className="page__main">
                     <DefaultErrorBoundary>
