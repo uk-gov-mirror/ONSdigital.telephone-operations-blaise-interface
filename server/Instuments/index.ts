@@ -47,7 +47,7 @@ export default function InstrumentRouter(
             return false;
         }
 
-        axios.get("http://" + BLAISE_API_URL + "/api/v1/cati/instruments")
+        axios.get("http://" + BLAISE_API_URL + "/api/v2/cati/questionnaires")
             .then(async function (response: AxiosResponse) {
                 const allInstruments: Instrument[] = response.data;
                 const activeInstruments: Instrument[] = [];
