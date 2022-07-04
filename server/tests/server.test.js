@@ -18,7 +18,7 @@ const mock = new MockAdapter(axios, { onNoMatch: "throwException" });
 
 describe("Given the API returns 2 instruments with only one that is active", () => {
     beforeAll(() => {
-        mock.onGet("http://" + process.env.BLAISE_API_URL + "/api/v1/cati/instruments").reply(200,
+        mock.onGet("http://" + process.env.BLAISE_API_URL + "/api/v2/cati/questionnaires").reply(200,
             apiInstrumentList,
         );
         const liveDateUrl = new RegExp(`${process.env.BIMS_API_URL}/tostartdate/.*`);
@@ -56,7 +56,7 @@ describe("Given the API returns 2 instruments with only one that is active", () 
 
 describe("Given the API returns 2 active instruments for the survey OPN", () => {
     beforeAll(() => {
-        mock.onGet("http://" + process.env.BLAISE_API_URL + "/api/v1/cati/instruments").reply(200,
+        mock.onGet("http://" + process.env.BLAISE_API_URL + "/api/v2/cati/questionnaires").reply(200,
             apiInstrumentList,
         );
         const liveDateUrl = new RegExp(`${process.env.BIMS_API_URL}/tostartdate/.*`);
@@ -98,7 +98,7 @@ describe("Given the API returns 2 active instruments for the survey OPN", () => 
 
 describe("Given the API returns 2 active instruments for 2 separate surveys ", () => {
     beforeAll(() => {
-        mock.onGet("http://" + process.env.BLAISE_API_URL + "/api/v1/cati/instruments").reply(200,
+        mock.onGet("http://" + process.env.BLAISE_API_URL + "/api/v2/cati/questionnaires").reply(200,
             apiInstrumentList,
         );
         const liveDateUrl = new RegExp(`${process.env.BIMS_API_URL}/tostartdate/.*`);
@@ -142,7 +142,7 @@ describe("Given the API returns 2 active instruments for 2 separate surveys ", (
 
 describe("Get list of instruments endpoint fails", () => {
     beforeAll(() => {
-        mock.onGet("http://" + process.env.BLAISE_API_URL + "/api/v1/cati/instruments").networkError();
+        mock.onGet("http://" + process.env.BLAISE_API_URL + "/api/v2/cati/questionnaires").networkError();
         const liveDateUrl = new RegExp(`${process.env.BIMS_API_URL}/tostartdate/.*`);
         mock.onGet(liveDateUrl).reply(200,
             { tostartdate: null },
@@ -206,7 +206,7 @@ defineFeature(feature, test => {
         given("an active survey day", async () => {
             const apiInstrumentList = [InstrumentHelper.apiInstrument(instrumentName, true)];
 
-            mock.onGet("http://" + process.env.BLAISE_API_URL + "/api/v1/cati/instruments").reply(200,
+            mock.onGet("http://" + process.env.BLAISE_API_URL + "/api/v2/cati/questionnaires").reply(200,
                 apiInstrumentList);
         });
     };
@@ -215,7 +215,7 @@ defineFeature(feature, test => {
         given("does not have an active survey day", async () => {
             const apiInstrumentList = [InstrumentHelper.apiInstrument(instrumentName, false)];
 
-            mock.onGet("http://" + process.env.BLAISE_API_URL + "/api/v1/cati/instruments").reply(200,
+            mock.onGet("http://" + process.env.BLAISE_API_URL + "/api/v2/cati/questionnaires").reply(200,
                 apiInstrumentList);
         });
     };
