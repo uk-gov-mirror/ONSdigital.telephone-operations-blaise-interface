@@ -41,54 +41,47 @@ export default function InstrumentRouter(
         async function activeToday(instrument: Instrument) {
             const telOpsStartDate = await getToStartDate(instrument);
 
-<<<<<<< HEAD
-            if (telOpsStartDate == null || Date.parse(telOpsStartDate) <= Date.now()) {
-                log.debug(`the instrument ${instrument.name} is live for TO (TO start date = ${telOpsStartDate == null ? "Not set" : telOpsStartDate}) (Active today = ${instrument.activeToday})`);
-                return instrument.activeToday;
-            }
-            log.debug(`the instrument ${instrument.name} is not currently live for TO (TO start date = ${telOpsStartDate == null ? "Not set" : telOpsStartDate}) (Active today = ${instrument.activeToday})`);
-=======
             if (telOpsStartDate == null) {
-                console.log(`the instrument ${instrument.name} is live for TO (TO start date = Not set) (Active today = ${instrument.activeToday})`);
+                log.debug(`the instrument ${instrument.name} is live for TO (TO start date = Not set) (Active today = ${instrument.activeToday})`);
                 return instrument.activeToday;
             }
 
             if (Date.parse(telOpsStartDate) <= Date.now()) {
-                console.log(`the instrument ${instrument.name} is live for TO (TO start date = ${telOpsStartDate}) (Active today = ${instrument.activeToday})`);
+                log.debug(`the instrument ${instrument.name} is live for TO (TO start date = ${telOpsStartDate}) (Active today = ${instrument.activeToday})`);
                 return instrument.activeToday;
             }
 
-            console.log(`the instrument ${instrument.name} is not currently live for TO (TO start date = ${telOpsStartDate}) (Active today = ${instrument.activeToday})`);
->>>>>>> 081491d (refactor: Simplify logic)
+            log.debug(`the instrument ${instrument.name} is not currently live for TO (TO start date = ${telOpsStartDate}) (Active today = ${instrument.activeToday})`);
             return false;
         }
 
         try {
             const response: AxiosResponse = await axios.get("http://" + BLAISE_API_URL + "/api/v2/cati/questionnaires");
-                const allInstruments: Instrument[] = response.data;
-                const activeInstruments: Instrument[] = [];
-                // Add interviewing link and date of instrument to array objects
-                await Promise.all(allInstruments.map(async function (instrument: Instrument) {
-                    const active = await activeToday(instrument);
-                    log.info(`Active today outputted (${ active }) for instrument (${ instrument.name }) type of (${ typeof active })`);
-                    if (active) {
-                        instrument.surveyTLA = instrument.name.substr(0, 3);
-                        instrument.link = "https://" + VM_EXTERNAL_WEB_URL + "/" + instrument.name + "?LayoutSet=CATI-Interviewer_Large";
-                        instrument.fieldPeriod = fieldPeriodToText(instrument.name);
-                        activeInstruments.push(instrument);
-                    }
-                }));
 
-                log.info("Retrieved active instruments, " + activeInstruments.length + " item/s");
+            const allInstruments: Instrument[] = response.data;
+            const activeInstruments: Instrument[] = [];
+            // Add interviewing link and date of instrument to array objects
+            await Promise.all(allInstruments.map(async function (instrument: Instrument) {
+                const active = await activeToday(instrument);
+                log.info(`Active today outputted (${ active }) for instrument (${ instrument.name }) type of (${ typeof active })`);
+                if (active) {
+                    instrument.surveyTLA = instrument.name.substr(0, 3);
+                    instrument.link = "https://" + VM_EXTERNAL_WEB_URL + "/" + instrument.name + "?LayoutSet=CATI-Interviewer_Large";
+                    instrument.fieldPeriod = fieldPeriodToText(instrument.name);
+                    activeInstruments.push(instrument);
+                }
+            }));
 
-                const surveys: Survey[] = _.chain(activeInstruments)
-                    // Group the elements of Array based on `surveyTLA` property
-                    .groupBy("surveyTLA")
-                    // `key` is group's name (surveyTLA), `value` is the array of objects
-                    .map((value: Instrument[], key: string) => ({ survey: key, instruments: value }))
-                    .value();
+            log.info("Retrieved active instruments, " + activeInstruments.length + " item/s");
 
-                res.json(surveys);
+            const surveys: Survey[] = _.chain(activeInstruments)
+                // Group the elements of Array based on `surveyTLA` property
+                .groupBy("surveyTLA")
+                // `key` is group's name (surveyTLA), `value` is the array of objects
+                .map((value: Instrument[], key: string) => ({ survey: key, instruments: value }))
+                .value();
+
+            res.json(surveys);
         }
         catch(error) {
             // handle error
