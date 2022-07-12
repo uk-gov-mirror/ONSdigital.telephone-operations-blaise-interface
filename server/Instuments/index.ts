@@ -50,6 +50,7 @@ export default function InstrumentRouter(
                 log.debug(`the instrument ${instrument.name} is live for TO (TO start date = Not set) (Active today = ${instrument.activeToday})`);
                 return instrument.activeToday;
             }
+
             if (Date.parse(telOpsStartDate) <= Date.now()) {
                 log.debug(`the instrument ${instrument.name} is live for TO (TO start date = ${telOpsStartDate}) (Active today = ${instrument.activeToday})`);
                 return instrument.activeToday;
@@ -76,19 +77,20 @@ export default function InstrumentRouter(
                 .filter((result) => result !== null) as Instrument[];
         }
 
-        async function fetchAllQuestionnaires() {
+        async function getAllInstruments(): Promise<Instrument[]> {
             const response: AxiosResponse = await axios.get(`http://${blaiseApiUrl}/api/v2/cati/questionnaires`);
-            const allInstruments: Instrument[] = response.data;
-            return allInstruments;
+            return response.data;
+        }
+
+        async function getSurveys(): Promise<Survey[]> {
+            const allInstruments = await getAllInstruments();
+            const activeInstruments = await getActiveTodayInstruments(allInstruments);
+            log.info(`Retrieved active instruments, ${activeInstruments.length} item/s`);
+            return groupBySurvey(activeInstruments);
         }
 
         try {
-            const allInstruments = await fetchAllQuestionnaires();
-            const activeInstruments: Instrument[] = await getActiveTodayInstruments(allInstruments);
-            log.info(`Retrieved active instruments, ${activeInstruments.length} item/s`);
-            const surveys: Survey[] = groupBySurvey(activeInstruments);
-
-            res.json(surveys);
+            res.json(await getSurveys());
         } catch(error) {
             log.error("Failed to retrieve instrument list");
             log.error(error);
