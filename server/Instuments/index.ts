@@ -43,6 +43,15 @@ export default function InstrumentRouter(
             return response.status == 200 && response.headers["content-type"] == "application/json" ? response.data.tostartdate : null;
         }
 
+        function addExtraInstrumentFields(instrument: Instrument): Instrument {
+            return {
+                ...instrument,
+                surveyTLA: instrument.name.substr(0, 3),
+                link: `https://${ vmExternalWebUrl }/${ instrument.name }?LayoutSet=CATI-Interviewer_Large`,
+                fieldPeriod: fieldPeriodToText(instrument.name),
+            };
+        }
+
         async function activeToday(instrument: Instrument) {
             const telOpsStartDate = await getToStartDate(instrument);
 
@@ -63,13 +72,7 @@ export default function InstrumentRouter(
         async function getActiveTodayInstrument(instrument: Instrument): Promise<Instrument | null> {
             const active = await activeToday(instrument);
             log.info(`Active today outputted (${active}) for instrument (${instrument.name}) type of (${typeof active})`);
-            if (!active) {
-                return null;
-            }
-            instrument.surveyTLA = instrument.name.substr(0, 3);
-            instrument.link = `https://${vmExternalWebUrl}/${instrument.name}?LayoutSet=CATI-Interviewer_Large`;
-            instrument.fieldPeriod = fieldPeriodToText(instrument.name);
-            return instrument;
+            return active ? instrument : null;
         }
 
         async function getActiveTodayInstruments(allInstruments: Instrument[]): Promise<Instrument[]> {
@@ -86,7 +89,7 @@ export default function InstrumentRouter(
             const allInstruments = await getAllInstruments();
             const activeInstruments = await getActiveTodayInstruments(allInstruments);
             log.info(`Retrieved active instruments, ${activeInstruments.length} item/s`);
-            return groupBySurvey(activeInstruments);
+            return groupBySurvey(activeInstruments.map(addExtraInstrumentFields));
         }
 
         try {
