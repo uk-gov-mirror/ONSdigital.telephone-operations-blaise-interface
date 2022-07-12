@@ -26,7 +26,7 @@ export function getEnvironmentVariables(): EnvironmentVariables {
     }
 
     if (VM_EXTERNAL_CLIENT_URL === undefined) {
-        console.error("VM_EXTERNAL_WEB_URL environment variable has not been set");
+        console.error("VM_EXTERNAL_CLIENT_URL environment variable has not been set");
         VM_EXTERNAL_CLIENT_URL = "ENV_VAR_NOT_SET";
     }
 
