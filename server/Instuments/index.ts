@@ -4,6 +4,7 @@ import axios, { AxiosResponse } from "axios";
 import _ from "lodash";
 import { fieldPeriodToText } from "../Functions";
 import AuthProvider from "../AuthProvider";
+import { Logger } from "../Logger";
 
 export default function InstrumentRouter(
     BLAISE_API_URL: string,
@@ -13,11 +14,14 @@ export default function InstrumentRouter(
     Router {
     "use strict";
     const instrumentRouter = express.Router();
-    const authProvider = new AuthProvider(BIMS_CLIENT_ID);
 
     // An api endpoint that returns list of installed instruments
     instrumentRouter.get("/instruments", (req: Request, res: Response) => {
-        console.log("get list of items");
+        const log: Logger = req.log;
+
+        log.debug("get list of items");
+
+        const authProvider = new AuthProvider(BIMS_CLIENT_ID, log);
 
         async function getToStartDate(instrument: Instrument) {
             let telOpsStartDate;
@@ -29,8 +33,7 @@ export default function InstrumentRouter(
                     validateStatus: function (status) { return status >= 200; }
                 })
                 .then(function (response: AxiosResponse) {
-
-                    console.log(`The BIMS request responded with a status of ${response.status} and a body of ${response.data}`);
+                    log.debug(`The BIMS request responded with a status of ${response.status} and a body of ${response.data}`);
 
                     return response.status == 200 && response.headers["content-type"] == "application/json" ? response.data.tostartdate : null;
                 });
@@ -40,10 +43,10 @@ export default function InstrumentRouter(
             const telOpsStartDate = await getToStartDate(instrument);
 
             if (telOpsStartDate == null || Date.parse(telOpsStartDate) <= Date.now()) {
-                console.log(`the instrument ${instrument.name} is live for TO (TO start date = ${telOpsStartDate == null ? "Not set" : telOpsStartDate}) (Active today = ${instrument.activeToday})`);
+                log.debug(`the instrument ${instrument.name} is live for TO (TO start date = ${telOpsStartDate == null ? "Not set" : telOpsStartDate}) (Active today = ${instrument.activeToday})`);
                 return instrument.activeToday;
             }
-            console.log(`the instrument ${instrument.name} is not currently live for TO (TO start date = ${telOpsStartDate == null ? "Not set" : telOpsStartDate}) (Active today = ${instrument.activeToday})`);
+            log.debug(`the instrument ${instrument.name} is not currently live for TO (TO start date = ${telOpsStartDate == null ? "Not set" : telOpsStartDate}) (Active today = ${instrument.activeToday})`);
             return false;
         }
 
@@ -54,7 +57,7 @@ export default function InstrumentRouter(
                 // Add interviewing link and date of instrument to array objects
                 await Promise.all(allInstruments.map(async function (instrument: Instrument) {
                     const active = await activeToday(instrument);
-                    console.log(`Active today outputted (${active}) for instrument (${instrument.name}) type of (${typeof active})`);
+                    log.info(`Active today outputted (${active}) for instrument (${instrument.name}) type of (${typeof active})`);
                     if (active) {
                         instrument.surveyTLA = instrument.name.substr(0, 3);
                         instrument.link = "https://" + VM_EXTERNAL_WEB_URL + "/" + instrument.name + "?LayoutSet=CATI-Interviewer_Large";
@@ -63,7 +66,7 @@ export default function InstrumentRouter(
                     }
                 }));
 
-                console.log("Retrieved active instruments, " + activeInstruments.length + " item/s");
+                log.info("Retrieved active instruments, " + activeInstruments.length + " item/s");
 
                 const surveys: Survey[] = _.chain(activeInstruments)
                     // Group the elements of Array based on `surveyTLA` property
@@ -75,8 +78,8 @@ export default function InstrumentRouter(
             })
             .catch(function (error) {
                 // handle error
-                console.error("Failed to retrieve instrument list");
-                console.error(error);
+                log.error("Failed to retrieve instrument list");
+                log.error(error);
                 return res.status(500).json(error);
             });
     });
