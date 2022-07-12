@@ -7,11 +7,11 @@ import AuthProvider from "../AuthProvider";
 import { Logger } from "../Logger";
 
 export default function InstrumentRouter(
-    BLAISE_API_URL: string,
-    VM_EXTERNAL_WEB_URL: string,
-    BIMS_CLIENT_ID: string,
-    BIMS_API_URL: string):
-    Router {
+    blaiseApiUrl: string,
+    vmExternalWebUrl: string,
+    bimsClientID: string,
+    bimsApiUrl: string
+): Router {
     "use strict";
     const instrumentRouter = express.Router();
 
@@ -21,13 +21,13 @@ export default function InstrumentRouter(
 
         log.debug("get list of items");
 
-        const authProvider = new AuthProvider(BIMS_CLIENT_ID, log);
+        const authProvider = new AuthProvider(bimsClientID, log);
 
         async function getToStartDate(instrument: Instrument) {
             const authHeader = await authProvider.getAuthHeader();
 
             const response: AxiosResponse = await axios.get(
-            `${BIMS_API_URL}/tostartdate/${instrument.name}`,
+            `${bimsApiUrl}/tostartdate/${instrument.name}`,
             {
                 headers: authHeader,
                 validateStatus: function (status) { return status >= 200; }
@@ -56,35 +56,31 @@ export default function InstrumentRouter(
         }
 
         try {
-            const response: AxiosResponse = await axios.get("http://" + BLAISE_API_URL + "/api/v2/cati/questionnaires");
-
+            const response: AxiosResponse = await axios.get("http://" + blaiseApiUrl + "/api/v2/cati/questionnaires");
             const allInstruments: Instrument[] = response.data;
-            const activeInstruments: Instrument[] = [];
-            // Add interviewing link and date of instrument to array objects
-            await Promise.all(allInstruments.map(async function (instrument: Instrument) {
+
+            const activeInstruments: Instrument[] = _.flatten(await Promise.all(allInstruments.map(async function (instrument: Instrument) {
                 const active = await activeToday(instrument);
                 log.info(`Active today outputted (${ active }) for instrument (${ instrument.name }) type of (${ typeof active })`);
-                if (active) {
-                    instrument.surveyTLA = instrument.name.substr(0, 3);
-                    instrument.link = "https://" + VM_EXTERNAL_WEB_URL + "/" + instrument.name + "?LayoutSet=CATI-Interviewer_Large";
-                    instrument.fieldPeriod = fieldPeriodToText(instrument.name);
-                    activeInstruments.push(instrument);
+                if (!active) {
+                    return [];
                 }
-            }));
+                instrument.surveyTLA = instrument.name.substr(0, 3);
+                instrument.link = "https://" + vmExternalWebUrl + "/" + instrument.name + "?LayoutSet=CATI-Interviewer_Large";
+                instrument.fieldPeriod = fieldPeriodToText(instrument.name);
+                return [instrument];
+            })));
 
             log.info("Retrieved active instruments, " + activeInstruments.length + " item/s");
 
             const surveys: Survey[] = _.chain(activeInstruments)
-                // Group the elements of Array based on `surveyTLA` property
                 .groupBy("surveyTLA")
-                // `key` is group's name (surveyTLA), `value` is the array of objects
                 .map((value: Instrument[], key: string) => ({ survey: key, instruments: value }))
                 .value();
 
             res.json(surveys);
         }
         catch(error) {
-            // handle error
             log.error("Failed to retrieve instrument list");
             log.error(error);
             res.status(500).json(error);
