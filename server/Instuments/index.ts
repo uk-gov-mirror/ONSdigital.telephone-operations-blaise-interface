@@ -41,11 +41,25 @@ export default function InstrumentRouter(
         async function activeToday(instrument: Instrument) {
             const telOpsStartDate = await getToStartDate(instrument);
 
+<<<<<<< HEAD
             if (telOpsStartDate == null || Date.parse(telOpsStartDate) <= Date.now()) {
                 log.debug(`the instrument ${instrument.name} is live for TO (TO start date = ${telOpsStartDate == null ? "Not set" : telOpsStartDate}) (Active today = ${instrument.activeToday})`);
                 return instrument.activeToday;
             }
             log.debug(`the instrument ${instrument.name} is not currently live for TO (TO start date = ${telOpsStartDate == null ? "Not set" : telOpsStartDate}) (Active today = ${instrument.activeToday})`);
+=======
+            if (telOpsStartDate == null) {
+                console.log(`the instrument ${instrument.name} is live for TO (TO start date = Not set) (Active today = ${instrument.activeToday})`);
+                return instrument.activeToday;
+            }
+
+            if (Date.parse(telOpsStartDate) <= Date.now()) {
+                console.log(`the instrument ${instrument.name} is live for TO (TO start date = ${telOpsStartDate}) (Active today = ${instrument.activeToday})`);
+                return instrument.activeToday;
+            }
+
+            console.log(`the instrument ${instrument.name} is not currently live for TO (TO start date = ${telOpsStartDate}) (Active today = ${instrument.activeToday})`);
+>>>>>>> 081491d (refactor: Simplify logic)
             return false;
         }
 
@@ -73,8 +87,8 @@ export default function InstrumentRouter(
                     // `key` is group's name (surveyTLA), `value` is the array of objects
                     .map((value: Instrument[], key: string) => ({ survey: key, instruments: value }))
                     .value();
-                res.json(surveys);
 
+                res.json(surveys);
         }
         catch(error) {
             // handle error
