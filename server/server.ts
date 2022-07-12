@@ -8,7 +8,7 @@ import {getEnvironmentVariables} from "./Config";
 
 const server = express();
 
-axios.defaults.timeout = 10000;
+axios.defaults.timeout = 15000;
 
 if (process.env.NODE_ENV !== "production") {
     dotenv.config();
