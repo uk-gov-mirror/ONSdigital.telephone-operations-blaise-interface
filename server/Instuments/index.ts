@@ -61,12 +61,12 @@ export default function InstrumentRouter(
 
         async function getActiveTodayInstrument(instrument: Instrument): Promise<Instrument | null> {
             const active = await activeToday(instrument);
-            log.info(`Active today outputted (${ active }) for instrument (${ instrument.name }) type of (${ typeof active })`);
+            log.info(`Active today outputted (${active}) for instrument (${instrument.name}) type of (${typeof active})`);
             if (!active) {
                 return null;
             }
             instrument.surveyTLA = instrument.name.substr(0, 3);
-            instrument.link = "https://" + vmExternalWebUrl + "/" + instrument.name + "?LayoutSet=CATI-Interviewer_Large";
+            instrument.link = `https://${vmExternalWebUrl}/${instrument.name}?LayoutSet=CATI-Interviewer_Large`;
             instrument.fieldPeriod = fieldPeriodToText(instrument.name);
             return instrument;
         }
@@ -77,7 +77,7 @@ export default function InstrumentRouter(
         }
 
         async function fetchAllQuestionnaires() {
-            const response: AxiosResponse = await axios.get("http://" + blaiseApiUrl + "/api/v2/cati/questionnaires");
+            const response: AxiosResponse = await axios.get(`http://${blaiseApiUrl}/api/v2/cati/questionnaires`);
             const allInstruments: Instrument[] = response.data;
             return allInstruments;
         }
@@ -85,7 +85,7 @@ export default function InstrumentRouter(
         try {
             const allInstruments = await fetchAllQuestionnaires();
             const activeInstruments: Instrument[] = await getActiveTodayInstruments(allInstruments);
-            log.info("Retrieved active instruments, " + activeInstruments.length + " item/s");
+            log.info(`Retrieved active instruments, ${activeInstruments.length} item/s`);
             const surveys: Survey[] = groupBySurvey(activeInstruments);
 
             res.json(surveys);
