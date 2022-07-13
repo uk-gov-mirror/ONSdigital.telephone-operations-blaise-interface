@@ -1,4 +1,4 @@
-import express, { Request, response, Response, Router } from "express";
+import express, { Request, Response, Router } from "express";
 import { Instrument, Survey } from "../../Interfaces";
 import axios, { AxiosResponse } from "axios";
 import _ from "lodash";
@@ -6,82 +6,99 @@ import { fieldPeriodToText } from "../Functions";
 import AuthProvider from "../AuthProvider";
 import { Logger } from "../Logger";
 
+function groupBySurvey(activeInstruments: Instrument[]) {
+    return _.chain(activeInstruments)
+        .groupBy("surveyTLA")
+        .map((value: Instrument[], key: string) => ({ survey: key, instruments: value }))
+        .value();
+}
+
 export default function InstrumentRouter(
-    BLAISE_API_URL: string,
-    VM_EXTERNAL_WEB_URL: string,
-    BIMS_CLIENT_ID: string,
-    BIMS_API_URL: string):
-    Router {
+    blaiseApiUrl: string,
+    vmExternalWebUrl: string,
+    bimsClientID: string,
+    bimsApiUrl: string
+): Router {
     "use strict";
     const instrumentRouter = express.Router();
 
-    // An api endpoint that returns list of installed instruments
-    instrumentRouter.get("/instruments", (req: Request, res: Response) => {
+    instrumentRouter.get("/instruments", async (req: Request, res: Response) => {
         const log: Logger = req.log;
 
         log.debug("get list of items");
 
-        const authProvider = new AuthProvider(BIMS_CLIENT_ID, log);
+        const authProvider: AuthProvider = new AuthProvider(bimsClientID, log);
 
         async function getToStartDate(instrument: Instrument) {
-            let telOpsStartDate;
             const authHeader = await authProvider.getAuthHeader();
-            return axios.get(
-                `${BIMS_API_URL}/tostartdate/${instrument.name}`,
+            const response: AxiosResponse = await axios.get(
+                `${bimsApiUrl}/tostartdate/${instrument.name}`,
                 {
                     headers: authHeader,
                     validateStatus: function (status) { return status >= 200; }
-                })
-                .then(function (response: AxiosResponse) {
-                    log.debug(`The BIMS request responded with a status of ${response.status} and a body of ${response.data}`);
-
-                    return response.status == 200 && response.headers["content-type"] == "application/json" ? response.data.tostartdate : null;
                 });
+
+            log.debug(`The BIMS request responded with a status of ${response.status} and a body of ${response.data}`);
+
+            return response.status == 200 && response.headers["content-type"] == "application/json" ? response.data.tostartdate : null;
+        }
+
+        function addExtraInstrumentFields(instrument: Instrument): Instrument {
+            return {
+                ...instrument,
+                surveyTLA: instrument.name.substr(0, 3),
+                link: `https://${ vmExternalWebUrl }/${ instrument.name }?LayoutSet=CATI-Interviewer_Large`,
+                fieldPeriod: fieldPeriodToText(instrument.name),
+            };
         }
 
         async function activeToday(instrument: Instrument) {
             const telOpsStartDate = await getToStartDate(instrument);
 
-            if (telOpsStartDate == null || Date.parse(telOpsStartDate) <= Date.now()) {
-                log.debug(`the instrument ${instrument.name} is live for TO (TO start date = ${telOpsStartDate == null ? "Not set" : telOpsStartDate}) (Active today = ${instrument.activeToday})`);
+            if (telOpsStartDate == null) {
+                log.debug(`the instrument ${instrument.name} is live for TO (TO start date = Not set) (Active today = ${instrument.activeToday})`);
                 return instrument.activeToday;
             }
-            log.debug(`the instrument ${instrument.name} is not currently live for TO (TO start date = ${telOpsStartDate == null ? "Not set" : telOpsStartDate}) (Active today = ${instrument.activeToday})`);
+
+            if (Date.parse(telOpsStartDate) <= Date.now()) {
+                log.debug(`the instrument ${instrument.name} is live for TO (TO start date = ${telOpsStartDate}) (Active today = ${instrument.activeToday})`);
+                return instrument.activeToday;
+            }
+
+            log.debug(`the instrument ${instrument.name} is not currently live for TO (TO start date = ${telOpsStartDate}) (Active today = ${instrument.activeToday})`);
             return false;
         }
 
-        axios.get("http://" + BLAISE_API_URL + "/api/v2/cati/questionnaires")
-            .then(async function (response: AxiosResponse) {
-                const allInstruments: Instrument[] = response.data;
-                const activeInstruments: Instrument[] = [];
-                // Add interviewing link and date of instrument to array objects
-                await Promise.all(allInstruments.map(async function (instrument: Instrument) {
-                    const active = await activeToday(instrument);
-                    log.info(`Active today outputted (${active}) for instrument (${instrument.name}) type of (${typeof active})`);
-                    if (active) {
-                        instrument.surveyTLA = instrument.name.substr(0, 3);
-                        instrument.link = "https://" + VM_EXTERNAL_WEB_URL + "/" + instrument.name + "?LayoutSet=CATI-Interviewer_Large";
-                        instrument.fieldPeriod = fieldPeriodToText(instrument.name);
-                        activeInstruments.push(instrument);
-                    }
-                }));
+        async function getActiveTodayInstrument(instrument: Instrument): Promise<Instrument | null> {
+            const active = await activeToday(instrument);
+            log.info(`Active today outputted (${active}) for instrument (${instrument.name}) type of (${typeof active})`);
+            return active ? instrument : null;
+        }
 
-                log.info("Retrieved active instruments, " + activeInstruments.length + " item/s");
+        async function getActiveTodayInstruments(allInstruments: Instrument[]): Promise<Instrument[]> {
+            return (await Promise.all(allInstruments.map(getActiveTodayInstrument)))
+                .filter((result) => result !== null) as Instrument[];
+        }
 
-                const surveys: Survey[] = _.chain(activeInstruments)
-                    // Group the elements of Array based on `surveyTLA` property
-                    .groupBy("surveyTLA")
-                    // `key` is group's name (surveyTLA), `value` is the array of objects
-                    .map((value: Instrument[], key: string) => ({ survey: key, instruments: value }))
-                    .value();
-                return res.json(surveys);
-            })
-            .catch(function (error) {
-                // handle error
-                log.error("Failed to retrieve instrument list");
-                log.error(error);
-                return res.status(500).json(error);
-            });
+        async function getAllInstruments(): Promise<Instrument[]> {
+            const response: AxiosResponse = await axios.get(`http://${blaiseApiUrl}/api/v2/cati/questionnaires`);
+            return response.data;
+        }
+
+        async function getSurveys(): Promise<Survey[]> {
+            const allInstruments = await getAllInstruments();
+            const activeInstruments = await getActiveTodayInstruments(allInstruments);
+            log.info(`Retrieved active instruments, ${activeInstruments.length} item/s`);
+            return groupBySurvey(activeInstruments.map(addExtraInstrumentFields));
+        }
+
+        try {
+            res.json(await getSurveys());
+        } catch(error) {
+            log.error("Failed to retrieve instrument list");
+            log.error(error);
+            res.status(500).json(error);
+        }
     });
 
     return instrumentRouter;
