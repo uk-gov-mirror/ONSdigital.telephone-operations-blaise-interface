@@ -103,11 +103,10 @@ describe("InstrumentRouter", () => {
                 survey: "QUE"
             }
         ]);
-        expect(log.debug).toHaveBeenCalledWith("The BIMS request responded with a status of 500 and a body of undefined");
         expect(log.debug).toHaveBeenCalledWith("the instrument QUESTIONNAIRE1 is live for TO (TO start date = Not set) (Active today = true)");
         expect(log.info).toHaveBeenCalledWith("Retrieved active instruments, 1 item/s");
         expect(log.warn).not.toHaveBeenCalled();
-        expect(log.error).not.toHaveBeenCalled();
+        expect(log.error).toHaveBeenCalledWith("The BIMS request responded with a status of 500 and a body of undefined");
     });
 
     it("does not return the instrument when tostartdate errors questionnaire is not active today", async () => {
@@ -119,11 +118,10 @@ describe("InstrumentRouter", () => {
         const response = await request.get("/instruments");
         expect(response.status).toBe(200);
         expect(response.body).toEqual([]);
-        expect(log.debug).toHaveBeenCalledWith("The BIMS request responded with a status of 500 and a body of undefined");
         expect(log.debug).toHaveBeenCalledWith("the instrument QUESTIONNAIRE1 is live for TO (TO start date = Not set) (Active today = false)");
         expect(log.info).toHaveBeenCalledWith("Retrieved active instruments, 0 item/s");
         expect(log.warn).not.toHaveBeenCalled();
-        expect(log.error).not.toHaveBeenCalled();
+        expect(log.error).toHaveBeenCalledWith("The BIMS request responded with a status of 500 and a body of undefined");
     });
 
     it("returns the instrument when tostartdate response type is not json and questionnaire is active today", async () => {

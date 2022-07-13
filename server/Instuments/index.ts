@@ -38,9 +38,16 @@ export default function InstrumentRouter(
                     validateStatus: function (status) { return status >= 200; }
                 });
 
-            log.debug(`The BIMS request responded with a status of ${response.status} and a body of ${response.data}`);
+            const logMessage = `The BIMS request responded with a status of ${ response.status } and a body of ${ response.data }`;
 
-            return response.status == 200 && response.headers["content-type"] == "application/json" ? response.data.tostartdate : null;
+            if (response.status !== 200) {
+                log.error(logMessage);
+                return null;
+            }
+
+            log.debug(logMessage);
+
+            return response.headers["content-type"] == "application/json" ? response.data.tostartdate : null;
         }
 
         function addExtraInstrumentFields(instrument: Instrument): Instrument {
