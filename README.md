@@ -43,12 +43,13 @@ git clone https://github.com/ONSdigital/telephone-operations-blaise-interface.gi
 
 Create a new .env file and add the following variables.
 
-| Variable                      | Description                                                                     | Var Example                  |
-|-------------------------------|---------------------------------------------------------------------------------|------------------------------|
-| PORT                          | Optional variable, specify the Port for express server to run on. If not passed in this is set as 5000 by default. <br><br>It's best not to set this as the react project will try and use the variable as well and conflict. By default React project locally runs on port 3000.                                              | 5009                         |
-| VM_EXTERNAL_WEB_URL           | External Url used for CATI dashboard and survey links.                          | tel-client-server.uk         |
-| VM_EXTERNAL_CLIENT_URL        | External link to connect to Blaise remotely through Blaise Server Manager.      | tel-web-server.uk            |
-| BLAISE_API_URL                | Url that the [Blaise Rest API](https://github.com/ONSdigital/blaise-api-rest) is running on to send calls to. | localhost:90 |
+| Variable               | Description                                                                                                                                                                                                                                                                       | Var Example          |
+|------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------|
+| PORT                   | Optional variable, specify the Port for express server to run on. If not passed in this is set as 5000 by default. <br><br>It's best not to set this as the react project will try and use the variable as well and conflict. By default React project locally runs on port 3000. | 5009                 |
+| VM_EXTERNAL_WEB_URL    | External Url used for CATI dashboard and survey links.                                                                                                                                                                                                                            | tel-client-server.uk |
+| VM_EXTERNAL_CLIENT_URL | External link to connect to Blaise remotely through Blaise Server Manager.                                                                                                                                                                                                        | tel-web-server.uk    |
+| BLAISE_API_URL         | Url that the [Blaise Rest API](https://github.com/ONSdigital/blaise-api-rest) is running on to send calls to.                                                                                                                                                                     | localhost:90         |
+| BIMS_API_URL           | Url that the [Blaise Information Metadata Services](https://github.com/ONSdigital/blaise-instrument-metadata-service) is running on to send calls to.                                                                                                                             | https://bims.com     |
 
 The `.env` file should be setup as below
 
@@ -56,6 +57,7 @@ The `.env` file should be setup as below
 VM_EXTERNAL_WEB_URL='tel-client-server.uk'
 VM_EXTERNAL_CLIENT_URL='tel-web-server.uk'
 BLAISE_API_URL='localhost:90'
+BIMS_API_URL='https://bims-url'
 ```
 
 Install required modules
