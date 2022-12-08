@@ -35,7 +35,7 @@
     "@types/node": "^18.11.11",
     "@types/pino": "^7.0.5",
     "@types/react": "^18.0.26",
-    "@types/react-dom": "^17.0.0",
+    "@types/react-dom": "^18.0.9",
     "axios": "^0.24.0",
     "blaise-design-system-react-components": "https://gitpkg.now.sh/ONSdigital/blaise-design-system-react-components?014a606b35c63d6fd703f7523918b8f9527bf2ff",
     "dotenv": "^8.2.0",
