@@ -38,7 +38,7 @@
     "@types/react-dom": "^18.0.9",
     "axios": "^0.24.0",
     "blaise-design-system-react-components": "https://gitpkg.now.sh/ONSdigital/blaise-design-system-react-components?014a606b35c63d6fd703f7523918b8f9527bf2ff",
-    "dotenv": "^8.2.0",
+    "dotenv": "^16.0.3",
     "ejs": "^3.1.5",
     "express": "^4.17.1",
     "formik": "^2.2.9",
