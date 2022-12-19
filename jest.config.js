@@ -6,3 +6,13 @@ process.env = Object.assign(process.env, {
     BIMS_CLIENT_ID: "mock@id",
     BIMS_API_URL: "mock-bims-api"
 });
+
+module.exports = {
+    "testEnvironment": "jsdom",
+    "coveragePathIgnorePatterns": [
+        "/node_modules/"
+    ],
+    "setupFilesAfterEnv": [
+        "jest-extended"
+    ]
+};
