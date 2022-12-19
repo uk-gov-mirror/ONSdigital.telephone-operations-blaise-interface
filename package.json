@@ -9,20 +9,13 @@
     "start-react": "react-scripts start",
     "build-react": "react-scripts build",
     "test": "jest --coverage --watchAll=false",
-    "gcp-build": "react-scripts build && tsc --project tsconfig.server.json"
+    "gcp-build": "react-scripts build && tsc --project tsconfig.server.json",
+    "dev": "concurrently --kill-others-on-fail \"yarn start-server\" \"yarn start-react\""
   },
   "proxy": "http://localhost:5000",
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "jest": {
-    "coveragePathIgnorePatterns": [
-      "/node_modules/"
-    ],
-    "setupFilesAfterEnv": [
-      "jest-extended"
-    ]
-  },
   "pre-commit": [
     "lint-fix"
   ],
@@ -38,6 +31,7 @@
     "@types/react-dom": "^18.0.9",
     "axios": "^0.24.0",
     "blaise-design-system-react-components": "https://gitpkg.now.sh/ONSdigital/blaise-design-system-react-components?014a606b35c63d6fd703f7523918b8f9527bf2ff",
+    "concurrently": "^7.6.0",
     "dotenv": "^16.0.3",
     "ejs": "^3.1.5",
     "express": "^4.17.1",
@@ -51,7 +45,7 @@
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "4.0.3",
+    "react-scripts": "5.0.1",
     "typescript": "^4.9.4"
   },
   "devDependencies": {
