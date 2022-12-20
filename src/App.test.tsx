@@ -26,6 +26,7 @@ const surveyListReturned: Survey[] = [
 ];
 
 function mock_server_request(returnedStatus: number, returnedJSON: any) {
+    //@ts-ignore
     global.fetch = jest.fn(() =>
         Promise.resolve({
             status: returnedStatus,

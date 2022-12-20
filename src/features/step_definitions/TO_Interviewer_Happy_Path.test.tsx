@@ -24,6 +24,7 @@ const feature = loadFeature(
 );
 
 function mock_server_request(returnedStatus: number, returnedJSON: Survey[]) {
+    //@ts-ignore
     global.fetch = jest.fn(() =>
         Promise.resolve({
             status: returnedStatus,
