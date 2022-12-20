@@ -39,14 +39,17 @@ describe("Given the API returns 2 instruments with only one that is active", () 
         }
     ];
 
-    it("should return a 200 status and a list with the one active instrument", async done => {
-        const response = await request.get("/api/instruments");
+    it("should return a 200 status and a list with the one active instrument", async () => {
+        try {
+            const response = await request.get("/api/instruments");
 
-        expect(response.statusCode).toEqual(200);
-        expect(response.body).toHaveLength(1);
-        expect(response.body[0].instruments).toHaveLength(1);
-        expect(response.body).toIncludeSameMembers(instrumentListReturned);
-        done();
+            expect(response.statusCode).toEqual(200);
+            expect(response.body).toHaveLength(1);
+            expect(response.body[0].instruments).toHaveLength(1);
+            expect(response.body).toIncludeSameMembers(instrumentListReturned);
+        } catch (error) {
+            console.error(error);
+        }
     });
 
     afterAll(() => {
@@ -79,16 +82,19 @@ describe("Given the API returns 2 active instruments for the survey OPN", () => 
         }
     ];
 
-    it("should return a list with one survey with 2 instrument objects", async done => {
-        const response = await request.get("/api/instruments");
+    it("should return a list with one survey with 2 instrument objects", async () => {
+        try {
+            const response = await request.get("/api/instruments");
 
-        expect(response.statusCode).toEqual(200);
-        expect(response.body).toHaveLength(1);
+            expect(response.statusCode).toEqual(200);
+            expect(response.body).toHaveLength(1);
 
-        expect(response.body[0].instruments).toHaveLength(2);
-        expect(response.body[0].survey).toEqual(instrumentListReturned[0].survey);
-        expect(response.body[0].instruments).toIncludeSameMembers(instrumentListReturned[0].instruments);
-        done();
+            expect(response.body[0].instruments).toHaveLength(2);
+            expect(response.body[0].survey).toEqual(instrumentListReturned[0].survey);
+            expect(response.body[0].instruments).toIncludeSameMembers(instrumentListReturned[0].instruments);
+        } catch (error) {
+            console.error(error);
+        }
     });
 
     afterAll(() => {
@@ -122,7 +128,8 @@ describe("Given the API returns 2 active instruments for 2 separate surveys ", (
             instruments: [InstrumentHelper.instrument("OPN2004A", true, "April 2020", "OPN", "https://external-web-url/OPN2004A?LayoutSet=CATI-Interviewer_Large")]
         }];
 
-    it("should return a list with 2 surveys with instrument object in each", async done => {
+    it("should return a list with 2 surveys with instrument object in each", async () => {
+      try {
         const response = await request.get("/api/instruments");
 
         expect(response.statusCode).toEqual(200);
@@ -131,7 +138,9 @@ describe("Given the API returns 2 active instruments for 2 separate surveys ", (
         expect(response.body[0].instruments).toHaveLength(1);
         expect(response.body[1].instruments).toHaveLength(1);
         expect(response.body).toIncludeSameMembers(instrumentListReturned);
-        done();
+      } catch (error) {
+        console.error(error);
+      }
     });
 
     afterAll(() => {
@@ -150,12 +159,15 @@ describe("Get list of instruments endpoint fails", () => {
         );
     });
 
-    it("should return a 500 status and an error message", async done => {
-        const response = await request.get("/api/instruments");
+    it("should return a 500 status and an error message", async () => {
+        try {
+            const response = await request.get("/api/instruments");
 
-        expect(response.statusCode).toEqual(500);
-        expect(JSON.stringify(response.body)).toMatch(/(Network Error)/i);
-        done();
+            expect(response.statusCode).toEqual(500);
+            expect(JSON.stringify(response.body)).toMatch(/(Network Error)/i);
+        } catch (error) {
+            console.error(error);
+        }
     });
 
     afterAll(() => {
