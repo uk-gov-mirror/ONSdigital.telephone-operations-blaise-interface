@@ -6,7 +6,7 @@ import InstrumentList from "./Components/InstrumentList";
 import SurveyList from "./Components/SurveyList";
 import {Survey} from "../Interfaces";
 import {ErrorBoundary} from "./Components/ErrorHandling/ErrorBoundary";
-import {Footer, Header, BetaBanner, ONSErrorPanel, ExternalLink} from "blaise-design-system-react-components";
+import {Footer, Header, ONSErrorPanel, ExternalLink} from "blaise-design-system-react-components";
 
 interface listError {
     error: boolean,
@@ -80,10 +80,9 @@ function App(): ReactElement {
 
     return (
         <>
-            <BetaBanner/>
             <Header title={headerText} />
-            <div style={divStyle} className="page__container container">
-                <main id="main-content" className="page__main">
+            <div style={divStyle} className="ons-page__container ons-container">
+                <main id="main-content" className="ons-page__main">
                     <DefaultErrorBoundary>
                         <h1>Interviewing</h1>
                         <p>
@@ -95,7 +94,7 @@ function App(): ReactElement {
                             take a few seconds to load.
                         </p>
                         {listError.error && <ONSErrorPanel/>}
-                        <p className="u-mt-m">
+                        <p className="ons-u-mt-m">
                             <ExternalLink text={"Link to CATI dashboard"}
                                           link={externalCATIUrl}
                                           id={"cati-dashboard"}/>

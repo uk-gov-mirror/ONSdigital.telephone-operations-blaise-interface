@@ -46,32 +46,32 @@ function InstrumentList(props: Props): ReactElement {
         {
             surveyInstruments && surveyInstruments.length > 0
                 ?
-                <table id="instrument-table" className="table ">
-                    <thead className="table__head u-mt-m">
-                    <tr className="table__row">
-                        <th scope="col" className="table__header ">
+                <table id="instrument-table" className="ons-table ">
+                    <thead className="ons-table__head ons-u-mt-m">
+                    <tr className="ons-table__row">
+                        <th scope="col" className="ons-table__header ">
                             <span>Questionnaire</span>
                         </th>
-                        <th scope="col" className="table__header ">
+                        <th scope="col" className="ons-table__header ">
                             <span>Field period</span>
                         </th>
-                        <th scope="col" className="table__header ">
+                        <th scope="col" className="ons-table__header ">
                             <span>Link to interview</span>
                         </th>
                     </tr>
                     </thead>
-                    <tbody className="table__body">
+                    <tbody className="ons-table__body">
                     {
                         surveyInstruments.map((item: Instrument) => {
                             return (
-                                <tr className="table__row" key={item.name} data-testid={"instrument-table-row"}>
-                                    <td className="table__cell ">
+                                <tr className="ons-table__row" key={item.name} data-testid={"instrument-table-row"}>
+                                    <td className="ons-table__cell ">
                                         {item.name}
                                     </td>
-                                    <td className="table__cell ">
+                                    <td className="ons-table__cell ">
                                         {item.fieldPeriod}
                                     </td>
-                                    <td className="table__cell ">
+                                    <td className="ons-table__cell ">
                                         <ExternalLink text={"Interview"}
                                                       link={item.link}
                                                       ariaLabel={"Launch interview for instrument " + item.name + " " + item.fieldPeriod}/>
