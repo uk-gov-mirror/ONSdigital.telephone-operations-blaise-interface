@@ -21,26 +21,26 @@ function SurveyList(props: Props): ReactElement {
         {
             list && list.length > 0
                 ?
-                <table id="survey-table" className="table ">
-                    <thead className="table__head u-mt-m">
-                    <tr className="table__row">
-                        <th scope="col" className="table__header ">
+                <table id="survey-table" className="ons-table ">
+                    <thead className="ons-table__head ons-u-mt-m">
+                    <tr className="ons-table__row">
+                        <th scope="col" className="ons-table__header ">
                             <span>Survey three letter acronym</span>
                         </th>
-                        <th scope="col" className="table__header ">
+                        <th scope="col" className="ons-table__header ">
                             <span>Link to questionnaires</span>
                         </th>
                     </tr>
                     </thead>
-                    <tbody className="table__body">
+                    <tbody className="ons-table__body">
                     {
                         list.map((item: Survey) => {
                             return (
-                                <tr className="table__row" key={item.survey} data-testid={"survey-table-row"}>
-                                    <td className="table__cell ">
+                                <tr className="ons-table__row" key={item.survey} data-testid={"survey-table-row"}>
+                                    <td className="ons-table__cell ">
                                         {item.survey}
                                     </td>
-                                    <td className="table__cell ">
+                                    <td className="ons-table__cell ">
                                         <Link to={"/survey/" + item.survey}>View active questionnaires</Link>
                                     </td>
                                 </tr>

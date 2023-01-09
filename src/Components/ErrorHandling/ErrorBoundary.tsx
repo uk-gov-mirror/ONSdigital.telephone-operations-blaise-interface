@@ -25,8 +25,8 @@ export class ErrorBoundary extends React.Component<Props,State>  {
         if (this.state.errorInfo.componentStack !== "Fine") {
             return (
                 <>
-                    <div className="panel panel--error panel--simple u-mt-m">
-                        <div className="panel__body">
+                    <div className="ons-panel ons-panel--error ons-panel--simple ons-u-mt-m">
+                        <div className="ons-panel__body">
                             <p>
                                 {this.props.errorMessageText}
                             </p>
