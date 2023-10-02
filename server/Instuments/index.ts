@@ -1,15 +1,15 @@
 import express, { Request, Response, Router } from "express";
-import { Instrument, Survey } from "../../Interfaces";
+import Survey, { Questionnaire } from "blaise-api-node-client";
 import axios, { AxiosResponse } from "axios";
 import _ from "lodash";
 import { fieldPeriodToText } from "../Functions";
 import AuthProvider from "../AuthProvider";
 import { Logger } from "../Logger";
 
-function groupBySurvey(activeInstruments: Instrument[]) {
+function groupBySurvey(activeInstruments: Questionnaire[]) {
     return _.chain(activeInstruments)
         .groupBy("surveyTLA")
-        .map((value: Instrument[], key: string) => ({ survey: key, instruments: value }))
+        .map((value: Questionnaire[], key: string) => ({ survey: key, instruments: value }))
         .value();
 }
 
@@ -29,7 +29,7 @@ export default function InstrumentRouter(
 
         const authProvider: AuthProvider = new AuthProvider(bimsClientID, log);
 
-        async function getToStartDate(instrument: Instrument) {
+        async function getToStartDate(instrument: Questionnaire) {
             const authHeader = await authProvider.getAuthHeader();
             const response: AxiosResponse = await axios.get(
                 `${bimsApiUrl}/tostartdate/${instrument.name}`,
@@ -50,7 +50,8 @@ export default function InstrumentRouter(
             return response.headers["content-type"] == "application/json" ? response.data.tostartdate : null;
         }
 
-        function addExtraInstrumentFields(instrument: Instrument): Instrument {
+        
+        function addExtraInstrumentFields(instrument: Questionnaire): Questionnaire {
             return {
                 ...instrument,
                 surveyTLA: instrument.name.substr(0, 3),
@@ -58,8 +59,9 @@ export default function InstrumentRouter(
                 fieldPeriod: fieldPeriodToText(instrument.name),
             };
         }
+        
 
-        async function activeToday(instrument: Instrument) {
+        async function activeToday(instrument: Questionnaire) {
             const telOpsStartDate = await getToStartDate(instrument);
 
             if (telOpsStartDate == null) {
@@ -76,18 +78,18 @@ export default function InstrumentRouter(
             return false;
         }
 
-        async function getActiveTodayInstrument(instrument: Instrument): Promise<Instrument | null> {
+        async function getActiveTodayInstrument(instrument: Questionnaire): Promise<Questionnaire | null> {
             const active = await activeToday(instrument);
             log.info(`Active today outputted (${active}) for instrument (${instrument.name}) type of (${typeof active})`);
             return active ? instrument : null;
         }
 
-        async function getActiveTodayInstruments(allInstruments: Instrument[]): Promise<Instrument[]> {
+        async function getActiveTodayInstruments(allInstruments: Questionnaire[]): Promise<Questionnaire[]> {
             return (await Promise.all(allInstruments.map(getActiveTodayInstrument)))
-                .filter((result) => result !== null) as Instrument[];
+                .filter((result) => result !== null) as Questionnaire[];
         }
 
-        async function getAllInstruments(): Promise<Instrument[]> {
+        async function getAllInstruments(): Promise<Questionnaire[]> {
             const response: AxiosResponse = await axios.get(`http://${blaiseApiUrl}/api/v2/cati/questionnaires`);
             return response.data;
         }
