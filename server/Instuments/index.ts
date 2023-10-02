@@ -1,5 +1,6 @@
 import express, { Request, Response, Router } from "express";
-import Survey, { Questionnaire } from "blaise-api-node-client";
+import BlaiseApiClient,  { Questionnaire } from "blaise-api-node-client";
+import { Survey } from "../../Interfaces"
 import axios, { AxiosResponse } from "axios";
 import _ from "lodash";
 import { fieldPeriodToText } from "../Functions";
@@ -9,7 +10,7 @@ import { Logger } from "../Logger";
 function groupBySurvey(activeInstruments: Questionnaire[]) {
     return _.chain(activeInstruments)
         .groupBy("surveyTLA")
-        .map((value: Questionnaire[], key: string) => ({ survey: key, instruments: value }))
+        .map((value: Questionnaire[], key: string) => ({ survey: key, questionnaires: value }))
         .value();
 }
 
@@ -21,6 +22,8 @@ export default function InstrumentRouter(
 ): Router {
     "use strict";
     const instrumentRouter = express.Router();
+
+    const bac = new BlaiseApiClient(`http://${BLAISE_API_URL}`);
 
     instrumentRouter.get("/instruments", async (req: Request, res: Response) => {
         const log: Logger = req.log;
