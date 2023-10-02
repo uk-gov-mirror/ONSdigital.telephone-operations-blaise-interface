@@ -1,6 +1,7 @@
 import React, {ReactElement} from "react";
 import {Link, useParams} from "react-router-dom";
-import {Instrument, Survey} from "../../Interfaces";
+import { Survey} from "../../Interfaces";
+import { Questionnaire } from "blaise-api-node-client";
 import {ExternalLink, ONSPanel} from "blaise-design-system-react-components";
 
 
@@ -26,16 +27,16 @@ function InstrumentList(props: Props): ReactElement {
         return obj.survey === survey;
     });
 
-    let surveyInstruments: Instrument[] = [];
+    let surveyInstruments: Questionnaire[] = [];
     if (filteredSurvey.length === 1) {
-        surveyInstruments = filteredSurvey[0].instruments;
+        surveyInstruments = filteredSurvey[0].questionnaires;
     } else if (filteredSurvey.length !== 1) {
         listError.message = "No active questionnaires for survey " + survey;
     } else {
         listError.message = "Unable to load questionnaires for survey " + survey;
     }
 
-    surveyInstruments.sort((a: Instrument, b: Instrument) => Date.parse(b.installDate) - Date.parse(a.installDate));
+    surveyInstruments.sort((a: Questionnaire, b: Questionnaire) => Date.parse(b.installDate) - Date.parse(a.installDate));
 
     return <>
         <p>
@@ -62,7 +63,7 @@ function InstrumentList(props: Props): ReactElement {
                     </thead>
                     <tbody className="ons-table__body">
                     {
-                        surveyInstruments.map((item: Instrument) => {
+                        surveyInstruments.map((item: Questionnaire) => {
                             return (
                                 <tr className="ons-table__row" key={item.name} data-testid={"instrument-table-row"}>
                                     <td className="ons-table__cell ">
@@ -73,7 +74,7 @@ function InstrumentList(props: Props): ReactElement {
                                     </td>
                                     <td className="ons-table__cell ">
                                         <ExternalLink text={"Interview"}
-                                                      link={item.link}
+                                                      link={item.link!}
                                                       ariaLabel={"Launch interview for instrument " + item.name + " " + item.fieldPeriod}/>
                                     </td>
                                 </tr>

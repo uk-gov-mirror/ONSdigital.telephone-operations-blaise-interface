@@ -23,7 +23,7 @@ export default function InstrumentRouter(
     "use strict";
     const instrumentRouter = express.Router();
 
-    const bac = new BlaiseApiClient(`http://${BLAISE_API_URL}`);
+    const blaiseApiClient = new BlaiseApiClient(`http://${blaiseApiUrl}`);
 
     instrumentRouter.get("/instruments", async (req: Request, res: Response) => {
         const log: Logger = req.log;
@@ -54,12 +54,12 @@ export default function InstrumentRouter(
         }
 
         
-        function addExtraInstrumentFields(instrument: Questionnaire): Questionnaire {
+        function addExtraInstrumentFields(questionnaire: Questionnaire): Questionnaire {
             return {
-                ...instrument,
-                surveyTLA: instrument.name.substr(0, 3),
-                link: `https://${ vmExternalWebUrl }/${ instrument.name }?LayoutSet=CATI-Interviewer_Large`,
-                fieldPeriod: fieldPeriodToText(instrument.name),
+                ...questionnaire,
+                surveyTLA: questionnaire.name.substr(0, 3),
+                link: `https://${ vmExternalWebUrl }/${ questionnaire.name }?LayoutSet=CATI-Interviewer_Large`,
+                fieldPeriod: fieldPeriodToText(questionnaire.name),
             };
         }
         
@@ -93,15 +93,15 @@ export default function InstrumentRouter(
         }
 
         async function getAllInstruments(): Promise<Questionnaire[]> {
-            const response: AxiosResponse = await axios.get(`http://${blaiseApiUrl}/api/v2/cati/questionnaires`);
-            return response.data;
+           const questionnaires: Questionnaire[] = await blaiseApiClient.getQuestionnaires( "gusty");
+           return questionnaires;
         }
 
         async function getSurveys(): Promise<Survey[]> {
             const allInstruments = await getAllInstruments();
             const activeInstruments = await getActiveTodayInstruments(allInstruments);
             log.info(`Retrieved active instruments, ${activeInstruments.length} item/s`);
-            return groupBySurvey(activeInstruments.map(addExtraInstrumentFields));
+            return groupBySurvey(allInstruments.map(addExtraInstrumentFields));
         }
 
         try {

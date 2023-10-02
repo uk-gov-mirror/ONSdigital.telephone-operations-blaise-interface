@@ -11,7 +11,7 @@ import {Survey} from "../Interfaces";
 const surveyListReturned: Survey[] = [
     {
         survey: "OPN",
-        instruments: [
+        questionnaires: [
             {
                 activeToday: true,
                 fieldPeriod: "July 2020",

@@ -3,7 +3,7 @@ import { Survey } from "../../../Interfaces";
 export const survey_list_with_OPN_and_LMS_with_one_active_instrument_each: Survey[] = [
     {
         survey: "OPN",
-        instruments: [
+        questionnaires: [
             {
                 activeToday: true,
                 fieldPeriod: "July 2020",
@@ -17,7 +17,7 @@ export const survey_list_with_OPN_and_LMS_with_one_active_instrument_each: Surve
     },
     {
         survey: "LMS",
-        instruments: [
+        questionnaires: [
             {
                 activeToday: true,
                 fieldPeriod: "Unknown",
@@ -34,7 +34,7 @@ export const survey_list_with_OPN_and_LMS_with_one_active_instrument_each: Surve
 export const survey_list_with_OPN_with_one_active_instrument: Survey[] = [
     {
         survey: "OPN",
-        instruments: [
+        questionnaires: [
             {
                 activeToday: true,
                 fieldPeriod: "July 2020",
@@ -51,7 +51,7 @@ export const survey_list_with_OPN_with_one_active_instrument: Survey[] = [
 export const survey_list_with_OPN_with_two_active_instruments: Survey[] = [
     {
         survey: "OPN",
-        instruments: [
+        questionnaires: [
             {
                 activeToday: true,
                 fieldPeriod: "July 2020",
@@ -77,7 +77,7 @@ export const survey_list_with_OPN_with_two_active_instruments: Survey[] = [
 export const survey_list_with_OPN_with_three_active_instruments: Survey[] = [
     {
         survey: "OPN",
-        instruments: [
+        questionnaires: [
             {
                 activeToday: true,
                 fieldPeriod: "July 2020",
