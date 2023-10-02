@@ -1,23 +1,8 @@
-interface ApiInstrument {
-    activeToday: boolean;
-    installDate: string;
-    name: string;
-    serverParkName: string;
-}
-
-interface Instrument {
-    installDate: string
-    name: string
-    serverParkName: string
-    activeToday: boolean
-    link: string
-    fieldPeriod: string
-    surveyTLA: string
-}
+import { Questionnaire } from "blaise-api-node-client"
 
 interface Survey {
-    instruments: Instrument[]
+    questionnaires: Questionnaire[]
     survey: string
 }
 
-export type {ApiInstrument, Instrument, Survey};
+export type { Survey};
