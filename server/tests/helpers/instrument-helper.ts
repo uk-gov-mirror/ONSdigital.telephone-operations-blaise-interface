@@ -2,7 +2,7 @@ import { Questionnaire } from "blaise-api-node-client";
 export class InstrumentHelper {
 
     public static apiInstrument(name :string, activeToday : boolean) : Questionnaire {
-        const apiInstrument : Questionnaire =
+        const apiQuestionnaire : Questionnaire =
                 {
                     activeToday: activeToday,
                     installDate: "2020-12-11T11:53:55.5612856+00:00",
@@ -10,11 +10,11 @@ export class InstrumentHelper {
                     serverParkName: "LocalDevelopment",
                 };
 
-        return apiInstrument;
+        return apiQuestionnaire;
     }
 
     public static instrument(name :string, activeToday : boolean, fieldPeriod: string, surveyType :string, link: string) : Questionnaire {
-        const instrument : Questionnaire =
+        const questionnaire : Questionnaire =
                 {
                     activeToday: activeToday,
                     fieldPeriod: fieldPeriod,
@@ -25,6 +25,6 @@ export class InstrumentHelper {
                     "surveyTLA": surveyType
                 };
 
-        return instrument;
+        return questionnaire;
     }
 }

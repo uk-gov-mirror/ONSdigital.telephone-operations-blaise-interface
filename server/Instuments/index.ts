@@ -15,15 +15,13 @@ function groupBySurvey(activeInstruments: Questionnaire[]) {
 }
 
 export default function InstrumentRouter(
-    blaiseApiUrl: string,
     vmExternalWebUrl: string,
     bimsClientID: string,
-    bimsApiUrl: string
+    bimsApiUrl: string,
+    blaiseApiClient: BlaiseApiClient
 ): Router {
     "use strict";
     const instrumentRouter = express.Router();
-
-    const blaiseApiClient = new BlaiseApiClient(`http://${blaiseApiUrl}`);
 
     instrumentRouter.get("/instruments", async (req: Request, res: Response) => {
         const log: Logger = req.log;
@@ -32,10 +30,10 @@ export default function InstrumentRouter(
 
         const authProvider: AuthProvider = new AuthProvider(bimsClientID, log);
 
-        async function getToStartDate(instrument: Questionnaire) {
+        async function getToStartDate(questionnaire: Questionnaire) {
             const authHeader = await authProvider.getAuthHeader();
             const response: AxiosResponse = await axios.get(
-                `${bimsApiUrl}/tostartdate/${instrument.name}`,
+                `${bimsApiUrl}/tostartdate/${questionnaire.name}`,
                 {
                     headers: authHeader,
                     validateStatus: function (status) { return status >= 200; }
@@ -64,44 +62,46 @@ export default function InstrumentRouter(
         }
         
 
-        async function activeToday(instrument: Questionnaire) {
-            const telOpsStartDate = await getToStartDate(instrument);
+        async function activeToday(questionnaire: Questionnaire) {
+            const telOpsStartDate = await getToStartDate(questionnaire);
 
             if (telOpsStartDate == null) {
-                log.debug(`the instrument ${instrument.name} is live for TO (TO start date = Not set) (Active today = ${instrument.activeToday})`);
-                return instrument.activeToday;
+                log.debug(`the instrument ${questionnaire.name} is live for TO (TO start date = Not set) (Active today = ${questionnaire.activeToday})`);
+                return questionnaire.activeToday;
             }
 
             if (Date.parse(telOpsStartDate) <= Date.now()) {
-                log.debug(`the instrument ${instrument.name} is live for TO (TO start date = ${telOpsStartDate}) (Active today = ${instrument.activeToday})`);
-                return instrument.activeToday;
+                log.debug(`the instrument ${questionnaire.name} is live for TO (TO start date = ${telOpsStartDate}) (Active today = ${questionnaire.activeToday})`);
+                return questionnaire.activeToday;
             }
 
-            log.debug(`the instrument ${instrument.name} is not currently live for TO (TO start date = ${telOpsStartDate}) (Active today = ${instrument.activeToday})`);
+            log.debug(`the instrument ${questionnaire.name} is not currently live for TO (TO start date = ${telOpsStartDate}) (Active today = ${questionnaire.activeToday})`);
             return false;
         }
 
-        async function getActiveTodayInstrument(instrument: Questionnaire): Promise<Questionnaire | null> {
-            const active = await activeToday(instrument);
-            log.info(`Active today outputted (${active}) for instrument (${instrument.name}) type of (${typeof active})`);
-            return active ? instrument : null;
+        async function getActiveTodayQuestionnaire(questionnaire: Questionnaire): Promise<Questionnaire | null> {
+            const active = await activeToday(questionnaire);
+            log.info(`Active today outputted (${active}) for instrument (${questionnaire.name}) type of (${typeof active})`);
+            
+            return active ? questionnaire : null;
         }
 
-        async function getActiveTodayInstruments(allInstruments: Questionnaire[]): Promise<Questionnaire[]> {
-            return (await Promise.all(allInstruments.map(getActiveTodayInstrument)))
-                .filter((result) => result !== null) as Questionnaire[];
+        async function getActiveTodayQuestionnaires(allallQuestionnaires: Questionnaire[]): Promise<Questionnaire[]> {
+            const activeQuestionnaires = await Promise.all(allallQuestionnaires.map(getActiveTodayQuestionnaire));
+            const filteredQuestionnaires = activeQuestionnaires.filter((result) => result !== null) as Questionnaire[];
+            return (filteredQuestionnaires);
+                
         }
 
-        async function getAllInstruments(): Promise<Questionnaire[]> {
-           const questionnaires: Questionnaire[] = await blaiseApiClient.getQuestionnaires( "gusty");
-           return questionnaires;
+        async function getAllQuestionnaires(): Promise<Questionnaire[]> {
+           return await blaiseApiClient.getAllQuestionnairesWithCatiData();
         }
 
         async function getSurveys(): Promise<Survey[]> {
-            const allInstruments = await getAllInstruments();
-            const activeInstruments = await getActiveTodayInstruments(allInstruments);
-            log.info(`Retrieved active instruments, ${activeInstruments.length} item/s`);
-            return groupBySurvey(allInstruments.map(addExtraInstrumentFields));
+            const allQuestionnaires = await getAllQuestionnaires();
+            const activeQuestionnaires = await getActiveTodayQuestionnaires(allQuestionnaires);
+            log.info(`Retrieved active instruments, ${activeQuestionnaires.length} item/s`);
+             return groupBySurvey(activeQuestionnaires.map(addExtraInstrumentFields));
         }
 
         try {

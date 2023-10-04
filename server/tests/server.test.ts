@@ -1,12 +1,17 @@
 /**
  * @jest-environment node
  */
-import app from "../server"; // Link to your server file
 import supertest from "supertest";
 import MockAdapter from "axios-mock-adapter";
 import axios from "axios";
+import { IMock, Mock, It } from 'typemoq';
+import BlaiseApiClient from "blaise-api-node-client";
+import nodeServer from "../server";
 require("jest-extended");
 
+const blaiseApiMock: IMock<BlaiseApiClient> = Mock.ofType(BlaiseApiClient);
+
+const app = nodeServer(blaiseApiMock.object);
 const request = supertest(app);
 
 // This sets the mock adapter on the default instance
@@ -18,9 +23,7 @@ const mock = new MockAdapter(axios, { onNoMatch: "throwException" });
 
 describe("Given the API returns 2 instruments with only one that is active", () => {
     beforeAll(() => {
-        mock.onGet("http://" + process.env.BLAISE_API_URL + "/api/v2/cati/questionnaires").reply(200,
-            apiInstrumentList,
-        );
+        blaiseApiMock.setup((api) => api.getAllQuestionnairesWithCatiData()).returns(async () => apiQuestionnaireList);
         const liveDateUrl = new RegExp(`${process.env.BIMS_API_URL}/tostartdate/.*`);
         mock.onGet(liveDateUrl).reply(200,
             { tostartdate: null },
@@ -28,28 +31,25 @@ describe("Given the API returns 2 instruments with only one that is active", () 
         );
     });
 
-    const apiInstrumentList = [
+    const apiQuestionnaireList = [
         InstrumentHelper.apiInstrument("OPN2007T", true),
         InstrumentHelper.apiInstrument("OPN2004A", false)];
 
-    const instrumentListReturned = [
+    const questionnairesReturned = [
         {
             survey: "OPN",
-            instruments: [InstrumentHelper.instrument("OPN2007T", true, "July 2020", "OPN", "https://external-web-url/OPN2007T?LayoutSet=CATI-Interviewer_Large")]
+            questionnaires: [InstrumentHelper.instrument("OPN2007T", true, "July 2020", "OPN", "https://external-web-url/OPN2007T?LayoutSet=CATI-Interviewer_Large")]
         }
     ];
 
     it("should return a 200 status and a list with the one active instrument", async () => {
-        try {
             const response = await request.get("/api/instruments");
+            console.debug('response.body[0]', response.body[0]);
 
             expect(response.statusCode).toEqual(200);
             expect(response.body).toHaveLength(1);
-            expect(response.body[0].instruments).toHaveLength(1);
-            expect(response.body).toIncludeSameMembers(instrumentListReturned);
-        } catch (error) {
-            console.error(error);
-        }
+            expect(response.body[0].questionnaires).toHaveLength(1);
+            expect(response.body).toIncludeSameMembers(questionnairesReturned);
     });
 
     afterAll(() => {
@@ -59,9 +59,8 @@ describe("Given the API returns 2 instruments with only one that is active", () 
 
 describe("Given the API returns 2 active instruments for the survey OPN", () => {
     beforeAll(() => {
-        mock.onGet("http://" + process.env.BLAISE_API_URL + "/api/v2/cati/questionnaires").reply(200,
-            apiInstrumentList,
-        );
+        blaiseApiMock.setup((api) => api.getAllQuestionnairesWithCatiData()).returns(async () => apiQuestionnaireList);
+
         const liveDateUrl = new RegExp(`${process.env.BIMS_API_URL}/tostartdate/.*`);
         mock.onGet(liveDateUrl).reply(200,
             { tostartdate: null },
@@ -69,32 +68,28 @@ describe("Given the API returns 2 active instruments for the survey OPN", () => 
         );
     });
 
-    const apiInstrumentList = [
+    const apiQuestionnaireList = [
         InstrumentHelper.apiInstrument("OPN2007T", true),
         InstrumentHelper.apiInstrument("OPN2004A", true)];
 
-    const instrumentListReturned = [
+    const questionnairesReturned = [
         {
             survey: "OPN",
-            instruments: [
+            questionnaires: [
                 InstrumentHelper.instrument("OPN2007T", true, "July 2020", "OPN", "https://external-web-url/OPN2007T?LayoutSet=CATI-Interviewer_Large"),
                 InstrumentHelper.instrument("OPN2004A", true, "April 2020", "OPN", "https://external-web-url/OPN2004A?LayoutSet=CATI-Interviewer_Large")]
         }
     ];
 
     it("should return a list with one survey with 2 instrument objects", async () => {
-        try {
             const response = await request.get("/api/instruments");
 
             expect(response.statusCode).toEqual(200);
             expect(response.body).toHaveLength(1);
 
-            expect(response.body[0].instruments).toHaveLength(2);
-            expect(response.body[0].survey).toEqual(instrumentListReturned[0].survey);
-            expect(response.body[0].instruments).toIncludeSameMembers(instrumentListReturned[0].instruments);
-        } catch (error) {
-            console.error(error);
-        }
+            expect(response.body[0].questionnaires).toHaveLength(2);
+            expect(response.body[0].survey).toEqual(questionnairesReturned[0].survey);
+            expect(response.body[0].questionnaires).toIncludeSameMembers(questionnairesReturned[0].questionnaires);
     });
 
     afterAll(() => {
@@ -104,9 +99,8 @@ describe("Given the API returns 2 active instruments for the survey OPN", () => 
 
 describe("Given the API returns 2 active instruments for 2 separate surveys ", () => {
     beforeAll(() => {
-        mock.onGet("http://" + process.env.BLAISE_API_URL + "/api/v2/cati/questionnaires").reply(200,
-            apiInstrumentList,
-        );
+        blaiseApiMock.setup((api) => api.getAllQuestionnairesWithCatiData()).returns(async () => apiQuestionnaireList);
+
         const liveDateUrl = new RegExp(`${process.env.BIMS_API_URL}/tostartdate/.*`);
         mock.onGet(liveDateUrl).reply(200,
             { tostartdate: null },
@@ -114,33 +108,29 @@ describe("Given the API returns 2 active instruments for 2 separate surveys ", (
         );
     });
 
-    const apiInstrumentList = [
+    const apiQuestionnaireList = [
         InstrumentHelper.apiInstrument("IPS2007T", true),
         InstrumentHelper.apiInstrument("OPN2004A", true)];
 
-    const instrumentListReturned = [
+    const questionnairesReturned = [
         {
             survey: "IPS",
-            instruments: [InstrumentHelper.instrument("IPS2007T", true, "July 2020", "IPS", "https://external-web-url/IPS2007T?LayoutSet=CATI-Interviewer_Large")]
+            questionnaires: [InstrumentHelper.instrument("IPS2007T", true, "July 2020", "IPS", "https://external-web-url/IPS2007T?LayoutSet=CATI-Interviewer_Large")]
         },
         {
             survey: "OPN",
-            instruments: [InstrumentHelper.instrument("OPN2004A", true, "April 2020", "OPN", "https://external-web-url/OPN2004A?LayoutSet=CATI-Interviewer_Large")]
+            questionnaires: [InstrumentHelper.instrument("OPN2004A", true, "April 2020", "OPN", "https://external-web-url/OPN2004A?LayoutSet=CATI-Interviewer_Large")]
         }];
 
     it("should return a list with 2 surveys with instrument object in each", async () => {
-      try {
         const response = await request.get("/api/instruments");
 
         expect(response.statusCode).toEqual(200);
         expect(response.body).toHaveLength(2);
 
-        expect(response.body[0].instruments).toHaveLength(1);
-        expect(response.body[1].instruments).toHaveLength(1);
-        expect(response.body).toIncludeSameMembers(instrumentListReturned);
-      } catch (error) {
-        console.error(error);
-      }
+        expect(response.body[0].questionnaires).toHaveLength(1);
+        expect(response.body[1].questionnaires).toHaveLength(1);
+        expect(response.body).toIncludeSameMembers(questionnairesReturned);
     });
 
     afterAll(() => {
@@ -151,7 +141,7 @@ describe("Given the API returns 2 active instruments for 2 separate surveys ", (
 
 describe("Get list of instruments endpoint fails", () => {
     beforeAll(() => {
-        mock.onGet("http://" + process.env.BLAISE_API_URL + "/api/v2/cati/questionnaires").networkError();
+        blaiseApiMock.setup((api) => api.getAllQuestionnairesWithCatiData()).throws(new Error());
         const liveDateUrl = new RegExp(`${process.env.BIMS_API_URL}/tostartdate/.*`);
         mock.onGet(liveDateUrl).reply(200,
             { tostartdate: null },
@@ -160,14 +150,9 @@ describe("Get list of instruments endpoint fails", () => {
     });
 
     it("should return a 500 status and an error message", async () => {
-        try {
             const response = await request.get("/api/instruments");
 
-            expect(response.statusCode).toEqual(500);
-            expect(JSON.stringify(response.body)).toMatch(/(Network Error)/i);
-        } catch (error) {
-            console.error(error);
-        }
+            expect(response.statusCode).toEqual(500);           
     });
 
     afterAll(() => {
@@ -176,9 +161,12 @@ describe("Get list of instruments endpoint fails", () => {
 });
 
 
+
+import { InstrumentHelper } from "./helpers/instrument-helper";
+
 import { defineFeature, loadFeature } from "jest-cucumber";
 import { IsoDateHelper } from "./helpers/iso-date-helper";
-import { InstrumentHelper } from "./helpers/instrument-helper";
+
 
 const feature = loadFeature("./src/features/TO_Interviewer_Happy_Path.feature", { tagFilter: "@server" });
 
@@ -187,7 +175,7 @@ defineFeature(feature, test => {
     //Scenario 3b
     let response;
     const liveDateUrl = new RegExp(`${process.env.BIMS_API_URL}/tostartdate/.*`);
-    const instrumentName = "OPN2007T";
+    const questionnaireName = "OPN2007T";
 
     const questionnaireHasATelOpsStartDateOfToday = (given) => {
         given("a survey questionnaire has a TelOps start date of today", async () => {
@@ -216,19 +204,17 @@ defineFeature(feature, test => {
 
     const questionnaireHasAnActiveSurveyDay = (given) => {
         given("an active survey day", async () => {
-            const apiInstrumentList = [InstrumentHelper.apiInstrument(instrumentName, true)];
+            const apiQuestionnaireList = [InstrumentHelper.apiInstrument(questionnaireName, true)];
 
-            mock.onGet("http://" + process.env.BLAISE_API_URL + "/api/v2/cati/questionnaires").reply(200,
-                apiInstrumentList);
+            blaiseApiMock.setup((api) => api.getAllQuestionnairesWithCatiData()).returns(async () => apiQuestionnaireList);
         });
     };
 
     const questionnaireDoesNotHaveAnActiveSurveyDay = (given) => {
         given("does not have an active survey day", async () => {
-            const apiInstrumentList = [InstrumentHelper.apiInstrument(instrumentName, false)];
+            const apiQuestionnaireList = [InstrumentHelper.apiInstrument(questionnaireName, false)];
 
-            mock.onGet("http://" + process.env.BLAISE_API_URL + "/api/v2/cati/questionnaires").reply(200,
-                apiInstrumentList);
+            blaiseApiMock.setup((api) => api.getAllQuestionnairesWithCatiData()).returns(async () => apiQuestionnaireList);
         });
     };
 
@@ -241,19 +227,19 @@ defineFeature(feature, test => {
     const thenIWillSeeTheQuestionnaireListed = (then) => {
         then("I will see that questionnaire listed for the survey", () => {
             // The survey is returned
-            let selectedSurvey = response.body[0].instruments;
+            let selectedSurvey = response.body[0].questionnaires;
             expect(selectedSurvey).toHaveLength(1);
 
-            const instrumentListReturned = [InstrumentHelper.instrument(instrumentName, true, "July 2020", "OPN", "https://external-web-url/OPN2007T?LayoutSet=CATI-Interviewer_Large")];
+            const questionnaireListReturned = [InstrumentHelper.instrument(questionnaireName, true, "July 2020", "OPN", "https://external-web-url/OPN2007T?LayoutSet=CATI-Interviewer_Large")];
 
-            expect(selectedSurvey).toEqual(instrumentListReturned);
+            expect(selectedSurvey).toEqual(questionnaireListReturned);
         });
     };
 
     const thenIWillNotSeeTheQuestionnaireListed = (then) => {
         then("I will not see that questionnaire listed for the survey", () => {
             // The questionnaire is not returned
-            expect(response.body).toHaveLength(0);
+            expect(response.body).toEqual([]);
         });
     };
 
