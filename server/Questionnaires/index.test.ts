@@ -72,7 +72,7 @@ describe("QuestionnaireRouter", () => {
 
 
     it("sends the auth header to BIMS", async () => {
-        // aarnge
+        // arrange
         const questionnaire: Questionnaire = {
             name: "OPN2211A",
             installDate: "2022-07-12",
@@ -90,7 +90,8 @@ describe("QuestionnaireRouter", () => {
             });
         
         // act
-        const response = await request.get("/instruments");
+        await request.get("/instruments");
+
         // assert        
         expect(sentHeaders).toHaveProperty("Authorization", "Bearer example-token");
     });

@@ -4,7 +4,7 @@
 import supertest from "supertest";
 import MockAdapter from "axios-mock-adapter";
 import axios from "axios";
-import { IMock, Mock, It } from 'typemoq';
+import { IMock, Mock } from 'typemoq';
 import BlaiseApiClient from "blaise-api-node-client";
 import nodeServer from "../server";
 import { QuestionnaireHelper } from "./helpers/questionnaire-helper";
@@ -44,12 +44,15 @@ describe("Given the API returns 2 instruments with only one that is active", () 
     ];
 
     it("should return a 200 status and a list with the one active instrument", async () => {
-            const response = await request.get("/api/instruments");
+        // act        
+        const response = await request.get("/api/instruments");
 
-            expect(response.statusCode).toEqual(200);
-            expect(response.body).toHaveLength(1);
-            expect(response.body[0].questionnaires).toHaveLength(1);
-            expect(response.body).toIncludeSameMembers(questionnairesReturned);
+
+        // assert
+        expect(response.statusCode).toEqual(200);
+        expect(response.body).toHaveLength(1);
+        expect(response.body[0].questionnaires).toHaveLength(1);
+        expect(response.body).toIncludeSameMembers(questionnairesReturned);
     });
 
     afterAll(() => {
@@ -87,14 +90,18 @@ describe("Given the API returns 2 active instruments for the survey OPN", () => 
     ];
 
     it("should return a list with one survey with 2 instrument objects", async () => {
-            const response = await request.get("/api/instruments");
+        // act    
+        const response = await request.get("/api/instruments");
 
-            expect(response.statusCode).toEqual(200);
-            expect(response.body).toHaveLength(1);
+        // arrange
+        expect(response.statusCode).toEqual(200);
 
-            expect(response.body[0].questionnaires).toHaveLength(2);
-            expect(response.body[0].survey).toEqual(questionnairesReturned[0].survey);
-            expect(response.body[0].questionnaires).toIncludeSameMembers(questionnairesReturned[0].questionnaires);
+        // assert
+        expect(response.body).toHaveLength(1);
+
+        expect(response.body[0].questionnaires).toHaveLength(2);
+        expect(response.body[0].survey).toEqual(questionnairesReturned[0].survey);
+        expect(response.body[0].questionnaires).toIncludeSameMembers(questionnairesReturned[0].questionnaires);
     });
 
     afterAll(() => {
@@ -133,8 +140,10 @@ describe("Given the API returns 2 active instruments for 2 separate surveys ", (
         }];
 
     it("should return a list with 2 surveys with instrument object in each", async () => {
+        // act
         const response = await request.get("/api/instruments");
 
+        // assert
         expect(response.statusCode).toEqual(200);
         expect(response.body).toHaveLength(2);
 
@@ -187,7 +196,6 @@ import { IsoDateHelper } from "./helpers/iso-date-helper";
 const feature = loadFeature("./src/features/TO_Interviewer_Happy_Path.feature", { tagFilter: "@server" });
 
 defineFeature(feature, test => {
-
     //Scenario 3b
     let response;
     const liveDateUrl = new RegExp(`${process.env.BIMS_API_URL}/tostartdate/.*`);
