@@ -14,16 +14,16 @@ function groupBySurvey(activeInstruments: Questionnaire[]) {
         .value();
 }
 
-export default function InstrumentRouter(
+export default function QuestionnaireRouter(
     vmExternalWebUrl: string,
     bimsClientID: string,
     bimsApiUrl: string,
     blaiseApiClient: BlaiseApiClient
 ): Router {
     "use strict";
-    const instrumentRouter = express.Router();
+    const questionnaireRouter = express.Router();
 
-    instrumentRouter.get("/instruments", async (req: Request, res: Response) => {
+    questionnaireRouter.get("/instruments", async (req: Request, res: Response) => {
         const log: Logger = req.log;
 
         const authProvider: AuthProvider = new AuthProvider(bimsClientID, log);
@@ -50,7 +50,7 @@ export default function InstrumentRouter(
         }
 
         
-        function addExtraInstrumentFields(questionnaire: Questionnaire): Questionnaire {
+        function addExtraQuestionnaireFields(questionnaire: Questionnaire): Questionnaire {
             return {
                 ...questionnaire,
                 surveyTLA: questionnaire.name.substr(0, 3),
@@ -100,7 +100,7 @@ export default function InstrumentRouter(
             const allQuestionnaires = await getAllQuestionnaires();
             const activeQuestionnaires = await getActiveTodayQuestionnaires(allQuestionnaires);
             log.info(`Retrieved active instruments, ${activeQuestionnaires.length} item/s`);
-            return groupBySurvey(activeQuestionnaires.map(addExtraInstrumentFields));
+            return groupBySurvey(activeQuestionnaires.map(addExtraQuestionnaireFields));
         }
 
         try {
@@ -112,5 +112,5 @@ export default function InstrumentRouter(
         }
     });
 
-    return instrumentRouter;
+    return questionnaireRouter;
 }

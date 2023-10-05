@@ -3,7 +3,7 @@ import axios from "axios";
 import path from "path";
 import ejs from "ejs";
 import dotenv from "dotenv";
-import InstrumentRouter from "./Instruments";
+import QuestionnaireRouter from "./Questionnaires";
 import {getEnvironmentVariables} from "./Config";
 import pinoLogger from "pino-http";
 import BlaiseApiClient from "blaise-api-node-client";
@@ -40,8 +40,8 @@ server.use(
     express.static(path.join(__dirname, `${buildFolder}/static`)),
 );
 
-// Load api Instruments routes from InstrumentRouter
-server.use("/api", InstrumentRouter(VM_EXTERNAL_WEB_URL, BIMS_CLIENT_ID, BIMS_API_URL, blaiseApiClient));
+// Load api Instruments routes from QuestionnaireRouter
+server.use("/api", QuestionnaireRouter(VM_EXTERNAL_WEB_URL, BIMS_CLIENT_ID, BIMS_API_URL, blaiseApiClient));
 
 // Health Check endpoint
 server.get("/tobi-ui/:version/health", async function (req: Request, res: Response) {

@@ -2,7 +2,7 @@ import express, { NextFunction, Request, Response } from "express";
 import supertest from "supertest";
 import MockAdapter from "axios-mock-adapter";
 
-import InstrumentRouter from "./index";
+import QuestionnaireRouter from "./index";
 import axios from "axios";
 import getGoogleAuthToken from "../AuthProvider/GoogleTokenProvider";
 import { Logger } from "../Logger";
@@ -13,7 +13,7 @@ import { IMock, Mock } from "typemoq";
 jest.mock("../AuthProvider/GoogleTokenProvider");
 const blaiseApiMock: IMock<BlaiseApiClient> = Mock.ofType(BlaiseApiClient);
 
-describe("InstrumentRouter", () => {
+describe("QuestionnaireRouter", () => {
     const app = express();
     const mockHttp = new MockAdapter(axios);
 
@@ -29,7 +29,7 @@ describe("InstrumentRouter", () => {
         next();
     });
 
-    app.use(InstrumentRouter(
+    app.use(QuestionnaireRouter(
         "vm.com",
         "bims-id",
         "http://bims.com",
