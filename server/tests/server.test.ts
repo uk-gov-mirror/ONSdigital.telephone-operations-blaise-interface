@@ -55,6 +55,11 @@ describe("Given the API returns 2 instruments with only one that is active", () 
     afterAll(() => {
         mock.reset();
     });
+
+    afterEach(() => {
+        blaiseApiMock.reset();
+        jest.resetAllMocks();
+    });
 });
 
 describe("Given the API returns 2 active instruments for the survey OPN", () => {
@@ -94,6 +99,11 @@ describe("Given the API returns 2 active instruments for the survey OPN", () => 
 
     afterAll(() => {
         mock.reset();
+    });
+
+    afterEach(() => {
+        blaiseApiMock.reset();
+        jest.resetAllMocks();
     });
 });
 
@@ -136,6 +146,11 @@ describe("Given the API returns 2 active instruments for 2 separate surveys ", (
     afterAll(() => {
         mock.reset();
     });
+
+    afterEach(() => {
+        blaiseApiMock.reset();
+        jest.resetAllMocks();
+    });
 });
 
 
@@ -158,9 +173,12 @@ describe("Get list of instruments endpoint fails", () => {
     afterAll(() => {
         mock.reset();
     });
+
+    afterEach(() => {
+        blaiseApiMock.reset();
+        jest.resetAllMocks();
+    });
 });
-
-
 
 import { InstrumentHelper } from "./helpers/instrument-helper";
 

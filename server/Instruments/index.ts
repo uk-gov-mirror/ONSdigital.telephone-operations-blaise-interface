@@ -26,8 +26,6 @@ export default function InstrumentRouter(
     instrumentRouter.get("/instruments", async (req: Request, res: Response) => {
         const log: Logger = req.log;
 
-        log.debug("get list of items");
-
         const authProvider: AuthProvider = new AuthProvider(bimsClientID, log);
 
         async function getToStartDate(questionnaire: Questionnaire) {
@@ -64,8 +62,8 @@ export default function InstrumentRouter(
 
         async function activeToday(questionnaire: Questionnaire) {
             const telOpsStartDate = await getToStartDate(questionnaire);
-
-            if (telOpsStartDate == null) {
+          
+            if (telOpsStartDate == null) {               
                 log.debug(`the instrument ${questionnaire.name} is live for TO (TO start date = Not set) (Active today = ${questionnaire.activeToday})`);
                 return questionnaire.activeToday;
             }
@@ -89,19 +87,20 @@ export default function InstrumentRouter(
         async function getActiveTodayQuestionnaires(allallQuestionnaires: Questionnaire[]): Promise<Questionnaire[]> {
             const activeQuestionnaires = await Promise.all(allallQuestionnaires.map(getActiveTodayQuestionnaire));
             const filteredQuestionnaires = activeQuestionnaires.filter((result) => result !== null) as Questionnaire[];
+
             return (filteredQuestionnaires);
                 
         }
 
         async function getAllQuestionnaires(): Promise<Questionnaire[]> {
-           return await blaiseApiClient.getAllQuestionnairesWithCatiData();
+            return await blaiseApiClient.getAllQuestionnairesWithCatiData();
         }
 
         async function getSurveys(): Promise<Survey[]> {
             const allQuestionnaires = await getAllQuestionnaires();
             const activeQuestionnaires = await getActiveTodayQuestionnaires(allQuestionnaires);
             log.info(`Retrieved active instruments, ${activeQuestionnaires.length} item/s`);
-             return groupBySurvey(activeQuestionnaires.map(addExtraInstrumentFields));
+            return groupBySurvey(activeQuestionnaires.map(addExtraInstrumentFields));
         }
 
         try {

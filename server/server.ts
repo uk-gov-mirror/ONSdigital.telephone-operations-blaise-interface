@@ -3,7 +3,7 @@ import axios from "axios";
 import path from "path";
 import ejs from "ejs";
 import dotenv from "dotenv";
-import InstrumentRouter from "./Instuments";
+import InstrumentRouter from "./Instruments";
 import {getEnvironmentVariables} from "./Config";
 import pinoLogger from "pino-http";
 import BlaiseApiClient from "blaise-api-node-client";
