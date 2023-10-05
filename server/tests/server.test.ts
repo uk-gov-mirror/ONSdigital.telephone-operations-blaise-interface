@@ -8,7 +8,7 @@ import { IMock, Mock, It } from 'typemoq';
 import BlaiseApiClient from "blaise-api-node-client";
 import nodeServer from "../server";
 require("jest-extended");
-
+jest.mock("../AuthProvider/GoogleTokenProvider");
 const blaiseApiMock: IMock<BlaiseApiClient> = Mock.ofType(BlaiseApiClient);
 
 const app = nodeServer(blaiseApiMock.object);
@@ -44,7 +44,6 @@ describe("Given the API returns 2 instruments with only one that is active", () 
 
     it("should return a 200 status and a list with the one active instrument", async () => {
             const response = await request.get("/api/instruments");
-            console.debug('response.body[0]', response.body[0]);
 
             expect(response.statusCode).toEqual(200);
             expect(response.body).toHaveLength(1);

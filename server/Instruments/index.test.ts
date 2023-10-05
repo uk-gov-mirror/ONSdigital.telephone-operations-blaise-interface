@@ -84,7 +84,6 @@ describe("InstrumentRouter", () => {
         // act
         const response = await request.get("/instruments");
         // assert        
-        console.debug('response', response.body);
         expect(sentHeaders).toHaveProperty("Authorization", "Bearer example-token");
     });
 
