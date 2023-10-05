@@ -1,4 +1,4 @@
-interface EnvironmentVariables {
+export interface EnvironmentVariables {
     VM_EXTERNAL_CLIENT_URL: string
     VM_EXTERNAL_WEB_URL: string
     BLAISE_API_URL: string

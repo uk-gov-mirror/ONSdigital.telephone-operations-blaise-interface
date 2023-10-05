@@ -21,14 +21,7 @@ if (process.env.NODE_ENV !== "production") {
 const buildFolder = "../../build";
 
 // load the .env variables in the server
-const {
-    VM_EXTERNAL_CLIENT_URL,
-    VM_EXTERNAL_WEB_URL,
-    BLAISE_API_URL,
-    CATI_DASHBOARD_URL,
-    BIMS_CLIENT_ID,
-    BIMS_API_URL
-} = getEnvironmentVariables();
+const environmentVariables = getEnvironmentVariables();
 
 server.use(pinoLogger());
 
@@ -41,7 +34,7 @@ server.use(
 );
 
 // Load api Instruments routes from QuestionnaireRouter
-server.use("/api", QuestionnaireRouter(VM_EXTERNAL_WEB_URL, BIMS_CLIENT_ID, BIMS_API_URL, blaiseApiClient));
+server.use("/api", QuestionnaireRouter(environmentVariables, blaiseApiClient));
 
 // Health Check endpoint
 server.get("/tobi-ui/:version/health", async function (req: Request, res: Response) {
@@ -49,8 +42,10 @@ server.get("/tobi-ui/:version/health", async function (req: Request, res: Respon
 });
 
 server.get("*", function (req: Request, res: Response) {
+    const clientUrl = environmentVariables.VM_EXTERNAL_CLIENT_URL;
+    const dashboardUrl = environmentVariables.CATI_DASHBOARD_URL;
     res.render("index.html", {
-        VM_EXTERNAL_CLIENT_URL, CATI_DASHBOARD_URL
+        clientUrl, dashboardUrl
     });
 });
 
