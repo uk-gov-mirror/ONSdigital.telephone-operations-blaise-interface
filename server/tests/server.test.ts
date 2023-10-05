@@ -12,7 +12,16 @@ require("jest-extended");
 jest.mock("../AuthProvider/GoogleTokenProvider");
 const blaiseApiMock: IMock<BlaiseApiClient> = Mock.ofType(BlaiseApiClient);
 
-const app = nodeServer(blaiseApiMock.object);
+const environmentVariables: EnvironmentVariables = {
+    VM_EXTERNAL_CLIENT_URL: "external-client-url",
+    VM_EXTERNAL_WEB_URL: "external-web-url",
+    BLAISE_API_URL: "mock",
+    CATI_DASHBOARD_URL: "internal-url",
+    BIMS_CLIENT_ID: "mock@id",
+    BIMS_API_URL: "mock-bims-api"
+};
+
+const app = nodeServer(environmentVariables, blaiseApiMock.object);
 const request = supertest(app);
 
 // This sets the mock adapter on the default instance
@@ -25,7 +34,7 @@ const mock = new MockAdapter(axios, { onNoMatch: "throwException" });
 describe("Given the API returns 2 instruments with only one that is active", () => {
     beforeAll(() => {
         blaiseApiMock.setup((api) => api.getAllQuestionnairesWithCatiData()).returns(async () => apiQuestionnaireList);
-        const liveDateUrl = new RegExp(`${process.env.BIMS_API_URL}/tostartdate/.*`);
+        const liveDateUrl = new RegExp(`${environmentVariables.BIMS_API_URL}/tostartdate/.*`);
         mock.onGet(liveDateUrl).reply(200,
             { tostartdate: null },
             { "content-type": "application/json" }
@@ -189,44 +198,45 @@ describe("Get list of instruments endpoint fails", () => {
     });
 });
 
-import { defineFeature, loadFeature } from "jest-cucumber";
+import { defineFeature, loadFeature, DefineStepFunction } from "jest-cucumber";
 import { IsoDateHelper } from "./helpers/iso-date-helper";
+import { EnvironmentVariables } from "../Config";
 
 
 const feature = loadFeature("./src/features/TO_Interviewer_Happy_Path.feature", { tagFilter: "@server" });
 
 defineFeature(feature, test => {
     //Scenario 3b
-    let response;
+    let response:any;
     const liveDateUrl = new RegExp(`${process.env.BIMS_API_URL}/tostartdate/.*`);
     const questionnaireName = "OPN2007T";
 
-    const questionnaireHasATelOpsStartDateOfToday = (given) => {
+    const questionnaireHasATelOpsStartDateOfToday = (given:DefineStepFunction) => {
         given("a survey questionnaire has a TelOps start date of today", async () => {
             mock.onGet(liveDateUrl).reply(200, { tostartdate: IsoDateHelper.today() }, { "content-type": "application/json" });
         });
     };
 
-    const questionnaireHasATelOpsStartDateInThePast = (given) => {
+    const questionnaireHasATelOpsStartDateInThePast = (given:DefineStepFunction) => {
         given("a survey questionnaire has a TelOps start date in the past", async () => {
             mock.onGet(liveDateUrl).reply(200, { tostartdate: IsoDateHelper.yesterday() }, { "content-type": "application/json" });
         });
     };
 
-    const questionnaireHasATelOpsStartDateInTheFuture = (given) => {
+    const questionnaireHasATelOpsStartDateInTheFuture = (given:DefineStepFunction) => {
         given("a survey questionnaire has a TelOps start date is in the future", async () => {
             mock.onGet(liveDateUrl).reply(200, { tostartdate: IsoDateHelper.tomorrow() }, { "content-type": "application/json" });
         });
     };
 
-    const questionnaireDoesNotHaveATelOpsStartDate = (given) => {
+    const questionnaireDoesNotHaveATelOpsStartDate = (given:DefineStepFunction) => {
         given("a survey questionnaire does not have a TelOps start date", async () => {
             mock.onGet(liveDateUrl).reply(404, null, { "content-type": "application/json" });
         }
         );
     };
 
-    const questionnaireHasAnActiveSurveyDay = (given) => {
+    const questionnaireHasAnActiveSurveyDay = (given:DefineStepFunction) => {
         given("an active survey day", async () => {
             const apiQuestionnaireList = [QuestionnaireHelper.apiQuestionnaire(questionnaireName, true)];
 
@@ -234,7 +244,7 @@ defineFeature(feature, test => {
         });
     };
 
-    const questionnaireDoesNotHaveAnActiveSurveyDay = (given) => {
+    const questionnaireDoesNotHaveAnActiveSurveyDay = (given:DefineStepFunction) => {
         given("does not have an active survey day", async () => {
             const apiQuestionnaireList = [QuestionnaireHelper.apiQuestionnaire(questionnaireName, false)];
 
@@ -242,13 +252,13 @@ defineFeature(feature, test => {
         });
     };
 
-    const iSelectTheSurveyIAmWorkingOn = (when) => {
+    const iSelectTheSurveyIAmWorkingOn = (when:DefineStepFunction) => {
         when("I select the survey I am working on", async () => {
             response = await request.get("/api/instruments");
         });
     };
 
-    const thenIWillSeeTheQuestionnaireListed = (then) => {
+    const thenIWillSeeTheQuestionnaireListed = (then:DefineStepFunction) => {
         then("I will see that questionnaire listed for the survey", () => {
             // The survey is returned
             let selectedSurvey = response.body[0].questionnaires;
@@ -260,7 +270,7 @@ defineFeature(feature, test => {
         });
     };
 
-    const thenIWillNotSeeTheQuestionnaireListed = (then) => {
+    const thenIWillNotSeeTheQuestionnaireListed = (then:DefineStepFunction) => {
         then("I will not see that questionnaire listed for the survey", () => {
             // The questionnaire is not returned
             expect(response.body).toEqual([]);

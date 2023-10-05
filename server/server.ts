@@ -4,11 +4,11 @@ import path from "path";
 import ejs from "ejs";
 import dotenv from "dotenv";
 import QuestionnaireRouter from "./Questionnaires";
-import {getEnvironmentVariables} from "./Config";
 import pinoLogger from "pino-http";
 import BlaiseApiClient from "blaise-api-node-client";
+import { EnvironmentVariables } from "./Config";
 
-export default function nodeServer(blaiseApiClient: BlaiseApiClient): Express {
+export default function nodeServer(environmentVariables: EnvironmentVariables, blaiseApiClient: BlaiseApiClient): Express {
 const server = express();
 
 axios.defaults.timeout = 15000;
@@ -19,9 +19,6 @@ if (process.env.NODE_ENV !== "production") {
 
 // where ever the react built package is
 const buildFolder = "../../build";
-
-// load the .env variables in the server
-const environmentVariables = getEnvironmentVariables();
 
 server.use(pinoLogger());
 
