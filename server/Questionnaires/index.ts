@@ -22,7 +22,7 @@ export default function QuestionnaireRouter(
     "use strict";
     const questionnaireRouter = express.Router();
 
-    questionnaireRouter.get("/instruments", async (req: Request, res: Response) => {
+    questionnaireRouter.get("/questionnaires", async (req: Request, res: Response) => {
         const log: Logger = req.log;
         const bimsClientId = environmentVariables.BIMS_CLIENT_ID;
         const bimsApiUrl = environmentVariables.BIMS_API_URL;
@@ -101,6 +101,7 @@ export default function QuestionnaireRouter(
 
         async function getSurveys(): Promise<Survey[]> {
             const allQuestionnaires = await getAllQuestionnaires();
+            console.log("gotAll Questionnaires"+allQuestionnaires);
             const activeQuestionnaires = await getActiveTodayQuestionnaires(allQuestionnaires);
             log.info(`Retrieved active instruments, ${activeQuestionnaires.length} item/s`);
             return groupBySurvey(activeQuestionnaires.map(addExtraQuestionnaireFields));

@@ -48,7 +48,7 @@ function App(): ReactElement {
     }, []);
 
     function getList() {
-        fetch("/api/instruments")
+        fetch("/api/questionnaires")
             .then((r: Response) => {
                 if (r.status !== 200) {
                     throw r.status + " - " + r.statusText;

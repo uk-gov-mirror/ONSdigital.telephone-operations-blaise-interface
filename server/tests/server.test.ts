@@ -27,7 +27,7 @@ const request = supertest(app);
 // This sets the mock adapter on the default instance
 const mock = new MockAdapter(axios, { onNoMatch: "throwException" });
 
-// Mock any GET request to /api/instruments
+// Mock any GET request to /api/questionnaires
 // arguments for reply are (status, data, headers)
 
 
@@ -54,8 +54,7 @@ describe("Given the API returns 2 instruments with only one that is active", () 
 
     it("should return a 200 status and a list with the one active instrument", async () => {
         // act        
-        const response = await request.get("/api/instruments");
-
+        const response = await request.get("/api/questionnaires");
 
         // assert
         expect(response.statusCode).toEqual(200);
@@ -100,7 +99,7 @@ describe("Given the API returns 2 active instruments for the survey OPN", () => 
 
     it("should return a list with one survey with 2 instrument objects", async () => {
         // act    
-        const response = await request.get("/api/instruments");
+        const response = await request.get("/api/questionnaires");
 
         // arrange
         expect(response.statusCode).toEqual(200);
@@ -150,7 +149,7 @@ describe("Given the API returns 2 active instruments for 2 separate surveys ", (
 
     it("should return a list with 2 surveys with instrument object in each", async () => {
         // act
-        const response = await request.get("/api/instruments");
+        const response = await request.get("/api/questionnaires");
 
         // assert
         expect(response.statusCode).toEqual(200);
@@ -183,7 +182,7 @@ describe("Get list of instruments endpoint fails", () => {
     });
 
     it("should return a 500 status and an error message", async () => {
-            const response = await request.get("/api/instruments");
+            const response = await request.get("/api/questionnaires");
 
             expect(response.statusCode).toEqual(500);           
     });
@@ -254,7 +253,7 @@ defineFeature(feature, test => {
 
     const iSelectTheSurveyIAmWorkingOn = (when:DefineStepFunction) => {
         when("I select the survey I am working on", async () => {
-            response = await request.get("/api/instruments");
+            response = await request.get("/api/questionnaires");
         });
     };
 

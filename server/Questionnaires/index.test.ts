@@ -63,7 +63,7 @@ describe("QuestionnaireRouter", () => {
         blaiseApiMock.setup((api) => api.getAllQuestionnairesWithCatiData()).throws(new Error());
     
         // act
-        const response = await request.get("/instruments");
+        const response = await request.get("/questionnaires");
         
         // assert
         expect(response.status).toBe(500);
@@ -90,7 +90,7 @@ describe("QuestionnaireRouter", () => {
             });
         
         // act
-        await request.get("/instruments");
+        await request.get("/questionnaires");
 
         // assert        
         expect(sentHeaders).toHaveProperty("Authorization", "Bearer example-token");
@@ -116,7 +116,7 @@ describe("QuestionnaireRouter", () => {
         mockHttp.onGet(`http://bims.com/tostartdate/${questionnaire.name}`).reply(500);
 
         // act    
-        const response = await request.get("/instruments");
+        const response = await request.get("/questionnaires");
         
         // assert
         expect(response.status).toBe(200);
@@ -147,7 +147,7 @@ describe("QuestionnaireRouter", () => {
         mockHttp.onGet(`http://bims.com/tostartdate/${questionnaire.name}`).reply(500);
 
         // act
-        const response = await request.get("/instruments");
+        const response = await request.get("/questionnaires");
         
         // assert
         expect(response.status).toBe(200);
@@ -182,7 +182,7 @@ describe("QuestionnaireRouter", () => {
             .reply(200, {}, { "content-type": "text/html" });
         
         // act
-        const response = await request.get("/instruments");
+        const response = await request.get("/questionnaires");
         
         // assert
         expect(response.status).toBe(200);
@@ -224,7 +224,7 @@ describe("QuestionnaireRouter", () => {
             .reply(200, { tostartdate: today.toISOString() }, { "content-type": "application/json" });   
 
         // act
-        const response = await request.get("/instruments");
+        const response = await request.get("/questionnaires");
 
         // assert
         expect(response.status).toBe(200);
@@ -257,7 +257,7 @@ describe("QuestionnaireRouter", () => {
             .reply(200, { tostartdate: today.toISOString() }, { "content-type": "application/json" });    
 
         // act            
-        const response = await request.get("/instruments");
+        const response = await request.get("/questionnaires");
         
         // assert
         expect(response.status).toBe(200);
@@ -286,7 +286,7 @@ describe("QuestionnaireRouter", () => {
             .reply(200, { tostartdate: tomorrow.toISOString() }, { "content-type": "application/json" });       
 
         // act
-        const response = await request.get("/instruments");
+        const response = await request.get("/questionnaires");
         
         // assert
         expect(response.status).toBe(200);
@@ -313,7 +313,7 @@ describe("QuestionnaireRouter", () => {
             .reply(200, { tostartdate: tomorrow.toISOString() }, { "content-type": "application/json" });
 
         // act
-        const response = await request.get("/instruments");
+        const response = await request.get("/questionnaires");
         
         // assert
         expect(response.status).toBe(200);
@@ -350,7 +350,7 @@ describe("QuestionnaireRouter", () => {
             .reply(200, { tostartdate: today.toISOString() }, { "content-type": "application/json" });
 
         // act
-        const response = await request.get("/instruments");
+        const response = await request.get("/questionnaires");
 
         // asert
         expect(response.status).toBe(200);
@@ -383,7 +383,7 @@ describe("QuestionnaireRouter", () => {
             .reply(200, { tostartdate: today.toISOString() }, { "content-type": "application/json" });
         
         // act
-        const response = await request.get("/instruments");
+        const response = await request.get("/questionnaires");
         
         // assert
         expect(response.status).toBe(200);
@@ -410,7 +410,7 @@ describe("QuestionnaireRouter", () => {
             .reply(200, { tostartdate: today.toISOString() }, { "content-type": "application/json" });
 
         // act
-        const response = await request.get("/instruments");
+        const response = await request.get("/questionnaires");
 
         // assert
         expect(response.status).toBe(200);
