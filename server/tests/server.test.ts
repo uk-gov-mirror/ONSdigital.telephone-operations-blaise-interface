@@ -7,6 +7,7 @@ import axios from "axios";
 import { IMock, Mock, It } from 'typemoq';
 import BlaiseApiClient from "blaise-api-node-client";
 import nodeServer from "../server";
+import { QuestionnaireHelper } from "./helpers/questionnaire-helper";
 require("jest-extended");
 jest.mock("../AuthProvider/GoogleTokenProvider");
 const blaiseApiMock: IMock<BlaiseApiClient> = Mock.ofType(BlaiseApiClient);
@@ -32,13 +33,13 @@ describe("Given the API returns 2 instruments with only one that is active", () 
     });
 
     const apiQuestionnaireList = [
-        InstrumentHelper.apiInstrument("OPN2007T", true),
-        InstrumentHelper.apiInstrument("OPN2004A", false)];
+        QuestionnaireHelper.apiQuestionnaire("OPN2007T", true),
+        QuestionnaireHelper.apiQuestionnaire("OPN2004A", false)];
 
     const questionnairesReturned = [
         {
             survey: "OPN",
-            questionnaires: [InstrumentHelper.instrument("OPN2007T", true, "July 2020", "OPN", "https://external-web-url/OPN2007T?LayoutSet=CATI-Interviewer_Large")]
+            questionnaires: [QuestionnaireHelper.Questionnaire("OPN2007T", true, "July 2020", "OPN", "https://external-web-url/OPN2007T?LayoutSet=CATI-Interviewer_Large")]
         }
     ];
 
@@ -73,15 +74,15 @@ describe("Given the API returns 2 active instruments for the survey OPN", () => 
     });
 
     const apiQuestionnaireList = [
-        InstrumentHelper.apiInstrument("OPN2007T", true),
-        InstrumentHelper.apiInstrument("OPN2004A", true)];
+        QuestionnaireHelper.apiQuestionnaire("OPN2007T", true),
+        QuestionnaireHelper.apiQuestionnaire("OPN2004A", true)];
 
     const questionnairesReturned = [
         {
             survey: "OPN",
             questionnaires: [
-                InstrumentHelper.instrument("OPN2007T", true, "July 2020", "OPN", "https://external-web-url/OPN2007T?LayoutSet=CATI-Interviewer_Large"),
-                InstrumentHelper.instrument("OPN2004A", true, "April 2020", "OPN", "https://external-web-url/OPN2004A?LayoutSet=CATI-Interviewer_Large")]
+                QuestionnaireHelper.Questionnaire("OPN2007T", true, "July 2020", "OPN", "https://external-web-url/OPN2007T?LayoutSet=CATI-Interviewer_Large"),
+                QuestionnaireHelper.Questionnaire("OPN2004A", true, "April 2020", "OPN", "https://external-web-url/OPN2004A?LayoutSet=CATI-Interviewer_Large")]
         }
     ];
 
@@ -118,17 +119,17 @@ describe("Given the API returns 2 active instruments for 2 separate surveys ", (
     });
 
     const apiQuestionnaireList = [
-        InstrumentHelper.apiInstrument("IPS2007T", true),
-        InstrumentHelper.apiInstrument("OPN2004A", true)];
+        QuestionnaireHelper.apiQuestionnaire("IPS2007T", true),
+        QuestionnaireHelper.apiQuestionnaire("OPN2004A", true)];
 
     const questionnairesReturned = [
         {
             survey: "IPS",
-            questionnaires: [InstrumentHelper.instrument("IPS2007T", true, "July 2020", "IPS", "https://external-web-url/IPS2007T?LayoutSet=CATI-Interviewer_Large")]
+            questionnaires: [QuestionnaireHelper.Questionnaire("IPS2007T", true, "July 2020", "IPS", "https://external-web-url/IPS2007T?LayoutSet=CATI-Interviewer_Large")]
         },
         {
             survey: "OPN",
-            questionnaires: [InstrumentHelper.instrument("OPN2004A", true, "April 2020", "OPN", "https://external-web-url/OPN2004A?LayoutSet=CATI-Interviewer_Large")]
+            questionnaires: [QuestionnaireHelper.Questionnaire("OPN2004A", true, "April 2020", "OPN", "https://external-web-url/OPN2004A?LayoutSet=CATI-Interviewer_Large")]
         }];
 
     it("should return a list with 2 surveys with instrument object in each", async () => {
@@ -179,8 +180,6 @@ describe("Get list of instruments endpoint fails", () => {
     });
 });
 
-import { InstrumentHelper } from "./helpers/instrument-helper";
-
 import { defineFeature, loadFeature } from "jest-cucumber";
 import { IsoDateHelper } from "./helpers/iso-date-helper";
 
@@ -221,7 +220,7 @@ defineFeature(feature, test => {
 
     const questionnaireHasAnActiveSurveyDay = (given) => {
         given("an active survey day", async () => {
-            const apiQuestionnaireList = [InstrumentHelper.apiInstrument(questionnaireName, true)];
+            const apiQuestionnaireList = [QuestionnaireHelper.apiQuestionnaire(questionnaireName, true)];
 
             blaiseApiMock.setup((api) => api.getAllQuestionnairesWithCatiData()).returns(async () => apiQuestionnaireList);
         });
@@ -229,7 +228,7 @@ defineFeature(feature, test => {
 
     const questionnaireDoesNotHaveAnActiveSurveyDay = (given) => {
         given("does not have an active survey day", async () => {
-            const apiQuestionnaireList = [InstrumentHelper.apiInstrument(questionnaireName, false)];
+            const apiQuestionnaireList = [QuestionnaireHelper.apiQuestionnaire(questionnaireName, false)];
 
             blaiseApiMock.setup((api) => api.getAllQuestionnairesWithCatiData()).returns(async () => apiQuestionnaireList);
         });
@@ -247,7 +246,7 @@ defineFeature(feature, test => {
             let selectedSurvey = response.body[0].questionnaires;
             expect(selectedSurvey).toHaveLength(1);
 
-            const questionnaireListReturned = [InstrumentHelper.instrument(questionnaireName, true, "July 2020", "OPN", "https://external-web-url/OPN2007T?LayoutSet=CATI-Interviewer_Large")];
+            const questionnaireListReturned = [QuestionnaireHelper.Questionnaire(questionnaireName, true, "July 2020", "OPN", "https://external-web-url/OPN2007T?LayoutSet=CATI-Interviewer_Large")];
 
             expect(selectedSurvey).toEqual(questionnaireListReturned);
         });

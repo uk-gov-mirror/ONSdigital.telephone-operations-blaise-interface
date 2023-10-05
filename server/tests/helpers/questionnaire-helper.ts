@@ -1,7 +1,7 @@
 import { Questionnaire } from "blaise-api-node-client";
-export class InstrumentHelper {
+export class QuestionnaireHelper {
 
-    public static apiInstrument(name :string, activeToday : boolean) : Questionnaire {
+    public static apiQuestionnaire(name :string, activeToday : boolean) : Questionnaire {
         const apiQuestionnaire : Questionnaire =
                 {
                     activeToday: activeToday,
@@ -13,7 +13,7 @@ export class InstrumentHelper {
         return apiQuestionnaire;
     }
 
-    public static instrument(name :string, activeToday : boolean, fieldPeriod: string, surveyType :string, link: string) : Questionnaire {
+    public static Questionnaire(name :string, activeToday : boolean, fieldPeriod: string, surveyType :string, link: string) : Questionnaire {
         const questionnaire : Questionnaire =
                 {
                     activeToday: activeToday,
