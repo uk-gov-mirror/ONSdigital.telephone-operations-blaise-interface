@@ -42,8 +42,15 @@ export function getEnvironmentVariables(): EnvironmentVariables {
 
     return {VM_EXTERNAL_CLIENT_URL, 
         VM_EXTERNAL_WEB_URL, 
-        BLAISE_API_URL, 
+        BLAISE_API_URL: fixURL(BLAISE_API_URL),
         CATI_DASHBOARD_URL, 
         BIMS_CLIENT_ID, 
         BIMS_API_URL};
+}
+
+function fixURL(url: string): string {
+    if (url.startsWith("http")) {
+        return url;
+    }
+    return `http://${url}`;
 }
