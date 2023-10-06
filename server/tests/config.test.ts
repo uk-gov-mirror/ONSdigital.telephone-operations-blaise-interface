@@ -19,7 +19,7 @@ describe("Config setup", () => {
 
         expect(VM_EXTERNAL_CLIENT_URL).toBe("external-client-url");
         expect(VM_EXTERNAL_WEB_URL).toBe("external-web-url");
-        expect(BLAISE_API_URL).toBe("mock");
+        expect(BLAISE_API_URL).toBe("http://mock");
         expect(CATI_DASHBOARD_URL).toBe("https://external-web-url/Blaise");
         expect(BIMS_CLIENT_ID).toBe("mock@id");
         expect(BIMS_API_URL).toBe("mock-bims-api");

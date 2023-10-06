@@ -41,7 +41,6 @@ server.get("/tobi-ui/:version/health", async function (req: Request, res: Respon
 server.get("*", function (req: Request, res: Response) {
     const clientUrl = environmentVariables.VM_EXTERNAL_CLIENT_URL;
     const dashboardUrl = environmentVariables.CATI_DASHBOARD_URL;
-    console.debug("get", clientUrl, dashboardUrl);
     res.render("index.html", {
         clientUrl, dashboardUrl
     });

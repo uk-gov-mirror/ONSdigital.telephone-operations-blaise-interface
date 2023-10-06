@@ -49,7 +49,7 @@ export function getEnvironmentVariables(): EnvironmentVariables {
 }
 
 function fixURL(url: string): string {
-    if (url.startsWith("http")) {
+    if (url.startsWith("ENV_VAR_NOT_SET") || url.startsWith("http")) {
         return url;
     }
     return `http://${url}`;
