@@ -18,7 +18,7 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 // where ever the react built package is
-const buildFolder = "../../build";
+const buildFolder = "../build";
 
 server.use(pinoLogger());
 
