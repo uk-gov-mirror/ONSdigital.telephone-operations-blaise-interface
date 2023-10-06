@@ -1,6 +1,5 @@
 import express, { Request, Response, Router } from "express";
-import BlaiseApiClient,  { Questionnaire } from "blaise-api-node-client";
-import { Survey } from "../../Interfaces"
+import BlaiseApiClient, { Questionnaire , Survey } from "blaise-api-node-client";
 import axios, { AxiosResponse } from "axios";
 import _ from "lodash";
 import { fieldPeriodToText } from "../Functions";

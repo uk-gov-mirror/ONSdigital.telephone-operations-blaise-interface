@@ -1,7 +1,6 @@
 import React, {ReactElement} from "react";
 import {Link, useParams} from "react-router-dom";
-import { Survey} from "../../Interfaces";
-import { Questionnaire } from "blaise-api-node-client";
+import { Questionnaire ,Survey } from "blaise-api-node-client";
 import {ExternalLink, ONSPanel} from "blaise-design-system-react-components";
 
 
