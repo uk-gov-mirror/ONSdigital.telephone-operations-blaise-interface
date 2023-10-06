@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 import QuestionnaireRouter from "./Questionnaires";
 import pinoLogger from "pino-http";
 import BlaiseApiClient from "blaise-api-node-client";
-import { EnvironmentVariables } from "./Config";
+import { EnvironmentVariables, getEnvironmentVariables } from "./Config";
 
 export default function nodeServer(environmentVariables: EnvironmentVariables, blaiseApiClient: BlaiseApiClient): Express {
 const server = express();
@@ -38,11 +38,17 @@ server.get("/tobi-ui/:version/health", async function (req: Request, res: Respon
     res.status(200).json({healthy: true});
 });
 
+// load the .env variables in the server
+const {
+    VM_EXTERNAL_CLIENT_URL,
+    CATI_DASHBOARD_URL,
+} = getEnvironmentVariables();
+
 server.get("*", function (req: Request, res: Response) {
-    const clientUrl = environmentVariables.VM_EXTERNAL_CLIENT_URL;
-    const dashboardUrl = environmentVariables.CATI_DASHBOARD_URL;
+    //const clientUrl = environmentVariables.VM_EXTERNAL_CLIENT_URL;
+    //const dashboardUrl = environmentVariables.CATI_DASHBOARD_URL;
     res.render("index.html", {
-        clientUrl, dashboardUrl
+        VM_EXTERNAL_CLIENT_URL, CATI_DASHBOARD_URL
     });
 });
 
