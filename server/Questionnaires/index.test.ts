@@ -30,10 +30,17 @@ describe("QuestionnaireRouter", () => {
         next();
     });
 
+    const environmentVariables: EnvironmentVariables = {
+        VM_EXTERNAL_WEB_URL:  "vm.com",
+        BIMS_CLIENT_ID:  "bims-id",
+        BIMS_API_URL: "http://bims.com",
+        VM_EXTERNAL_CLIENT_URL: "",
+        BLAISE_API_URL: "",
+        CATI_DASHBOARD_URL: ""
+    }
+
     app.use(QuestionnaireRouter(
-        "vm.com",
-        "bims-id",
-        "http://bims.com",
+        environmentVariables,
         blaiseApiMock.object
     ));
 

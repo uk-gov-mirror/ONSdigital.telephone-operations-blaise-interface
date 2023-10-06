@@ -12,17 +12,15 @@ if (process.env.NODE_ENV !== "production") {
     dotenv.config();
 }
 // load the .env variables in the server
-const {
-    BLAISE_API_URL,
-} = getEnvironmentVariables();
+const environmentVariables = getEnvironmentVariables();
 
 const port: string = process.env.PORT || "5000";
 
 // create client
-const blaiseApiClient = new BlaiseApiClient(BLAISE_API_URL);
+const blaiseApiClient = new BlaiseApiClient(environmentVariables.BLAISE_API_URL);
 
 // create app
-const app = nodeServer(blaiseApiClient);
+const app = nodeServer(environmentVariables, blaiseApiClient);
 
 app.listen(port);
 

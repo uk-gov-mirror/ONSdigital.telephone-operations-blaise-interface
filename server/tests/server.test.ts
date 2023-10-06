@@ -12,8 +12,16 @@ require("jest-extended");
 jest.mock("../AuthProvider/GoogleTokenProvider");
 const blaiseApiMock: IMock<BlaiseApiClient> = Mock.ofType(BlaiseApiClient);
 
+const environmentVariables: EnvironmentVariables = {
+    VM_EXTERNAL_CLIENT_URL: "external-client-url",
+    VM_EXTERNAL_WEB_URL: "external-web-url",
+    BLAISE_API_URL: "mock",
+    CATI_DASHBOARD_URL: "internal-url",
+    BIMS_CLIENT_ID: "mock@id",
+    BIMS_API_URL: "mock-bims-api"
+};
 
-const app = nodeServer(blaiseApiMock.object);
+const app = nodeServer(environmentVariables, blaiseApiMock.object);
 const request = supertest(app);
 
 // This sets the mock adapter on the default instance
@@ -26,7 +34,7 @@ const mock = new MockAdapter(axios, { onNoMatch: "throwException" });
 describe("Given the API returns 2 instruments with only one that is active", () => {
     beforeAll(() => {
         blaiseApiMock.setup((api) => api.getAllQuestionnairesWithCatiData()).returns(async () => apiQuestionnaireList);
-        const liveDateUrl = new RegExp(`${process.env.BIMS_API_URL}/tostartdate/.*`);
+        const liveDateUrl = new RegExp(`${environmentVariables.BIMS_API_URL}/tostartdate/.*`);
         mock.onGet(liveDateUrl).reply(200,
             { tostartdate: null },
             { "content-type": "application/json" }
