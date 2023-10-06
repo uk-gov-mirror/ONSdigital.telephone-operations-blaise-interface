@@ -5,7 +5,6 @@ import _ from "lodash";
 import { fieldPeriodToText } from "../Functions";
 import AuthProvider from "../AuthProvider";
 import { Logger } from "../Logger";
-import { EnvironmentVariables } from "../Config";
 
 function groupBySurvey(activeInstruments: Questionnaire[]) {
     return _.chain(activeInstruments)
@@ -15,7 +14,9 @@ function groupBySurvey(activeInstruments: Questionnaire[]) {
 }
 
 export default function QuestionnaireRouter(
-    environmentVariables: EnvironmentVariables,
+    vmExternalWebUrl: string,
+    bimsClientID: string,
+    bimsApiUrl: string,
     blaiseApiClient: BlaiseApiClient
 ): Router {
     "use strict";
@@ -23,10 +24,8 @@ export default function QuestionnaireRouter(
 
     questionnaireRouter.get("/questionnaires", async (req: Request, res: Response) => {
         const log: Logger = req.log;
-        const bimsClientId = environmentVariables.BIMS_CLIENT_ID;
-        const bimsApiUrl = environmentVariables.BIMS_API_URL;
 
-        const authProvider: AuthProvider = new AuthProvider(bimsClientId, log);
+        const authProvider: AuthProvider = new AuthProvider(bimsClientID, log);
 
         async function getToStartDate(questionnaire: Questionnaire) {
             const authHeader = await authProvider.getAuthHeader();
@@ -51,7 +50,6 @@ export default function QuestionnaireRouter(
 
         
         function addExtraQuestionnaireFields(questionnaire: Questionnaire): Questionnaire {
-            const vmExternalWebUrl = environmentVariables.VM_EXTERNAL_WEB_URL;
             
             return {
                 ...questionnaire,
