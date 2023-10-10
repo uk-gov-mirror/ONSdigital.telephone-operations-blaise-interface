@@ -1,5 +1,5 @@
 import {defineFeature, loadFeature} from "jest-cucumber";
-import {Survey} from "../../../Interfaces";
+import {Survey} from "blaise-api-node-client";
 import {createMemoryHistory} from "history";
 import {render, screen, waitFor} from "@testing-library/react";
 import {Router} from "react-router";
