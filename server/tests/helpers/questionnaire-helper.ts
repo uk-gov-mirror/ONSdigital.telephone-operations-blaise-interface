@@ -1,8 +1,8 @@
-import {ApiInstrument, Instrument, Survey} from "../../../Interfaces";
-export class InstrumentHelper {
+import { Questionnaire } from "blaise-api-node-client";
+export class QuestionnaireHelper {
 
-    public static apiInstrument(name :string, activeToday : boolean) : ApiInstrument {
-        const apiInstrument : ApiInstrument =
+    public static apiQuestionnaire(name :string, activeToday : boolean) : Questionnaire {
+        const apiQuestionnaire : Questionnaire =
                 {
                     activeToday: activeToday,
                     installDate: "2020-12-11T11:53:55.5612856+00:00",
@@ -10,11 +10,11 @@ export class InstrumentHelper {
                     serverParkName: "LocalDevelopment",
                 };
 
-        return apiInstrument;
+        return apiQuestionnaire;
     }
 
-    public static instrument(name :string, activeToday : boolean, fieldPeriod: string, surveyType :string, link: string) : Instrument {
-        const instrument : Instrument =
+    public static Questionnaire(name :string, activeToday : boolean, fieldPeriod: string, surveyType :string, link: string) : Questionnaire {
+        const questionnaire : Questionnaire =
                 {
                     activeToday: activeToday,
                     fieldPeriod: fieldPeriod,
@@ -25,6 +25,6 @@ export class InstrumentHelper {
                     "surveyTLA": surveyType
                 };
 
-        return instrument;
+        return questionnaire;
     }
 }

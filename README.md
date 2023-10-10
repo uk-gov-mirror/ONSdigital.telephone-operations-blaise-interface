@@ -30,7 +30,7 @@ can [create an IAP tunnel](https://cloud.google.com/sdk/gcloud/reference/compute
 Instance running the rest API in a sandbox.
 
 ```shell
-gcloud compute start-iap-tunnel restapi-1 90 --local-host-port=localhost:90 --zone europe-west2-a
+gcloud compute start-iap-tunnel restapi-1 80 --local-host-port=localhost:5011 --zone europe-west2-a
 ```
 
 #### Setup locally steps
@@ -56,7 +56,7 @@ The `.env` file should be setup as below
 ```.env
 VM_EXTERNAL_WEB_URL='tel-client-server.uk'
 VM_EXTERNAL_CLIENT_URL='tel-web-server.uk'
-BLAISE_API_URL='localhost:90'
+BLAISE_API_URL='http://localhost:5011'
 BIMS_API_URL='https://bims-url'
 ```
 

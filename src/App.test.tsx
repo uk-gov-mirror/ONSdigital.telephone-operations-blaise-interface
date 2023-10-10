@@ -6,12 +6,12 @@ import flushPromises from "./tests/utils";
 import {act} from "react-dom/test-utils";
 import {createMemoryHistory} from "history";
 import {Router} from "react-router";
-import {Survey} from "../Interfaces";
+import {Survey} from "blaise-api-node-client";
 
 const surveyListReturned: Survey[] = [
     {
         survey: "OPN",
-        instruments: [
+        questionnaires: [
             {
                 activeToday: true,
                 fieldPeriod: "July 2020",
