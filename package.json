@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "start": "node ./dist/server/index.js",
-    "start-server": "tsc --project tsconfig.server.json && node ./dist/server/index.js",
+    "start": "node ./dist/index.js",
+    "start-server": "tsc --project tsconfig.server.json && node ./dist/index.js",
     "start-react": "react-scripts start",
     "build-react": "react-scripts build",
     "test": "jest --coverage --watchAll=false",
@@ -30,6 +30,7 @@
     "@types/react": "^18.0.26",
     "@types/react-dom": "^18.0.9",
     "axios": "^0.24.0",
+    "blaise-api-node-client": "https://github.com/ONSdigital/blaise-api-node-client",
     "blaise-design-system-react-components": "git+https://github.com/ONSdigital/blaise-design-system-react-components#0.13.2",
     "concurrently": "^7.6.0",
     "dotenv": "^16.0.3",
@@ -62,7 +63,8 @@
     "eslint": "^7.13.0",
     "eslint-plugin-react": "^7.21.5",
     "jest-extended": "^0.11.5",
-    "supertest": "^6.3.3"
+    "supertest": "^6.3.3",
+    "typemoq": "^2.1.0"
   },
   "browserslist": {
     "production": [
