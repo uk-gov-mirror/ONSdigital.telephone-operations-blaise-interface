@@ -4,7 +4,7 @@
 import supertest from "supertest";
 import MockAdapter from "axios-mock-adapter";
 import axios from "axios";
-import { IMock, Mock } from 'typemoq';
+import { IMock, Mock } from "typemoq";
 import BlaiseApiClient from "blaise-api-node-client";
 import nodeServer from "../server";
 import { QuestionnaireHelper } from "./helpers/questionnaire-helper";
@@ -260,7 +260,7 @@ defineFeature(feature, test => {
     const thenIWillSeeTheQuestionnaireListed = (then:DefineStepFunction) => {
         then("I will see that questionnaire listed for the survey", () => {
             // The survey is returned
-            let selectedSurvey = response.body[0].questionnaires;
+            const selectedSurvey = response.body[0].questionnaires;
             expect(selectedSurvey).toHaveLength(1);
 
             const questionnaireListReturned = [QuestionnaireHelper.Questionnaire(questionnaireName, true, "July 2020", "OPN", "https://external-web-url/OPN2007T?LayoutSet=CATI-Interviewer_Large")];

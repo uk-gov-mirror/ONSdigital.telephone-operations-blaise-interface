@@ -37,7 +37,7 @@ describe("QuestionnaireRouter", () => {
         VM_EXTERNAL_CLIENT_URL: "",
         BLAISE_API_URL: "",
         CATI_DASHBOARD_URL: ""
-    }
+    };
 
     app.use(QuestionnaireRouter(
         environmentVariables,
