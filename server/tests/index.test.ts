@@ -1,5 +1,5 @@
 import supertest from "supertest";
-import { IMock, Mock, It } from 'typemoq';
+import { IMock, Mock, It } from "typemoq";
 import BlaiseApiClient from "blaise-api-node-client";
 import nodeServer from "../server";
 import { EnvironmentVariables } from "../Config";
