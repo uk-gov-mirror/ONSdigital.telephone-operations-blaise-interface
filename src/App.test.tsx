@@ -1,12 +1,13 @@
 import React from "react";
-import {render, waitFor, fireEvent, screen, cleanup} from "@testing-library/react";
+import { render, waitFor, fireEvent, screen, cleanup } from "@testing-library/react";
 import App from "./App";
 import "@testing-library/jest-dom";
 import flushPromises from "./tests/utils";
-import {act} from "react-dom/test-utils";
-import {createMemoryHistory} from "history";
-import {Router} from "react-router";
-import {Survey} from "blaise-api-node-client";
+import { act } from "react-dom/test-utils";
+import { createMemoryHistory } from "history";
+import { Router } from "react-router";
+import { Questionnaire, Survey } from "blaise-api-node-client";
+import { Response } from 'node-fetch';
 
 const surveyListReturned: Survey[] = [
     {
@@ -25,13 +26,25 @@ const surveyListReturned: Survey[] = [
     }
 ];
 
-function mock_server_request(returnedStatus: number, returnedJSON: any) {
-    //@ts-ignore
-    global.fetch = jest.fn(() =>
-        Promise.resolve({
-            status: returnedStatus,
-            json: () => Promise.resolve(returnedJSON),
-        })
+function mock_server_request(returnedStatus: number, returnedJSON: Survey[]) {
+    global.fetch = jest.fn(
+        (_input: RequestInfo | URL, _init?: RequestInit | undefined) =>
+            Promise.resolve(
+                new Response(JSON.stringify(returnedJSON), {
+                    status: returnedStatus,
+                })
+            )
+    );
+}
+
+function mock_server_malformed_response(returnedStatus: number, returnedJSON: { text: string }) {
+    global.fetch = jest.fn(
+        (_input: RequestInfo | URL, _init?: RequestInit | undefined) =>
+            Promise.resolve(
+                new Response(JSON.stringify(returnedJSON), {
+                    status: returnedStatus,
+                })
+            )
     );
 }
 
@@ -46,7 +59,7 @@ describe("React homepage", () => {
         const history = createMemoryHistory();
         const wrapper = render(
             <Router history={history}>
-                <App/>
+                <App />
             </Router>
         );
 
@@ -63,7 +76,7 @@ describe("React homepage", () => {
         const history = createMemoryHistory();
         const wrapper = render(
             <Router history={history}>
-                <App/>
+                <App />
             </Router>
         );
 
@@ -85,9 +98,9 @@ describe("React homepage", () => {
 
     it("should render correctly", async () => {
         const history = createMemoryHistory();
-        const {getByText, queryByText } = render(
+        const { getByText, queryByText } = render(
             <Router history={history}>
-                <App/>
+                <App />
             </Router>
         );
 
@@ -123,14 +136,14 @@ describe("React homepage", () => {
 describe("Given the API returns malformed json", () => {
 
     beforeAll(() => {
-        mock_server_request(200, {text: "Hello"});
+        mock_server_malformed_response(200, { text: "Hello" });
     });
 
     it("it should render with the error message displayed", async () => {
         const history = createMemoryHistory();
-        const {getByText, queryByText } = render(
+        const { getByText, queryByText } = render(
             <Router history={history}>
-                <App/>
+                <App />
             </Router>
         );
 
@@ -158,9 +171,9 @@ describe("Given the API returns an empty list", () => {
 
     it("it should render with a message to inform the user in the list", async () => {
         const history = createMemoryHistory();
-        const {getByText, queryByText } = render(
+        const { getByText, queryByText } = render(
             <Router history={history}>
-                <App/>
+                <App />
             </Router>
         );
 
