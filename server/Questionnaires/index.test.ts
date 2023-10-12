@@ -7,6 +7,7 @@ import axios from "axios";
 import getGoogleAuthToken from "../AuthProvider/GoogleTokenProvider";
 import { Logger } from "../Logger";
 import { P } from "pino";
+import pinoLogger from "pino-http";
 import BlaiseApiClient, { Questionnaire } from "blaise-api-node-client";
 import { IMock, Mock } from "typemoq";
 import { EnvironmentVariables } from "../Config";
@@ -26,7 +27,7 @@ describe("QuestionnaireRouter", () => {
     };
 
     app.use((req: Request, res: Response, next: NextFunction) => {
-        req["log"] = log as P.Logger<P.LoggerOptions>;
+        req.log = log as P.Logger<P.LoggerOptions>;
         next();
     });
 
