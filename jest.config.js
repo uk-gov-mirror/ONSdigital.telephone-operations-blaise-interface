@@ -14,5 +14,15 @@ module.exports = {
     ],
     "setupFilesAfterEnv": [
         "jest-extended"
-    ]
+    ],
+    "preset": "ts-jest",
+    "moduleNameMapper": {
+        "\\.(css|less|scss)$": "identity-obj-proxy"
+    },
+    "testEnvironmentOptions": {
+        "html": "<html lang=\"zh-cmn-Hant\"></html>",
+        "url": "https://jestjs.io/",
+        "userAgent": "Agent/007"
+    },
+    transformIgnorePatterns: ["<rootDir>/node_modules/(?!crypto-random-string/)"]
 };

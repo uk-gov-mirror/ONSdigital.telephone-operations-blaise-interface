@@ -6,8 +6,7 @@ import flushPromises from "./tests/utils";
 import { act } from "react-dom/test-utils";
 import { createMemoryHistory } from "history";
 import { Router } from "react-router";
-import { Questionnaire, Survey } from "blaise-api-node-client";
-import { Response } from 'node-fetch';
+import { Survey } from "blaise-api-node-client";
 
 const surveyListReturned: Survey[] = [
     {
@@ -27,26 +26,22 @@ const surveyListReturned: Survey[] = [
 ];
 
 function mock_server_request(returnedStatus: number, returnedJSON: Survey[]) {
-    global.fetch = jest.fn(
-        (_input: RequestInfo | URL, _init?: RequestInit | undefined) =>
-            Promise.resolve(
-                new Response(JSON.stringify(returnedJSON), {
-                    status: returnedStatus,
-                })
-            )
-    );
+    global.fetch = jest.fn(() =>
+        Promise.resolve({
+            status: returnedStatus,
+            json: () => Promise.resolve(returnedJSON),
+        })
+    ) as jest.Mock;
+}
+function mock_server_malformed_response(returnedStatus: number, returnedJSON: { text: string }) {
+    global.fetch = jest.fn(() =>
+        Promise.resolve({
+            status: returnedStatus,
+            json: () => Promise.resolve(returnedJSON),
+        })
+    ) as jest.Mock;
 }
 
-function mock_server_malformed_response(returnedStatus: number, returnedJSON: { text: string }) {
-    global.fetch = jest.fn(
-        (_input: RequestInfo | URL, _init?: RequestInit | undefined) =>
-            Promise.resolve(
-                new Response(JSON.stringify(returnedJSON), {
-                    status: returnedStatus,
-                })
-            )
-    );
-}
 
 describe("React homepage", () => {
 
