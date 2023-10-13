@@ -263,7 +263,8 @@ defineFeature(feature, test => {
             const selectedSurvey = response[0].questionnaires;
             expect(selectedSurvey).toHaveLength(1);
 
-            const questionnaireListReturned = [QuestionnaireHelper.Questionnaire(questionnaireName, true, "July 2020", "OPN", "https://external-web-url/OPN2007T?LayoutSet=CATI-Interviewer_Large")];
+            const questionnaireListReturned = [QuestionnaireHelper.Questionnaire(
+                questionnaireName, true, "July 2020", "OPN", "https://external-web-url/OPN2007T?LayoutSet=CATI-Interviewer_Large")];
 
             expect(selectedSurvey).toEqual(questionnaireListReturned);
         });
