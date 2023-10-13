@@ -182,9 +182,9 @@ describe("Get list of instruments endpoint fails", () => {
     });
 
     it("should return a 500 status and an error message", async () => {
-            const response = await request.get("/api/questionnaires");
+        const response = await request.get("/api/questionnaires");
 
-            expect(response.statusCode).toEqual(500);           
+        expect(response.statusCode).toEqual(500);
     });
 
     afterAll(() => {
@@ -206,36 +206,36 @@ const feature = loadFeature("./src/features/TO_Interviewer_Happy_Path.feature", 
 
 defineFeature(feature, test => {
     //Scenario 3b
-    let response:Survey;
+    let response: Survey[];
     const liveDateUrl = new RegExp(`${process.env.BIMS_API_URL}/tostartdate/.*`);
     const questionnaireName = "OPN2007T";
 
-    const questionnaireHasATelOpsStartDateOfToday = (given:DefineStepFunction) => {
+    const questionnaireHasATelOpsStartDateOfToday = (given: DefineStepFunction) => {
         given("a survey questionnaire has a TelOps start date of today", async () => {
             mock.onGet(liveDateUrl).reply(200, { tostartdate: IsoDateHelper.today() }, { "content-type": "application/json" });
         });
     };
 
-    const questionnaireHasATelOpsStartDateInThePast = (given:DefineStepFunction) => {
+    const questionnaireHasATelOpsStartDateInThePast = (given: DefineStepFunction) => {
         given("a survey questionnaire has a TelOps start date in the past", async () => {
             mock.onGet(liveDateUrl).reply(200, { tostartdate: IsoDateHelper.yesterday() }, { "content-type": "application/json" });
         });
     };
 
-    const questionnaireHasATelOpsStartDateInTheFuture = (given:DefineStepFunction) => {
+    const questionnaireHasATelOpsStartDateInTheFuture = (given: DefineStepFunction) => {
         given("a survey questionnaire has a TelOps start date is in the future", async () => {
             mock.onGet(liveDateUrl).reply(200, { tostartdate: IsoDateHelper.tomorrow() }, { "content-type": "application/json" });
         });
     };
 
-    const questionnaireDoesNotHaveATelOpsStartDate = (given:DefineStepFunction) => {
+    const questionnaireDoesNotHaveATelOpsStartDate = (given: DefineStepFunction) => {
         given("a survey questionnaire does not have a TelOps start date", async () => {
             mock.onGet(liveDateUrl).reply(404, null, { "content-type": "application/json" });
         }
         );
     };
 
-    const questionnaireHasAnActiveSurveyDay = (given:DefineStepFunction) => {
+    const questionnaireHasAnActiveSurveyDay = (given: DefineStepFunction) => {
         given("an active survey day", async () => {
             const apiQuestionnaireList = [QuestionnaireHelper.apiQuestionnaire(questionnaireName, true)];
 
@@ -243,7 +243,7 @@ defineFeature(feature, test => {
         });
     };
 
-    const questionnaireDoesNotHaveAnActiveSurveyDay = (given:DefineStepFunction) => {
+    const questionnaireDoesNotHaveAnActiveSurveyDay = (given: DefineStepFunction) => {
         given("does not have an active survey day", async () => {
             const apiQuestionnaireList = [QuestionnaireHelper.apiQuestionnaire(questionnaireName, false)];
 
@@ -251,16 +251,16 @@ defineFeature(feature, test => {
         });
     };
 
-    const iSelectTheSurveyIAmWorkingOn = (when:DefineStepFunction) => {
+    const iSelectTheSurveyIAmWorkingOn = (when: DefineStepFunction) => {
         when("I select the survey I am working on", async () => {
-            response = await request.get("/api/questionnaires");
+            response = (await request.get("/api/questionnaires")).body;
         });
     };
 
-    const thenIWillSeeTheQuestionnaireListed = (then:DefineStepFunction) => {
+    const thenIWillSeeTheQuestionnaireListed = (then: DefineStepFunction) => {
         then("I will see that questionnaire listed for the survey", () => {
             // The survey is returned
-            const selectedSurvey = response.body[0].questionnaires;
+            const selectedSurvey = response[0].questionnaires;
             expect(selectedSurvey).toHaveLength(1);
 
             const questionnaireListReturned = [QuestionnaireHelper.Questionnaire(questionnaireName, true, "July 2020", "OPN", "https://external-web-url/OPN2007T?LayoutSet=CATI-Interviewer_Large")];
@@ -269,10 +269,10 @@ defineFeature(feature, test => {
         });
     };
 
-    const thenIWillNotSeeTheQuestionnaireListed = (then:DefineStepFunction) => {
+    const thenIWillNotSeeTheQuestionnaireListed = (then: DefineStepFunction) => {
         then("I will not see that questionnaire listed for the survey", () => {
             // The questionnaire is not returned
-            expect(response.body).toEqual([]);
+            expect(response).toEqual([]);
         });
     };
 
