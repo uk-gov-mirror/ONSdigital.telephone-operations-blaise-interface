@@ -5,7 +5,7 @@ import supertest from "supertest";
 import MockAdapter from "axios-mock-adapter";
 import axios from "axios";
 import { IMock, Mock } from "typemoq";
-import BlaiseApiClient from "blaise-api-node-client";
+import BlaiseApiClient, { Survey } from "blaise-api-node-client";
 import nodeServer from "../server";
 import { QuestionnaireHelper } from "./helpers/questionnaire-helper";
 require("jest-extended");
@@ -206,7 +206,7 @@ const feature = loadFeature("./src/features/TO_Interviewer_Happy_Path.feature", 
 
 defineFeature(feature, test => {
     //Scenario 3b
-    let response:any;
+    let response:Survey;
     const liveDateUrl = new RegExp(`${process.env.BIMS_API_URL}/tostartdate/.*`);
     const questionnaireName = "OPN2007T";
 
