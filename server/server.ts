@@ -1,4 +1,4 @@
-import express, { NextFunction, Request, Response, Express } from "express";
+import express, { Request, Response, Express } from "express";
 import axios from "axios";
 import path from "path";
 import ejs from "ejs";

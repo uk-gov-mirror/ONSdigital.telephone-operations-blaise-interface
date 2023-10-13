@@ -73,7 +73,7 @@ function InstrumentList(props: Props): ReactElement {
                                     </td>
                                     <td className="ons-table__cell ">
                                         <ExternalLink text={"Interview"}
-                                                      link={item.link!}
+                                                      link={item.link ?? ""}
                                                       ariaLabel={"Launch interview for instrument " + item.name + " " + item.fieldPeriod}/>
                                     </td>
                                 </tr>
