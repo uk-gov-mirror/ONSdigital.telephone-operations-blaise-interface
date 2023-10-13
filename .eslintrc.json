@@ -26,7 +26,8 @@
     },
     "plugins": [
         "react",
-        "@typescript-eslint"
+        "@typescript-eslint",
+        "import"
     ],
     "rules": {
         "linebreak-style": [
@@ -42,9 +43,7 @@
             "always"
         ],
         "import/no-extraneous-dependencies": [
-            "error", {
-               "devDependencies": true
-            }
+            "error", {"devDependencies": true}
         ],
         "@typescript-eslint/no-explicit-any": "error",
         "react/react-in-jsx-scope": "off",
