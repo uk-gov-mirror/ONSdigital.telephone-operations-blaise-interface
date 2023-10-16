@@ -5,7 +5,7 @@ import { defineFeature, loadFeature } from "jest-cucumber";
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
 import { createMemoryHistory } from "history";
-import { Router } from "react-router";
+import { Router } from "react-router-dom";
 import flushPromises from "../../tests/utils";
 // Mock elements
 import {

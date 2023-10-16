@@ -2,7 +2,7 @@ import { defineFeature, loadFeature } from "jest-cucumber";
 import { Survey } from "blaise-api-node-client";
 import { createMemoryHistory } from "history";
 import { render, screen, waitFor } from "@testing-library/react";
-import { Router } from "react-router";
+import { Router } from "react-router-dom";
 import App from "../../App";
 import { act } from "react-dom/test-utils";
 import flushPromises from "../../tests/utils";
