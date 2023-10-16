@@ -2,9 +2,9 @@ name: Test coverage report
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: [ BLAIS5-3514 ]
   push:
-    branches: [ main ]
+    branches: [ BLAIS5-3514 ]
 
 jobs:
   build:
