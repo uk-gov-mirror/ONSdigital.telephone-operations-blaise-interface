@@ -24,8 +24,6 @@ const divStyle = {
 
 function App(): ReactElement {
 
-    const myConst:any = "hi";
-
     const [headerText, setHeaderText] = useState<string>("Telephone Operations Blaise Interface");
 
     useEffect(() => {
