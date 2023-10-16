@@ -24,5 +24,6 @@ module.exports = {
         "url": "https://jestjs.io/",
         "userAgent": "Agent/007"
     },
-    transformIgnorePatterns: ["<rootDir>/node_modules/(?!crypto-random-string/)"]
+    transformIgnorePatterns: ["<rootDir>/node_modules/(?!crypto-random-string/)"],
+    modulePathIgnorePatterns: ["<rootDir>/dist/"]
 };
