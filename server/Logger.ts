@@ -1,3 +1,6 @@
+import pino from "pino-http";
+module.exports = pino({});
+
 import { P } from "pino";
 
 export interface Logger {
