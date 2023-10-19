@@ -1,11 +1,11 @@
 // React
 import React from "react";
 // Test modules
-import {defineFeature, loadFeature} from "jest-cucumber";
-import {cleanup, fireEvent, render, screen, waitFor} from "@testing-library/react";
-import {act} from "react-dom/test-utils";
-import {createMemoryHistory} from "history";
-import {Router} from "react-router";
+import { defineFeature, loadFeature } from "jest-cucumber";
+import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { act } from "react-dom/test-utils";
+import { createMemoryHistory } from "history";
+import { Router } from "react-router-dom";
 import flushPromises from "../../tests/utils";
 // Mock elements
 import {
@@ -20,17 +20,16 @@ import { Survey } from "blaise-api-node-client";
 // Load in feature details from .feature file
 const feature = loadFeature(
     "./src/features/TO_Interviewer_Happy_Path.feature",
-    {tagFilter: "not @server and not @integration"}
+    { tagFilter: "not @server and not @integration" }
 );
 
 function mock_server_request(returnedStatus: number, returnedJSON: Survey[]) {
-    //@ts-ignore
     global.fetch = jest.fn(() =>
         Promise.resolve({
             status: returnedStatus,
             json: () => Promise.resolve(returnedJSON),
         })
-    );
+    ) as jest.Mock;
 }
 
 defineFeature(feature, test => {
@@ -49,7 +48,7 @@ defineFeature(feature, test => {
     /**
      *  Scenario 2
      **/
-    test("View live survey list in TOBI", ({given, when, then}) => {
+    test("View live survey list in TOBI", ({ given, when, then }) => {
         given("I am a Telephone Operations TO Interviewer", () => {
             mock_server_request(
                 200,
@@ -61,7 +60,7 @@ defineFeature(feature, test => {
             const history = createMemoryHistory();
             render(
                 <Router history={history}>
-                    <App/>
+                    <App />
                 </Router>
             );
             await act(async () => {
@@ -80,7 +79,7 @@ defineFeature(feature, test => {
     /**
      *  Scenario 2
      **/
-    test("Select survey", ({given, when, then, and}) => {
+    test("Select survey", ({ given, when, then, and }) => {
 
         given("I can view a list of surveys on Blaise within TOBI", async () => {
             mock_server_request(
@@ -90,7 +89,7 @@ defineFeature(feature, test => {
             const history = createMemoryHistory();
             render(
                 <Router history={history}>
-                    <App/>
+                    <App />
                 </Router>
             );
             await act(async () => {
@@ -141,7 +140,7 @@ defineFeature(feature, test => {
     /**
      *  Scenario 3c
      **/
-    test("Return to select survey", ({given, when, then}) => {
+    test("Return to select survey", ({ given, when, then }) => {
         given("I have selected a survey", async () => {
             mock_server_request(
                 200,
@@ -150,7 +149,7 @@ defineFeature(feature, test => {
             const history = createMemoryHistory();
             render(
                 <Router history={history}>
-                    <App/>
+                    <App />
                 </Router>
             );
 

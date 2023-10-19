@@ -1,5 +1,5 @@
-function isNumber(n: any) {
-    return !isNaN(parseFloat(n)) && isFinite(n);
+function isNumber(n: number | string) {
+    return !isNaN(parseFloat(String(n))) && isFinite(Number(n));
 }
 
 function fieldPeriodFromInstrument(instrument_name: string): string {

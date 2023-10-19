@@ -26,25 +26,25 @@ describe("QuestionnaireRouter", () => {
     };
 
     app.use((req: Request, res: Response, next: NextFunction) => {
-        req["log"] = log as P.Logger<P.LoggerOptions>;
+        req.log = log as P.Logger<P.LoggerOptions>;
         next();
     });
 
     const environmentVariables: EnvironmentVariables = {
-        VM_EXTERNAL_WEB_URL:  "vm.com",
-        BIMS_CLIENT_ID:  "bims-id",
+        VM_EXTERNAL_WEB_URL: "vm.com",
+        BIMS_CLIENT_ID: "bims-id",
         BIMS_API_URL: "http://bims.com",
         VM_EXTERNAL_CLIENT_URL: "",
         BLAISE_API_URL: "",
         CATI_DASHBOARD_URL: ""
-    }
+    };
 
     app.use(QuestionnaireRouter(
         environmentVariables,
         blaiseApiMock.object
     ));
 
-    const request = supertest(app);   
+    const request = supertest(app);
 
     const today = new Date();
     const tomorrow = new Date();
@@ -61,10 +61,10 @@ describe("QuestionnaireRouter", () => {
     it("returns 500 when questionnaires endpoint errors", async () => {
         // aarnge
         blaiseApiMock.setup((api) => api.getAllQuestionnairesWithCatiData()).throws(new Error());
-    
+
         // act
         const response = await request.get("/questionnaires");
-        
+
         // assert
         expect(response.status).toBe(500);
         expect(log.error).toHaveBeenCalledWith("Failed to retrieve instrument list");
@@ -88,7 +88,7 @@ describe("QuestionnaireRouter", () => {
                 sentHeaders = headers;
                 return [200, { tostartdate: today.toISOString() }];
             });
-        
+
         // act
         await request.get("/questionnaires");
 
@@ -117,7 +117,7 @@ describe("QuestionnaireRouter", () => {
 
         // act    
         const response = await request.get("/questionnaires");
-        
+
         // assert
         expect(response.status).toBe(200);
 
@@ -148,7 +148,7 @@ describe("QuestionnaireRouter", () => {
 
         // act
         const response = await request.get("/questionnaires");
-        
+
         // assert
         expect(response.status).toBe(200);
         expect(response.body).toEqual([]);
@@ -176,14 +176,14 @@ describe("QuestionnaireRouter", () => {
             activeToday: true
         };
 
-        blaiseApiMock.setup((api) => api.getAllQuestionnairesWithCatiData()).returns(async () => [questionnaire]);        
+        blaiseApiMock.setup((api) => api.getAllQuestionnairesWithCatiData()).returns(async () => [questionnaire]);
         mockHttp
             .onGet(`http://bims.com/tostartdate/${questionnaire.name}`)
             .reply(200, {}, { "content-type": "text/html" });
-        
+
         // act
         const response = await request.get("/questionnaires");
-        
+
         // assert
         expect(response.status).toBe(200);
         expect(response.body).toEqual([
@@ -218,10 +218,10 @@ describe("QuestionnaireRouter", () => {
             activeToday: true
         };
 
-        blaiseApiMock.setup((api) => api.getAllQuestionnairesWithCatiData()).returns(async () => [questionnaire]);        
+        blaiseApiMock.setup((api) => api.getAllQuestionnairesWithCatiData()).returns(async () => [questionnaire]);
         mockHttp
             .onGet(`http://bims.com/tostartdate/${questionnaire.name}`)
-            .reply(200, { tostartdate: today.toISOString() }, { "content-type": "application/json" });   
+            .reply(200, { tostartdate: today.toISOString() }, { "content-type": "application/json" });
 
         // act
         const response = await request.get("/questionnaires");
@@ -251,20 +251,20 @@ describe("QuestionnaireRouter", () => {
             activeToday: false
         };
 
-        blaiseApiMock.setup((api) => api.getAllQuestionnairesWithCatiData()).returns(async () => [questionnaire]);        
+        blaiseApiMock.setup((api) => api.getAllQuestionnairesWithCatiData()).returns(async () => [questionnaire]);
         mockHttp
-            .onGet(`http://bims.com/tostartdate/${questionnaire.name}`)    
-            .reply(200, { tostartdate: today.toISOString() }, { "content-type": "application/json" });    
+            .onGet(`http://bims.com/tostartdate/${questionnaire.name}`)
+            .reply(200, { tostartdate: today.toISOString() }, { "content-type": "application/json" });
 
         // act            
         const response = await request.get("/questionnaires");
-        
+
         // assert
         expect(response.status).toBe(200);
         expect(response.body).toEqual([]);
         expect(log.debug).toHaveBeenCalledWith("The BIMS request responded with a status of 200 and a body of [object Object]");
         expect(log.debug).toHaveBeenCalledWith(expect.stringMatching(/the instrument OPN2211A is live for TO \(TO start date = .*\) \(Active today = false\)/));
-        expect(log.info).toHaveBeenCalledWith( "Retrieved active instruments, 0 item/s");
+        expect(log.info).toHaveBeenCalledWith("Retrieved active instruments, 0 item/s");
         expect(log.warn).not.toHaveBeenCalled();
         expect(log.error).not.toHaveBeenCalled();
     });
@@ -280,14 +280,14 @@ describe("QuestionnaireRouter", () => {
             activeToday: true
         };
 
-        blaiseApiMock.setup((api) => api.getAllQuestionnairesWithCatiData()).returns(async () => [questionnaire]);        
+        blaiseApiMock.setup((api) => api.getAllQuestionnairesWithCatiData()).returns(async () => [questionnaire]);
         mockHttp
-            .onGet(`http://bims.com/tostartdate/${questionnaire.name}`)    
-            .reply(200, { tostartdate: tomorrow.toISOString() }, { "content-type": "application/json" });       
+            .onGet(`http://bims.com/tostartdate/${questionnaire.name}`)
+            .reply(200, { tostartdate: tomorrow.toISOString() }, { "content-type": "application/json" });
 
         // act
         const response = await request.get("/questionnaires");
-        
+
         // assert
         expect(response.status).toBe(200);
         expect(response.body).toEqual([]);
@@ -307,14 +307,14 @@ describe("QuestionnaireRouter", () => {
             activeToday: false
         };
 
-        blaiseApiMock.setup((api) => api.getAllQuestionnairesWithCatiData()).returns(async () => [questionnaire]);        
+        blaiseApiMock.setup((api) => api.getAllQuestionnairesWithCatiData()).returns(async () => [questionnaire]);
         mockHttp
-            .onGet(`http://bims.com/tostartdate/${questionnaire.name}`)    
+            .onGet(`http://bims.com/tostartdate/${questionnaire.name}`)
             .reply(200, { tostartdate: tomorrow.toISOString() }, { "content-type": "application/json" });
 
         // act
         const response = await request.get("/questionnaires");
-        
+
         // assert
         expect(response.status).toBe(200);
         expect(response.body).toEqual([]);
@@ -344,9 +344,9 @@ describe("QuestionnaireRouter", () => {
             activeToday: true
         };
 
-        blaiseApiMock.setup((api) => api.getAllQuestionnairesWithCatiData()).returns(async () => [questionnaire]);        
+        blaiseApiMock.setup((api) => api.getAllQuestionnairesWithCatiData()).returns(async () => [questionnaire]);
         mockHttp
-            .onGet(`http://bims.com/tostartdate/${questionnaire.name}`)            
+            .onGet(`http://bims.com/tostartdate/${questionnaire.name}`)
             .reply(200, { tostartdate: today.toISOString() }, { "content-type": "application/json" });
 
         // act
@@ -377,14 +377,14 @@ describe("QuestionnaireRouter", () => {
             activeToday: false
         };
 
-        blaiseApiMock.setup((api) => api.getAllQuestionnairesWithCatiData()).returns(async () => [questionnaire]);        
+        blaiseApiMock.setup((api) => api.getAllQuestionnairesWithCatiData()).returns(async () => [questionnaire]);
         mockHttp
-            .onGet(`http://bims.com/tostartdate/${questionnaire.name}`)      
+            .onGet(`http://bims.com/tostartdate/${questionnaire.name}`)
             .reply(200, { tostartdate: today.toISOString() }, { "content-type": "application/json" });
-        
+
         // act
         const response = await request.get("/questionnaires");
-        
+
         // assert
         expect(response.status).toBe(200);
         expect(response.body).toEqual([]);
@@ -404,9 +404,9 @@ describe("QuestionnaireRouter", () => {
             activeToday: true
         };
 
-        blaiseApiMock.setup((api) => api.getAllQuestionnairesWithCatiData()).returns(async () => [questionnaire]);        
+        blaiseApiMock.setup((api) => api.getAllQuestionnairesWithCatiData()).returns(async () => [questionnaire]);
         mockHttp
-            .onGet(`http://bims.com/tostartdate/${questionnaire.name}`)      
+            .onGet(`http://bims.com/tostartdate/${questionnaire.name}`)
             .reply(200, { tostartdate: today.toISOString() }, { "content-type": "application/json" });
 
         // act
@@ -428,5 +428,5 @@ describe("QuestionnaireRouter", () => {
                 survey: "XXX"
             }
         ]);
-    });     
+    });
 });
