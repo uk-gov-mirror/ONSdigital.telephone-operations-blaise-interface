@@ -41,7 +41,7 @@ export default function nodeServer(environmentVariables: EnvironmentVariables, b
     server.get("*", function (req: Request, res: Response) {
         const clientUrl = environmentVariables.VM_EXTERNAL_CLIENT_URL;
         const dashboardUrl = environmentVariables.CATI_DASHBOARD_URL;
-        res.render("../public/index.html", {
+        res.render("index.html", {
             clientUrl, dashboardUrl
         });
     });
