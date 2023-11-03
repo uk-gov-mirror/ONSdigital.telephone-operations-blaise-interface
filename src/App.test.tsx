@@ -188,27 +188,3 @@ describe("Given the API returns an empty list", () => {
         cleanup();
     });
 });
-
-
-describe("Given the initial external CATI URL", () => {
-
-    beforeAll(() => {
-        mock_server_request(200, []);
-    });
-
-    it("it should return with /CaseInfo", async () => {
-
-        const history = createMemoryHistory();
-        render(
-            <Router history={history}>
-                <App />
-            </Router>
-        );
-
-        expect(<ExternalLink text={"Link to CATI dashboard"} link={''} id={"cati-dashboard"} />).toBeInTheDocument;
-
-        // const externalCATIUrlElement = getByText("/Blaise");
-        // const externalCATIUrl = externalCATIUrlElement.textContent;
-        // expect(externalCATIUrl).toEqual("/Blaise");
-    });
-});

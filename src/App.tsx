@@ -31,7 +31,7 @@ function App(): ReactElement {
     });
 
     const [externalClientUrl, setExternalClientUrl] = useState<string>("External URL should be here");
-    const [externalCATIUrl, setExternalCATIUrl] = useState<string>("/Blaise");
+    const [externalCATIUrl, setExternalCATIUrl] = useState<string>("/Blaise/CaseInfo");
 
     useEffect(function retrieveVariables() {
         setExternalClientUrl(isDevEnv() ?
