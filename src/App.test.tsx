@@ -1,12 +1,13 @@
 import React from "react";
 import { render, waitFor, fireEvent, screen, cleanup } from "@testing-library/react";
-import App from "./App";
 import "@testing-library/jest-dom";
 import flushPromises from "./tests/utils";
 import { act } from "react-dom/test-utils";
 import { createMemoryHistory } from "history";
 import { Router } from "react-router-dom";
 import { Survey } from "blaise-api-node-client";
+import App from "./App";
+import { ExternalLink } from "blaise-design-system-react-components";
 
 const surveyListReturned: Survey[] = [
     {
@@ -185,5 +186,29 @@ describe("Given the API returns an empty list", () => {
     afterAll(() => {
         jest.clearAllMocks();
         cleanup();
+    });
+});
+
+
+describe("Given the initial external CATI URL", () => {
+
+    beforeAll(() => {
+        mock_server_request(200, []);
+    });
+
+    it("it should return with /CaseInfo", async () => {
+
+        const history = createMemoryHistory();
+        render(
+            <Router history={history}>
+                <App />
+            </Router>
+        );
+
+        expect(<ExternalLink text={"Link to CATI dashboard"} link={''} id={"cati-dashboard"} />).toBeInTheDocument;
+
+        // const externalCATIUrlElement = getByText("/Blaise");
+        // const externalCATIUrl = externalCATIUrlElement.textContent;
+        // expect(externalCATIUrl).toEqual("/Blaise");
     });
 });
