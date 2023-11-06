@@ -56,14 +56,13 @@ defineFeature(feature, test => {
             });
         });
 
-        when("I click the link to the CATI dashboard", async () => {
-            fireEvent.click(screen.getByText(/Link to CATI dashboard/i));
-            await act(async () => {
-                await flushPromises();
+        when("the link to the CATI dashboard is present", async () => {
+        await waitFor(() => {
+            expect(screen.getByText(/Link to CATI dashboard/i))
             });
         });
 
-        then("I arrive at the Case Info tab URL", async () => {
+        then("it will take me to the CATI dashboard", async () => {
         await waitFor(() => {
             expect(screen.getByText(/Link to CATI dashboard/i).getAttribute("href")).toContain("/Blaise/CaseInfo");
     });
