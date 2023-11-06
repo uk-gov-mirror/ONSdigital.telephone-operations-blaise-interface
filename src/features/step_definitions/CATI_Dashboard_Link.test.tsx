@@ -1,6 +1,6 @@
 import React from "react";
 import { defineFeature, loadFeature } from "jest-cucumber";
-import {cleanup, fireEvent, render, screen, waitFor} from "@testing-library/react";
+import {cleanup, render, screen, waitFor} from "@testing-library/react";
 import { act } from "react-dom/test-utils";
 import { createMemoryHistory } from "history";
 import { Router } from "react-router-dom";
@@ -58,7 +58,7 @@ defineFeature(feature, test => {
 
         when("the link to the CATI dashboard is present", async () => {
         await waitFor(() => {
-            expect(screen.getByText(/Link to CATI dashboard/i))
+            expect(screen.getByText(/Link to CATI dashboard/i));
             });
         });
 
