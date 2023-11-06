@@ -1,4 +1,3 @@
-//
 // import React from "react";
 // import { defineFeature, loadFeature } from "jest-cucumber";
 // import {cleanup, fireEvent, render, screen, waitFor} from "@testing-library/react";
