@@ -7,7 +7,6 @@ import { createMemoryHistory } from "history";
 import { Router } from "react-router-dom";
 import { Survey } from "blaise-api-node-client";
 import App from "./App";
-import { ExternalLink } from "blaise-design-system-react-components";
 
 const surveyListReturned: Survey[] = [
     {
@@ -104,6 +103,8 @@ describe("React homepage", () => {
 
         await waitFor(() => {
             expect(getByText(/Telephone Operations Blaise Interface/i)).toBeDefined();
+            expect(queryByText(/Link to CATI dashboard/i)).toBeInTheDocument();
+            expect(queryByText(/Link to CATI dashboard/i)?.getAttribute("href")).toContain("/Blaise/CaseInfo");
             expect(getByText(/OPN/i)).toBeDefined();
             expect(queryByText(/Loading/i)).not.toBeInTheDocument();
         });
