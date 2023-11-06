@@ -65,7 +65,7 @@ defineFeature(feature, test => {
 
         then("I arrive at the Case Info tab URL", async () => {
         await waitFor(() => {
-            expect(window.location.pathname).toContain("/Blaise/CaseInfo");
+            expect(screen.getByText(/Link to CATI dashboard/i).getAttribute("href")).toContain("/Blaise/CaseInfo");
     });
     });
 });
