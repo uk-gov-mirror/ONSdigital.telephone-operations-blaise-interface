@@ -1,4 +1,4 @@
-import {getEnvironmentVariables} from "../Config";
+import { getEnvironmentVariables } from "../Config";
 
 describe("Config setup", () => {
     afterEach(() => {
@@ -20,7 +20,7 @@ describe("Config setup", () => {
         expect(VM_EXTERNAL_CLIENT_URL).toBe("external-client-url");
         expect(VM_EXTERNAL_WEB_URL).toBe("external-web-url");
         expect(BLAISE_API_URL).toBe("http://mock");
-        expect(CATI_DASHBOARD_URL).toBe("https://external-web-url/Blaise");
+        expect(CATI_DASHBOARD_URL).toBe("https://external-web-url/Blaise/CaseInfo");
         expect(BIMS_CLIENT_ID).toBe("mock@id");
         expect(BIMS_API_URL).toBe("mock-bims-api");
     });
@@ -46,7 +46,7 @@ describe("Config setup", () => {
         expect(VM_EXTERNAL_CLIENT_URL).toBe("ENV_VAR_NOT_SET");
         expect(VM_EXTERNAL_WEB_URL).toBe("ENV_VAR_NOT_SET");
         expect(BLAISE_API_URL).toBe("ENV_VAR_NOT_SET");
-        expect(CATI_DASHBOARD_URL).toBe("https://undefined/Blaise");
+        expect(CATI_DASHBOARD_URL).toBe("https://undefined/Blaise/CaseInfo");
         expect(BIMS_CLIENT_ID).toBe("ENV_VAR_NOT_SET");
         expect(BIMS_API_URL).toBe("ENV_VAR_NOT_SET");
     });

@@ -81,6 +81,7 @@ Object {
           >
             <a
               class="ons-external-link"
+              href="cati-dashboard-url/Blaise/CaseInfo"
               id="cati-dashboard"
               rel="noopener noreferrer"
               target="_blank"
@@ -421,6 +422,7 @@ Object {
         >
           <a
             class="ons-external-link"
+            href="cati-dashboard-url/Blaise/CaseInfo"
             id="cati-dashboard"
             rel="noopener noreferrer"
             target="_blank"
@@ -818,6 +820,7 @@ Object {
           >
             <a
               class="ons-external-link"
+              href="cati-dashboard-url/Blaise/CaseInfo"
               id="cati-dashboard"
               rel="noopener noreferrer"
               target="_blank"
@@ -1119,6 +1122,7 @@ Object {
         >
           <a
             class="ons-external-link"
+            href="cati-dashboard-url/Blaise/CaseInfo"
             id="cati-dashboard"
             rel="noopener noreferrer"
             target="_blank"

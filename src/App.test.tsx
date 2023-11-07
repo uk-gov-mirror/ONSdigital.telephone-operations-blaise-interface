@@ -1,12 +1,12 @@
 import React from "react";
 import { render, waitFor, fireEvent, screen, cleanup } from "@testing-library/react";
-import App from "./App";
 import "@testing-library/jest-dom";
 import flushPromises from "./tests/utils";
 import { act } from "react-dom/test-utils";
 import { createMemoryHistory } from "history";
 import { Router } from "react-router-dom";
 import { Survey } from "blaise-api-node-client";
+import App from "./App";
 
 const surveyListReturned: Survey[] = [
     {
@@ -103,6 +103,8 @@ describe("React homepage", () => {
 
         await waitFor(() => {
             expect(getByText(/Telephone Operations Blaise Interface/i)).toBeDefined();
+            expect(queryByText(/Link to CATI dashboard/i)).toBeInTheDocument();
+            expect(queryByText(/Link to CATI dashboard/i)?.getAttribute("href")).toContain("/Blaise/CaseInfo");
             expect(getByText(/OPN/i)).toBeDefined();
             expect(queryByText(/Loading/i)).not.toBeInTheDocument();
         });

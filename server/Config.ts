@@ -8,12 +8,12 @@ export interface EnvironmentVariables {
 }
 
 export function getEnvironmentVariables(): EnvironmentVariables {
-    let {VM_EXTERNAL_CLIENT_URL, 
-        VM_EXTERNAL_WEB_URL, 
-        BLAISE_API_URL, 
-        BIMS_CLIENT_ID, 
-        BIMS_API_URL} = process.env;
-    const CATI_DASHBOARD_URL = "https://" + VM_EXTERNAL_WEB_URL + "/Blaise";
+    let { VM_EXTERNAL_CLIENT_URL,
+        VM_EXTERNAL_WEB_URL,
+        BLAISE_API_URL,
+        BIMS_CLIENT_ID,
+        BIMS_API_URL } = process.env;
+    const CATI_DASHBOARD_URL = "https://" + VM_EXTERNAL_WEB_URL + "/Blaise/CaseInfo";
 
     if (BLAISE_API_URL === undefined) {
         console.error("BLAISE_API_URL environment variable has not been set");
@@ -40,12 +40,14 @@ export function getEnvironmentVariables(): EnvironmentVariables {
         BIMS_API_URL = "ENV_VAR_NOT_SET";
     }
 
-    return {VM_EXTERNAL_CLIENT_URL, 
-        VM_EXTERNAL_WEB_URL, 
+    return {
+        VM_EXTERNAL_CLIENT_URL,
+        VM_EXTERNAL_WEB_URL,
         BLAISE_API_URL: fixURL(BLAISE_API_URL),
-        CATI_DASHBOARD_URL, 
-        BIMS_CLIENT_ID, 
-        BIMS_API_URL};
+        CATI_DASHBOARD_URL,
+        BIMS_CLIENT_ID,
+        BIMS_API_URL
+    };
 }
 
 function fixURL(url: string): string {
