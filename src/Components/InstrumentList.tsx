@@ -14,10 +14,6 @@ interface Props {
     listError: listError;
 }
 
-interface Params {
-    survey: string
-}
-
 function InstrumentList(props: Props): ReactElement {
     const { list, listError }: Props = props;
     const { survey } = useParams<string>(); 
