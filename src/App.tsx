@@ -1,7 +1,7 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import { DefaultErrorBoundary } from "./Components/ErrorHandling/DefaultErrorBoundary";
 import { isDevEnv, isTrainingEnv } from "./Functions";
-import { Switch, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import InstrumentList from "./Components/InstrumentList";
 import SurveyList from "./Components/SurveyList";
 import { Survey } from "blaise-api-node-client";
@@ -77,7 +77,6 @@ function App(): ReactElement {
             );
     }
 
-
     return (
         <>
             <Header title={headerText} />
@@ -99,18 +98,24 @@ function App(): ReactElement {
                                 link={externalCATIUrl}
                                 id={"cati-dashboard"} />
                         </p>
-                        <Switch>
-                            <Route path="/survey/:survey">
-                                <ErrorBoundary errorMessageText={"Unable to load questionnaire table correctly"}>
-                                    <InstrumentList list={surveys} listError={listError} />
-                                </ErrorBoundary>
-                            </Route>
-                            <Route path="/">
-                                <ErrorBoundary errorMessageText={"Unable to load survey table correctly"}>
-                                    <SurveyList list={surveys} listError={listError} />
-                                </ErrorBoundary>
-                            </Route>
-                        </Switch>
+                        <Routes>
+                            <Route 
+                                path="/survey/:survey" 
+                                element={
+                                    <ErrorBoundary errorMessageText={"Unable to load questionnaire table correctly"}>
+                                        <InstrumentList list={surveys} listError={listError} />
+                                    </ErrorBoundary>
+                                }
+                            />
+                            <Route 
+                                path="/" 
+                                element={
+                                    <ErrorBoundary errorMessageText={"Unable to load survey table correctly"}>
+                                        <SurveyList list={surveys} listError={listError} />
+                                    </ErrorBoundary>
+                                }
+                            />
+                        </Routes>
                     </DefaultErrorBoundary>
                 </main>
             </div>
