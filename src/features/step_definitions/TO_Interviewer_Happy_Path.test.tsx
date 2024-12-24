@@ -3,9 +3,8 @@ import React from "react";
 // Test modules
 import { defineFeature, loadFeature } from "jest-cucumber";
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { act } from "react-dom/test-utils";
-import { createMemoryHistory } from "history";
-import { Router } from "react-router-dom";
+import { act } from "react";
+import { MemoryRouter } from "react-router-dom";
 import flushPromises from "../../tests/utils";
 // Mock elements
 import {
@@ -57,11 +56,10 @@ defineFeature(feature, test => {
         });
 
         when("I launch TOBI", async () => {
-            const history = createMemoryHistory();
             render(
-                <Router history={history}>
+                <MemoryRouter initialEntries={["/"]}>
                     <App />
-                </Router>
+                </MemoryRouter>
             );
             await act(async () => {
                 await flushPromises();
@@ -86,11 +84,10 @@ defineFeature(feature, test => {
                 200,
                 survey_list_with_OPN_with_three_active_instruments
             );
-            const history = createMemoryHistory();
             render(
-                <Router history={history}>
+                <MemoryRouter initialEntries={["/"]}>
                     <App />
-                </Router>
+                </MemoryRouter>
             );
             await act(async () => {
                 await flushPromises();
@@ -146,11 +143,10 @@ defineFeature(feature, test => {
                 200,
                 survey_list_with_OPN_with_two_active_instruments
             );
-            const history = createMemoryHistory();
             render(
-                <Router history={history}>
+                <MemoryRouter initialEntries={["/"]}>
                     <App />
-                </Router>
+                </MemoryRouter>
             );
 
             await act(async () => {

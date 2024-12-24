@@ -10,17 +10,13 @@ interface listError {
 }
 
 interface Props {
-    list: Survey[],
-    listError: listError
-}
-
-interface Params {
-    survey: string
+    list: Survey[];
+    listError: listError;
 }
 
 function InstrumentList(props: Props): ReactElement {
-    const {list, listError}: Props = props;
-    const {survey}: Params = useParams();
+    const { list, listError }: Props = props;
+    const { survey } = useParams<string>(); 
 
     const filteredSurvey: Survey[] = list.filter((obj: Survey) => {
         return obj.survey === survey;
