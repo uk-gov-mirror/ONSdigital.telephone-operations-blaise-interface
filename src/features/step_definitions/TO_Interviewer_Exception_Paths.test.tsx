@@ -1,10 +1,9 @@
 import { defineFeature, loadFeature } from "jest-cucumber";
 import { Survey } from "blaise-api-node-client";
-import { createMemoryHistory } from "history";
 import { render, screen, waitFor } from "@testing-library/react";
-import { Router } from "react-router-dom";
+import { MemoryRouter } from "react-router-dom";
 import App from "../../App";
-import { act } from "react-dom/test-utils";
+import { act } from "react";
 import flushPromises from "../../tests/utils";
 import React from "react";
 
@@ -26,11 +25,10 @@ defineFeature(feature, test => {
     test("Accessing Blaise via Blaise 5 User Interface: Blaise is down/not responding", ({ given, when, then }) => {
         given("I am a Blaise user trying to access via TOBI", () => {
             mock_server_request(500, []);
-            const history = createMemoryHistory();
             render(
-                <Router history={history}>
+                <MemoryRouter>
                     <App />
-                </Router>
+                </MemoryRouter>
             );
         });
 
