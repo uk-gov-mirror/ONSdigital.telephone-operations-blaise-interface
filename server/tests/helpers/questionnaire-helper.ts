@@ -13,7 +13,7 @@ export class QuestionnaireHelper {
         return apiQuestionnaire;
     }
 
-    public static Questionnaire(name :string, activeToday : boolean, fieldPeriod: string, surveyType :string, link: string) : Questionnaire {
+    public static Questionnaire(name :string, activeToday : boolean, fieldPeriod: string, survey :string, link: string) : Questionnaire {
         const questionnaire : Questionnaire =
                 {
                     activeToday: activeToday,
@@ -22,7 +22,7 @@ export class QuestionnaireHelper {
                     link: link,
                     name: name,
                     serverParkName: "LocalDevelopment",
-                    "surveyTLA": surveyType
+                    "surveyTLA": survey
                 };
 
         return questionnaire;
